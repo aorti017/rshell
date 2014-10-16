@@ -1,6 +1,5 @@
 #include <iostream>
 #include <stdio.h>
-#include <stdio.h>
 #include <ctype.h>
 #include <cstring>
 #include <vector>
@@ -18,7 +17,6 @@ bool conntest(string x){
     else if(x.at(i) == ';' || x.at(i) == '&'
          || x.at(i) == '|')
     {
-        //cout << "b" << endl;
         return true;
     }
     else{
@@ -31,7 +29,6 @@ bool endswith(string x){
     if(x.at(i) == ';' || x.at(i) == '&'
          || x.at(i) == '|')
     {
-        //cout << "b" << endl;
         return true;
     }
     else{
@@ -65,9 +62,7 @@ int main(){
    int cnt = 0;
    pch = strtok(str, " ");
    while(cnt < 100){
-       /*if(isexit(pch)){
-           return 0;
-       }*/
+       //add exit check here
        if(pch == NULL || conntest(pch)){
            if(pch != NULL && endswith(pch)){
                string tmp = pch;
