@@ -77,6 +77,33 @@ string chopFront(string x, vector<string> &v){
     }
 }
 
+string parse(string x, string& c, vector<string> &v){
+    if(x == ";" || x == "||" || x == "&&"){
+        c = x;
+        return "";
+    }
+    if(x.at(0) == ';'){
+        c = x.at(0);
+        v.push_back(x.substr(1,x.size()-1));
+        return "";
+    }
+    else if(x.at(0) == '&' && x.at(1) == '&'){
+        c = x.substr(0,1);
+        v.push_back(x.substr(2, x.size()-1));
+        return "";
+    }
+    else if(x.at(0) == '|' && x.at(1) == '|'){
+        c = x.substr(0,1);
+        v.push_back(x.substr(2, x.size()-1));
+        return "";
+    }
+    else if(x.at(x.size()-1) = ';'){
+        c = x.at(0);
+        return x.substr(0, x.size()-1);
+    }
+}
+
+
 bool run(char str[]){
     char* pch;
     bool sucs;
@@ -87,17 +114,12 @@ bool run(char str[]){
 
     while(pch != "exit"){
         if(pch == NULL || conntest(pch)){
-            if(pch != NULL && (endswith(pch) || beginswith(pch))){
-                string tmp = pch;
-	            int loc = findend(pch);
-	            if(loc > 0){
-                    tmp = tmp.substr(0, loc);
-                    cmd.push_back(tmp);
-	            }
-                if(loc == 0){
-                    connector  = chopFront(pch, addIn);
-                    cout << connector << endl;
-                }
+            if(pch != NULL){
+                    string tmp = pch;
+                    tmp = parse(tmp, connector, addIn);
+                    if(tmp != ""){
+                        cmd.push_back(tmp);
+                    }
             }
             int pid = fork();
             if(pid == 0){
@@ -109,6 +131,8 @@ bool run(char str[]){
                  argc[cmd.size()] = NULL;
                  if(-1 ==  execvp(argc[0], argc)){
                     perror("execvp");
+$ execvp: No such file or directory
+$
                  }
             }
             else{
