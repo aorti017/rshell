@@ -5,6 +5,7 @@
 #include <vector>
 #include <unistd.h>
 #include <sys/types.h>
+#include <stdlib.h>
 #include <sys/wait.h>
 using namespace std;
 
@@ -48,21 +49,13 @@ int findend(string x){
 }
 
 
-int main(){
-   string input;
-   cout << "$ ";
-   getline(cin, input);
-   char str[input.size()+1];
-   strcpy(str, input.c_str());
-
+bool run(char str[]){
    char* pch;
    bool sucs;
-   char conn;
    vector<string> cmd;
-   int cnt = 0;
    pch = strtok(str, " ");
-   while(cnt < 100){
-       //add exit check here
+
+   while(pch != "exit"){
        if(pch == NULL || conntest(pch)){
            if(pch != NULL && endswith(pch)){
                string tmp = pch;
@@ -86,15 +79,36 @@ int main(){
            }
            else{
                wait(NULL);
-               return 0;
+	       pch = strtok(NULL, " ");
+	       cmd.clear();
+	       if(pch == "exit")
+	       exit(1);
+               if(pch == NULL)
+	       return true;
            }
        }
        else{
-           cnt++;
 	   if(pch != " ")
            cmd.push_back(pch);
            pch = strtok(NULL, " ");
+	   if(pch == "exit")
+	   exit(1);
        }
+   }
+   return false;
+}
+
+
+
+int main(){
+   bool goon = true;
+   while(goon){
+   string input;
+   cout << "$ ";
+   getline(cin, input);
+   char str[input.size()+1];
+   strcpy(str, input.c_str());
+   goon = run(str);
    }
    return 0;
 }
