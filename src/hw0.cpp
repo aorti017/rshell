@@ -13,7 +13,6 @@ bool conntest(string x){
     int i = x.size() - 1;
     int y = 0;
     if(x == "&&" || x == ";" || x == "||"){
-        //cout << "a" << endl;
         return true;
     }
     else if(x.at(i) == ';' || x.at(i) == '&'
@@ -25,55 +24,12 @@ bool conntest(string x){
         return true;
     }
     else{
-        return false;
-    }
-}
-
-bool endswith(string x){
-    int i = x.size() - 1;
-    if(x.at(i) == ';' || x.at(i) == '&'
-         || x.at(i) == '|')
-    {
-        return true;
-    }
-    else{
-        return false;
-    }
-}
-
-int findend(string x){
-    for(int i = 0; i < x.size(); i++){
-        if(x.at(i) == '&' || x.at(i) == ';'
-            || x.at(i) == '|')
-        {
-            return i;
+        for(int i = 0; i < x.size(); i++){
+            if(x.at(i) == ';' || x.at(i) == '|' || x.at(i) == '&'){
+                return true;
+            }
         }
-    }
-    return -1;
-}
-
-bool beginswith(string x){
-    if(x.at(0) == ';' || x.at(0) == '&' || x.at(0) == '|'){
-        return true;
-    }
-    else{
         return false;
-    }
-}
-
-
-string chopFront(string x, vector<string> &v){
-    if(x.at(0) == '&' && x.at(1) == '&'){
-        v.push_back(x.substr(2,x.size()-1));
-        return x.substr(0, 2);
-    }
-    else if(x.at(0) == '|' && x.at(1) == '|'){
-        v.push_back(x.substr(2,x.size()-1));
-        return x.substr(0, 2);
-    }
-    else{
-        v.push_back(x.substr(1,x.size()-1));
-        return x.substr(0, 1);
     }
 }
 
@@ -97,12 +53,35 @@ string parse(string x, string& c, vector<string> &v){
         v.push_back(x.substr(2, x.size()-1));
         return "";
     }
-    else if(x.at(x.size()-1) = ';'){
+    else if(x.at(x.size()-1) == ';'){
         c = x.at(0);
         return x.substr(0, x.size()-1);
     }
+    else if(x.at(x.size()-2) == '|' && x.at(x.size()-1) == '|'){
+        c = x.substr(x.size()-2, x.size()-1);
+        return x.substr(0, x.size() - 2) ;
+    }
+    else if(x.at(x.size()-2) == '&' && x.at(x.size()-1) == '&'){
+        c = x.substr(x.size()-2, x.size()-1);
+        return x.substr(0, x.size() - 2) ;
+    }
+    else{
+        for(int i = 0; i < x.size(); i++){
+            if(x.at(i) == ';' || x.at(i) == '&' || x.at(i) == '|'){
+                if(x.at(i) == ';'){
+                    c = x.at(i);
+                    v.push_back(x.substr(i+1, x.size()-1));
+                    return x.substr(0, i);
+                }
+                else if(i != x.size() - 1 && (x.at(i) == '&' || x.at(i) == '|')){
+                    c = x.substr(i, i + 1);
+                    v.push_back(x.substr(i+2, x.size() -1));
+                    return x.substr(0, i);
+                }
+            }
+        }
+    }
 }
-
 
 bool run(char str[]){
     char* pch;
@@ -129,10 +108,10 @@ bool run(char str[]){
                 	 strcpy(argc[i], cmd.at(i).c_str());
                  }
                  argc[cmd.size()] = NULL;
+                 cout << cmd.at(0) << endl;
                  if(-1 ==  execvp(argc[0], argc)){
                     perror("execvp");
-$ execvp: No such file or directory
-$
+                    return false;
                  }
             }
             else{
