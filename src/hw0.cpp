@@ -10,12 +10,10 @@
 using namespace std;
 
 void parse(char  x[], vector<string> &v){
-    //cout << "parse executes" << endl;
     char* tmp;
     tmp = strtok(x, " ");
     while(tmp != NULL){
         v.push_back(tmp);
-        //cout << tmp << endl;
         tmp = strtok(NULL, " ");
     }
 }
@@ -92,7 +90,6 @@ bool run(char str[]){
         exit(0);
     }
     while(pch != NULL){
-        //cout << "execvp executes" << endl;
             int pid = fork();
             if(pid == -1){
                 perror("fork");
@@ -100,20 +97,21 @@ bool run(char str[]){
             }
             else if(pid == 0){
                 parse(pch, cmd);
-                char* argc[cmd.size() + 1];
-                 for(int i = 0 ; i < cmd.size(); i++ ){
+                int cmd_size = cmd.size() + 1;
+                 char** argc = new char*[cmd_size];
+                 for(unsigned int i = 0 ; i < cmd.size(); i++ ){
                 	 argc[i] = new char[cmd.at(i).size()];
                 	 strcpy(argc[i], cmd.at(i).c_str());
                  }
                  argc[cmd.size()] = NULL;
                  if(-1 ==  execvp(argc[0], argc)){
                     perror("execvp");
+                    delete[] argc;
                     exit(1);
                  }
             }
             else{
                 waitpid(-1, &status, 0);
-                //cout << status << endl;
                 if(status > 0){
                     sucs = false;
                 }
@@ -143,9 +141,11 @@ int main(){
        cout << "$ ";
        getline(cin, input);
        input = commentRemoval(input);
-       char str[input.size()+1];
+       int input_size = input.size()+1;
+       char* str = new char[input_size];
        strcpy(str, input.c_str());
        goon = run(str);
+       delete[] str;
    }
    return 0;
 }
