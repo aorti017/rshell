@@ -40,8 +40,8 @@ bool isExit(char x[]){
 
 bool run(char str[]){
     char* pch;
-    bool sucs;
-    bool found = true;
+    bool sucs = true;
+    int status = 0;
     string ext = "exit";
     string connector;
     string strz = str;
@@ -81,6 +81,10 @@ bool run(char str[]){
     while(pch != NULL){
         //cout << "execvp executes" << endl;
             int pid = fork();
+            if(pid == -1){
+                perror("fork");
+                exit(1);
+            }
             if(pid == 0){
                 parse(pch, cmd);
                 char* argc[cmd.size() + 1];
@@ -91,21 +95,32 @@ bool run(char str[]){
                  argc[cmd.size()] = NULL;
                  if(-1 ==  execvp(argc[0], argc)){
                     perror("execvp");
-                    return false;
+                    exit(1);
                  }
             }
             else{
-                wait(NULL);
+                waitpid(-1, &status, 0);
+                //cout << status << endl;
+                if(status > 0){
+                    sucs = false;
+                }
+                else{
+                    sucs = true;
+                }
 	            cmd.clear();
-                pch = strtok(NULL, connector.c_str());
+                if((connector=="&&" && sucs) || (connector=="||" && !sucs) || (connector==";")){
+                    pch = strtok(NULL, connector.c_str());
+                }
+                else{
+                    return true;
+                }
                 if(pch != NULL && isExit(pch)){
-                    exit(0);
+                        exit(0);
                 }
             }
    }
    return true;
 }
-
 
 
 int main(){
