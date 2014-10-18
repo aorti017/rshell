@@ -47,7 +47,6 @@ bool run(char str[]){
     string strz = str;
     vector<string> cmd;
     pch = strtok(str, ";");
-
     if(pch==NULL){
         return true;
     }
@@ -56,7 +55,7 @@ bool run(char str[]){
         connector = ";";
     }
 
-    else if(pch == strz){
+    if(pch == strz){
         pch = strtok(str, "&&");
         if(pch == NULL){
             return true;
@@ -66,7 +65,7 @@ bool run(char str[]){
         }
     }
 
-    else if(pch == strz){
+    if(pch == strz){
         pch = strtok(str, "||");
         if(pch == NULL){
             return true;
@@ -75,6 +74,7 @@ bool run(char str[]){
             connector = "||";
         }
     }
+
     if(pch != NULL && isExit(pch)){
         exit(0);
     }
