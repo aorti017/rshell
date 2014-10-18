@@ -15,7 +15,7 @@ void parse(char  x[], vector<string> &v){
     tmp = strtok(x, " ");
     while(tmp != NULL){
         v.push_back(tmp);
-        //cout << "*" << tmp << "*" << endl;
+        //cout << tmp << endl;
         tmp = strtok(NULL, " ");
     }
 }
@@ -36,6 +36,19 @@ bool isExit(char x[]){
         k++;
     }
     return true;
+}
+
+string commentRemoval(string x){
+    int comm = x.find('#');
+    if(comm == -1){
+        return x;
+    }
+    else if(comm == 0){
+        return "";
+    }
+    else{
+        return x.substr(0, comm);
+    }
 }
 
 bool run(char str[]){
@@ -82,10 +95,9 @@ bool run(char str[]){
         //cout << "execvp executes" << endl;
             int pid = fork();
             if(pid == -1){
-                perror("fork");
                 exit(1);
             }
-            if(pid == 0){
+            else if(pid == 0){
                 parse(pch, cmd);
                 char* argc[cmd.size() + 1];
                  for(int i = 0 ; i < cmd.size(); i++ ){
@@ -129,6 +141,7 @@ int main(){
        string input;
        cout << "$ ";
        getline(cin, input);
+       input = commentRemoval(input);
        char str[input.size()+1];
        strcpy(str, input.c_str());
        goon = run(str);
