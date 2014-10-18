@@ -95,6 +95,7 @@ bool run(char str[]){
         //cout << "execvp executes" << endl;
             int pid = fork();
             if(pid == -1){
+                perror("fork");
                 exit(1);
             }
             else if(pid == 0){
