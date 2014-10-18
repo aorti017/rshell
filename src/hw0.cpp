@@ -20,10 +20,29 @@ void parse(char  x[], vector<string> &v){
     }
 }
 
+bool isExit(char x[]){
+    string tmp = x;
+    string ext = "exit";
+    int e = tmp.find('e');
+    int t = tmp.find('t', e);
+    if(e == -1 || t == -1){
+        return false;
+    }
+    int k = 0;
+    for(int i = e; i < t + 1; i++){
+        if(tmp.at(i) != ext.at(k)){
+            return false;
+        }
+        k++;
+    }
+    return true;
+}
+
 bool run(char str[]){
     char* pch;
     bool sucs;
     bool found = true;
+    string ext = "exit";
     string connector;
     string strz = str;
     vector<string> cmd;
@@ -56,7 +75,9 @@ bool run(char str[]){
             connector = "||";
         }
     }
-
+    if(pch != NULL && isExit(pch)){
+        exit(0);
+    }
     while(pch != NULL){
         //cout << "execvp executes" << endl;
             int pid = fork();
@@ -77,6 +98,9 @@ bool run(char str[]){
                 wait(NULL);
 	            cmd.clear();
                 pch = strtok(NULL, connector.c_str());
+                if(pch != NULL && isExit(pch)){
+                    exit(0);
+                }
             }
    }
    return true;
