@@ -19,21 +19,16 @@ void parse(char  x[], vector<string> &v){
 }
 
 bool isExit(char x[]){
-    string tmp = x;
     string ext = "exit";
-    int e = tmp.find('e');
-    int t = tmp.find('t', e);
-    if(e == -1 || t == -1){
+    string ext2 = " exit";
+    string ext3 = "exit ";
+    string ext4 = " exit ";
+    if(x == ext || x == ext2 || x == ext3 || x == ext4){
+        return true;
+    }
+    else{
         return false;
     }
-    int k = 0;
-    for(int i = e; i < t + 1; i++){
-        if(tmp.at(i) != ext.at(k)){
-            return false;
-        }
-        k++;
-    }
-    return true;
 }
 
 string commentRemoval(string x){
