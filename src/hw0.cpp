@@ -52,6 +52,7 @@ bool run(char str[]){
     string connector;
     string strz = str;
     vector<string> cmd;
+
     pch = strtok(str, ";");
     if(pch==NULL){
         return true;
@@ -80,7 +81,6 @@ bool run(char str[]){
             connector = "||";
         }
     }
-
     if(pch != NULL && isExit(pch)){
         exit(0);
     }

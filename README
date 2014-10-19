@@ -33,3 +33,8 @@ Bugs/Limitations:
 4. Using connectors as part of or the parameter for a command may cause the command to not execte as instructed,
 or not execute at all.
 5. Can not mix connectors in a single command line.
+6. Using more than one consecutive "&&" connectors with spaces in between any will cause the commands after them
+to not execute.
+7. "&" and "|" can be substituted for "&&" and "||", respectively, when connecting commands.
+8. When using the "&&" connectors if any extra of these connectors are insrted in between any
+two commands, and any of the extra connectors are seperated by a space, any command after them will not run.
