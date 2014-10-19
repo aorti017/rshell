@@ -37,3 +37,5 @@ to not execute.
 6. "&" and "|" can be substituted for "&&" and "||", respectively, when connecting commands.
 7. When using the "&&" connectors if any extra of these connectors are inserted in between any
 two commands, and any of the extra connectors are seperated by a space, any command after them will not run.
+8. Passing "#" into echo between quotations (e.g. 'echo "this is #9"') will cause eveyrthing up until the "#" to be printed
+but nothing after it.
