@@ -28,21 +28,33 @@ void parse(char  x[], vector<string> &v){
 //is "exit" or any spaced variation of it.
 //returnd false otherwise
 bool isExit(char x[]){
+    //sets up vars necessary for comparison
     string tmp = x;
     string hold = "exit";
     char spc = ' ';
     unsigned int k = 0;
 
+    //if the size of the passed in char[] is less than that
+    //necessary for it to be exit return false
     if(tmp.size() < hold.size()){
         return false;
     }
 
+    //check each non-space character if within the first
+    //four characters any of the characters dont align with "exit" return false
+    //otherwise count how many more characters there are in the passed in string
+    //if there are more than 4 return false otherwise return true
+    //if a space appears when k is > 0 but < 4 return false, this prevents
+    //bugs like "exi t" from working
     for(unsigned int i = 0; i < tmp.size(); i++){
         if(tmp.at(i) != spc){
             if(k < hold.size() && tmp.at(i) != hold.at(k)){
                 return false;
             }
             k++;
+        }
+        else if(k > 0 && k < hold.size()){
+            return false;
         }
     }
     if(k != hold.size()){
@@ -51,6 +63,7 @@ bool isExit(char x[]){
     else{
         return true;
     }
+    //alternative way to parse that causes a bug when calling exit
     /*
     //sets up any of the acceptable commands
     //to exit
