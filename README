@@ -36,5 +36,5 @@ or not execute at all.
 6. Using more than one consecutive "&&" connectors with spaces in between any will cause the commands after them
 to not execute.
 7. "&" and "|" can be substituted for "&&" and "||", respectively, when connecting commands.
-8. When using the "&&" connectors if any extra of these connectors are insrted in between any
+8. When using the "&&" connectors if any extra of these connectors are inserted in between any
 two commands, and any of the extra connectors are seperated by a space, any command after them will not run.
