@@ -12,7 +12,7 @@ Alexander Ortiz
 
 Program Overview
 ---------
-
+RShell is meant to be a basic implementation of the Bash shell written in C++. Utilizing the execvp function RShell can execute all commands found in ```/bin```.
 
 File List
 ----------
