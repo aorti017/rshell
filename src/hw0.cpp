@@ -63,30 +63,20 @@ bool isExit(char x[]){
     else{
         return true;
     }
-    //alternative way to parse that causes a bug when calling exit
-    /*
-    //sets up any of the acceptable commands
-    //to exit
-    string ext = "exit";
-    string ext2 = " exit";
-    string ext3 = "exit ";
-    string ext4 = " exit ";
-    //checks if the command is eqaul to any of the acceptable forms
-    //returning true if equal to any and false otherwise
-    if(x == ext || x == ext2 || x == ext3 || x == ext4){
-        return true;
-    }
-    else{
-        return false;
-    }
-    */
 }
 
+//traverses the entered list of commands
+//and checks to see how many different kinds of
+//connectors there are, if there are more than one
+//it returns true else returns false
 bool multiConn(string x){
     int amp = 0;
     int ln = 0;
     int semi = 0;
     int total = 0;
+    //if any part of the string does not
+    //align with "exit" returns false, otherwise counts
+    //all characters after the passed in command
     for(unsigned int i = 0; i < x.size(); i++){
         if(x.at(i) == '&' && i != x.size()-1){
             if(x.at(i+1) == '&'){
@@ -103,6 +93,7 @@ bool multiConn(string x){
         }
 
     }
+    //calculates the total amount of different connectors
     if(amp > 0){
         total++;
     }
@@ -112,9 +103,11 @@ bool multiConn(string x){
     if(ln > 0){
         total++;
     }
+    //if more than one return true
     if(total > 1){
         return true;
     }
+    //else false
     else{
         return false;
     }
@@ -280,29 +273,48 @@ void run(char str[]){
 
 //main takes in commands and passes them to run to execute
 int main(){
+
     //continue until terminated by a conditional branch within run
     while(true){
-        //get the users command including all spaces
+
+        //retrieves the login name
+        //and checks to make sure there was no error
         char* login = getlogin();
         if(login == NULL){
             perror("getlogin");
         }
+
+        //sets up the host name variable, maximum of 128 chars
         char host[128];
+
+        //holds return value of gethostname
         int hostFlag;
+
+        //sets up input var
         string input;
+
+        //retrieves the host name and checks for errors
         if((hostFlag = gethostname(host, sizeof(host))) == -1){
             perror("gethostname");
         }
+
+        //if both login and gethostname rerurned without error
+        //cout the login@host
         if(login != NULL && hostFlag != -1){
             cout << login << "@" << host << "$ ";
         }
+        //otherwise cout vanilla prompt
         else{
             cout << "$ ";
         }
+
+        //retrieve user input including spaces
         getline(cin, input);
 
         //remove anything that is a comment from the users input
         input = commentRemoval(input);
+
+        //check for multiple connectors
         if(!multiConn(input)){
             //determines the size of the input
             int input_size = input.size()+1;
@@ -315,6 +327,8 @@ int main(){
             //after running the dynamically allocated memory is deleted
             delete[] str;
         }
+        //if there are more than one connector do not run commands
+        //and cerr error
         else{
             cerr << "Multiple connector types forbidden" << endl;
         }
