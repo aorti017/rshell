@@ -1,86 +1,142 @@
-Script started on Mon 20 Oct 2014 10:13:47 AM PDT
-~
-aorti017@hammer $ cd Desktop/rshell
-~/Desktop/rshell
-aorti017@hammer $ make
-if [ ! -d "./bin" ];\
-	then mkdir bin;\
-	fi
-g++ -Wall -Werror -pedantic -ansi src/hw0.cpp -o bin/rshell
-~/Desktop/rshell
-aorti017@hammer $ bin/rshell
-$ #I wi;ll   ll begin by processing commands seperated by spaces      variou  s amounts of spaces and con mmando s or neither^[[D    
-$ ls #a command surrounded by no spaces and no connectors
+Script started on Mon 20 Oct 2014 05:10:21 PM PDT
+]0;alexander@alexander-desktop: ~/Documents/execalexander@alexander-desktop:~/Documents/exec$ bin/rshell
+$ #testing executing two or fewer commands with vai rious amounts od f spaces and connectors between them
+$ ls
 bin  LICENSE  Makefile	README	src  tests
-$ ls; #a command se  tem rminated with a connector
+$ ls;
 bin  LICENSE  Makefile	README	src  tests
-$  ls #a command sp epr erated by sp              urrounded by spaces and cno  no     no connector 
+$  ls
 bin  LICENSE  Makefile	README	src  tests
-$ ls ; #  a command                ls ; #a comman  d s surrounded with spaces and termint ated by a connector
+$  ls;
 bin  LICENSE  Makefile	README	src  tests
-$ ls && pwd #a   two commands seperated by spaces and a connector
+$  ls ;
 bin  LICENSE  Makefile	README	src  tests
-/home/csmajs/aorti017/Desktop/rshell
-$ ls&& pwd #two commands seperated bya    a space and a connector
+$ ;s  ls;pwd
 bin  LICENSE  Makefile	README	src  tests
-/home/csmajs/aorti017/Desktop/rshell
-$ ls &&pwd #to  two comamnd    mands seperated by a space and a connector
+/home/alexander/Documents/exec
+$ ls ; pwd
 bin  LICENSE  Makefile	README	src  tests
-/home/csmajs/aorti017/Desktop/rshell
-$ ls&&pwd #two commands e seperated by only a connector
+/home/alexander/Documents/exec
+$ ls; pwd
 bin  LICENSE  Makefile	README	src  tests
-/home/csmajs/aorti017/Desktop/rshell
-$ ls && pw        ls -a&&mkdir .secrets && ls -a&& rm -rf .secrets &&ls -a #multiple commands sp eperated by varying amounts of spca  aces and connectors
+/home/alexander/Documents/exec
+$ ls ;pwd
+bin  LICENSE  Makefile	README	src  tests
+/home/alexander/Documents/exec
+$ #testsin  g    ing processing more than two commands with vara  rious amounts of spaces and connectors between
+$ ls -a ; mkdir .secrets; ls -a;rm -rf .secrets ;ls -a
 .  ..  bin  .git  LICENSE  Makefile  README  src  tests
 .  ..  bin  .git  LICENSE  Makefile  README  .secrets  src  tests
 .  ..  bin  .git  LICENSE  Makefile  README  src  tests
-$ ls -a;mkdir .       touch .s supersecrets ; ls 0a  -a; rm .supersecrets ;ls -al ; #  multiple commands seperated by varying amounts of space anda  terminated by a different com nnector
-.  ..  bin  .git  LICENSE  Makefile  README  src  tests
-.  ..  bin  .git  LICENSE  Makefile  README  src  .supersecrets  tests
-.  ..  bin  .git  LICENSE  Makefile  README  src  tests
-$ ls -al ;touch .supersecrets ; ls -al   ; rm.sup     .supersecrets ;ls 0a  -a #the sam e  e test as above w but without the temrinatinf g          erminating connector
-.  ..  bin  .git  LICENSE  Makefile  README  src  tests
-.  ..  bin  .git  LICENSE  Makefile  README  src  .supersecrets  tests
-.  ..  bin  .git  LICENSE  Makefile  README  src  tests
-$ #Now I will be e testing the logic of the connectors
-$ ls ; pwd ; echo ""^[[Dhello          hello world";  ; #Using ; each command should execute regardless of ir f the one prior faie led                                                                         each command should execute
+$ #testing the logic of the "&&", "||", and ";" connectors
+$ ls; pwd; echo "complete"
 bin  LICENSE  Makefile	README	src  tests
-/home/csmajs/aorti017/Desktop/rshell
-"hello world"
-$ not-a-comman   d ; ls ; pwd;       wd ; #each command after not-a-comm d should rn un despite it failing
+/home/alexander/Documents/exec
+"complete"
+$ not-acomd-     -cmd;s ls;pwd
 execvp: No such file or directory
 bin  LICENSE  Makefile	README	src  tests
-/home/csmajs/aorti017/Desktop/rshell
-$ ls ; not-a-comd ; pwd ; echo ""^[[Dhell         hello world" ; #each command beof  for  e and after not-a-ocm   comd should dr  run despite it failing
+/home/alexander/Documents/exec
+$ ls ; not-a-cmd ; pwd
 bin  LICENSE  Makefile	README	src  tests
 execvp: No such file or directory
-/home/csmajs/aorti017/Desktop/rshell
-"hello world"
-$ ls && pwd && wcho he  ""^[[D^[[D               echo : "hello word" #each command should execute if the one prior executed successfully
+/home/alexander/Documents/exec
+$ ls && pwd && echo "complete"
 bin  LICENSE  Makefile	README	src  tests
-/home/csmajs/aorti017/Desktop/rshell
-"hello word"
-$ not-a-comd && ls && pwd #nothing after not-aomc  com   -  -comd should run becase  use it fails
+/home/alexander/Documents/exec
+"complete"
+$ ls && not-a-cmd && pwd
+bin  LICENSE  Makefile	README	src  tests
 execvp: No such file or directory
-$ ls && pw  d && not-a-comd && echo ""^[[Dhell         hello world" #eveyrthing       rything before but nothing after not-a-comd should execute bea cause not-a-comd fails
-bin  LICENSE  Makefile	README	src  tests
-/home/csmajs/aorti017/Desktop/rshell
+$ not-a-cmd && ls && pwd
 execvp: No such file or directory
-$ ls || pwd ||echo ""^[[Dhello world                hello world" #only the first command should ex                                only the first command should execute beca ause a command sp  should only execute if the prior to it failed
+$ ls || pwd || echo "complete"
 bin  LICENSE  Makefile	README	src  tests
-$ not-a-comd || not-a-comd || ls ||pwd      pwd #o the ls  third command should execute beacsue the two beo fore it fail, but the fourth eill    wio ll not beacues the third passed
+$ not  -a-cmd || ls || pwd
+execvp: No such file or directory
+bin  LICENSE  Makefile	README	src  tests
+$ not-a-cmd || not-a-cmd || ls
 execvp: No such file or directory
 execvp: No such file or directory
 bin  LICENSE  Makefile	README	src  tests
-$ #I will now demonstart                now test the exit command when enetered alone and                  tered alone and connected with other commands
+$ o nt ot-a-cmd;not-a-cmd;not-a-cmd
+execvp: No such file or directory
+execvp: No such file or directory
+execvp: No such file or directory
+$ not-a-cmd&&not-a-cmd&&not-a-cmd
+execvp: No such file or directory
+$ not-a-cmd||not-a-cmd||not-c a-d cmd
+execvp: No such file or directory
+execvp: No such file or directory
+execvp: No such file or directory
+$ #testing the use of flags and parameters
+$ ls -a -l
+total 36
+drwxrwxr-x 6 alexander alexander 4096 Oct 20 17:13 .
+drwxr-xr-x 5 alexander alexander 4096 Oct 20 17:03 ..
+drwxrwxr-x 2 alexander alexander 4096 Oct 20 17:09 bin
+drwxrwxr-x 8 alexander alexander 4096 Oct 20 17:09 .git
+-rw-rw-r-- 1 alexander alexander   97 Oct 20 17:04 LICENSE
+-rw-rw-r-- 1 alexander alexander  180 Oct 20 17:04 Makefile
+-rw-rw-r-- 1 alexander alexander 2294 Oct 20 17:04 README
+drwxrwxr-x 2 alexander alexander 4096 Oct 20 17:04 src
+drwxrwxr-x 2 alexander alexander 4096 Oct 20 17:10 tests
+$ ls -a -l && pwd && echo This is a param
+total 36
+drwxrwxr-x 6 alexander alexander 4096 Oct 20 17:13 .
+drwxr-xr-x 5 alexander alexander 4096 Oct 20 17:03 ..
+drwxrwxr-x 2 alexander alexander 4096 Oct 20 17:09 bin
+drwxrwxr-x 8 alexander alexander 4096 Oct 20 17:09 .git
+-rw-rw-r-- 1 alexander alexander   97 Oct 20 17:04 LICENSE
+-rw-rw-r-- 1 alexander alexander  180 Oct 20 17:04 Makefile
+-rw-rw-r-- 1 alexander alexander 2294 Oct 20 17:04 README
+drwxrwxr-x 2 alexander alexander 4096 Oct 20 17:04 src
+drwxrwxr-x 2 alexander alexander 4096 Oct 20 17:10 tests
+/home/alexander/Documents/exec
+This is a param
+$ ls -a -l -Ql ;
+total 36
+drwxrwxr-x 6 alexander alexander 4096 Oct 20 17:13 "."
+drwxr-xr-x 5 alexander alexander 4096 Oct 20 17:03 ".."
+drwxrwxr-x 2 alexander alexander 4096 Oct 20 17:09 "bin"
+drwxrwxr-x 8 alexander alexander 4096 Oct 20 17:09 ".git"
+-rw-rw-r-- 1 alexander alexander   97 Oct 20 17:04 "LICENSE"
+-rw-rw-r-- 1 alexander alexander  180 Oct 20 17:04 "Makefile"
+-rw-rw-r-- 1 alexander alexander 2294 Oct 20 17:04 "README"
+drwxrwxr-x 2 alexander alexander 4096 Oct 20 17:04 "src"
+drwxrwxr-x 2 alexander alexander 4096 Oct 20 17:10 "tests"
+$ echo the fie le reads: ; cat emptyfile
+the file reads:
+cat: emptyfile: No such file or directory
+$ #testing the comment functionall ity
+$ ls # t  this iz   s a comment
+bin  LICENSE  Makefile	README	src  tests
+$ ls #&&pwd && echo hello
+bin  LICENSE  Makefile	README	src  tests
+$ #ls && pwd && ls -a
+$ #testing the exit command
 $ exit
-~/Desktop/rshell
-aorti017@hammer $ bin/rshell
+]0;alexander@alexander-desktop: ~/Documents/execalexander@alexander-desktop:~/Documents/exec$ bn[Kin/rshell
 $ ls && pwd && exit
 bin  LICENSE  Makefile	README	src  tests
-/home/csmajs/aorti017/Desktop/rshell
-~/Desktop/rshell
-aorti017@hammer $ exit
+/home/alexander/Documents/exec
+]0;alexander@alexander-desktop: ~/Documents/execalexander@alexander-desktop:~/Documents/exec$ bin/sr[K[Krshell
+$ ls &&  ||       not-a-cmd || not-a-cmd ||    exit   
+execvp: No such file or directory
+execvp: No such file or directory
+]0;alexander@alexander-desktop: ~/Documents/execalexander@alexander-desktop:~/Documents/exec$ bin/rshell
+$ this-will-not exit
+execvp: No such file or directory
+$ exit this-will-not
+execvp: No such file or directory
+$ echo "exit"
+"exit"
+$ echo ecit   xit
+exit
+$ ls ; touch exit ; ls ; rm exit ; exit
+bin  LICENSE  Makefile	README	src  tests
+bin  exit  LICENSE  Makefile  README  src  tests
+]0;alexander@alexander-desktop: ~/Documents/execalexander@alexander-desktop:~/Documents/exec$ exit
 exit
 
-Script done on Mon 20 Oct 2014 10:52:50 AM PDT
+Script done on Mon 20 Oct 2014 05:24:26 PM PDT
