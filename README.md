@@ -50,7 +50,9 @@ How to run
 
 Program Operation
 ---------
-
+* Multiple commands can be stirnged together on a single line by using the ```&&```, ```||```, or ```;``` connectors.
+* Using more than one type of connector per line will result in a ```Multiple connector types forbidden``` error message.
+* Excess connectors inserted in the front of a command line, in between commands, or at the end of a command line will be ignored.
 
 Bugs
 ---------
