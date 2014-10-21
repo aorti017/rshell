@@ -47,7 +47,7 @@ How to run
 3. ```make```
 4. ```bin/rshell```
 
-Program Operation
+Using RShell
 ---------
 * Multiple commands can be stirnged together on a single line by using the ```&&```, ```||```, or ```;``` connectors.
 * Connecting multiple commands by ```&&``` will cause commands to execute only if the command prior was successful.
@@ -58,8 +58,9 @@ Program Operation
 * Comments can be inserted using ```#```, anything after ```#``` will be interpreted as a comment.
 * The ```exit``` command will exit RShell upon execution.
 
-Bugs
+Bugs/Limitations
 ---------
+* Does no support the functionality of quotation marks with commands like ```echo```.
 * Using connectors as part of or the parameter for a command may cause the command to not execute properly.
 * "&" and "|" are interpreted as meaning the same thing as the "&&" and "||" connectors when used in place of connectors.
 * When using "&&" connectors if any extra (more than 1) of these connectors are inserted in between any two commands and any of the said extra connectors are seperated by a space any command after the excess connectors will not execute.
