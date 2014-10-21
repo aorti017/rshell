@@ -283,8 +283,22 @@ int main(){
     //continue until terminated by a conditional branch within run
     while(true){
         //get the users command including all spaces
+        char* login = getlogin();
+        if(login == NULL){
+            perror("getlogin");
+        }
+        char host[128];
+        int hostFlag;
         string input;
-        cout << "$ ";
+        if((hostFlag = gethostname(host, sizeof(host))) == -1){
+            perror("gethostname");
+        }
+        if(login != NULL && hostFlag != -1){
+            cout << login << "@" << host << "$ ";
+        }
+        else{
+            cout << "$ ";
+        }
         getline(cin, input);
 
         //remove anything that is a comment from the users input
