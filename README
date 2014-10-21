@@ -1,10 +1,10 @@
-rshell:i
+rshell:
 This program is a basic command shell called rshell. It is capable of running bash commands whos executables
 can be found in /bin(such as "ls", "echo", and "pwd"to name a few).
 
-Installing:
+Installing/Running:
 To install rshell run the following commands:
-    1. git pull https://github.com/aorti017/rshell.git
+    1. git clone https://github.com/aorti017/rshell.git
     2. cd rshell
     3. make
 Then, to run rshell run "bin/rshell"
@@ -25,18 +25,13 @@ To exit rshell enter the command "exit". This command has the capability of bein
 series of commands connected by any of the connectors.
 Comments can be made by appending the comment after a "#" character within the command, anything after the
 "#" is treated as a comment.
-Using multiple connectors of differing type in a single command will result in a "Multiple connector types forbidden" error
+Using multiple connectors of differing type in a single command will result in a "Multiple connector types forbidden" error.
+Connectors appended to the start of a command line are ignored as well as excess connectors appended to the end of the command lineor in between commands.
 
 Bugs/Limitations:
-1. If any connector is the first thing to appear in a command it is ignored, and no error is displayed.
-2. Multiple consecutive connectors with out commands between them are ignored and no error is displayed.
-3. Trailing connectors are ignored and no error is displayed.
-4. Using connectors as part of or the parameter for a command may cause the command to not execte as instructed,
+1. Using connectors as part of or the parameter for a command may cause the command to not execte as instructed,
 or not execute at all.
-5. Can not mix connectors in a single command line.
-to not execute.
-6. "&" and "|" can be substituted for "&&" and "||", respectively, when connecting commands.
-7. When using the "&&" connectors if any extra of these connectors are inserted in between any
+2. "&" and "|" can be substituted for "&&" and "||", respectively, when connecting commands.
+3. When using the "&&" connectors if any extra of these connectors are inserted in between any
 two commands, and any of the extra connectors are seperated by a space, any command after them will not run.
-8. Passing "#" into echo between quotations (e.g. 'echo "this is #9"') will cause eveyrthing up until the "#" to be printed
 but nothing after it.
