@@ -82,6 +82,45 @@ bool isExit(char x[]){
     */
 }
 
+bool multiConn(string x){
+    int amp = 0;
+    int ln = 0;
+    int semi = 0;
+    int total = 0;
+    for(unsigned int i = 0; i < x.size(); i++){
+        if(x.at(i) == '&' && i != x.size()-1){
+            if(x.at(i+1) == '&'){
+                amp++;
+            }
+        }
+        if(x.at(i) == '|' && i != x.size()-1){
+           if(x.at(i+1) == '|'){
+               ln++;
+           }
+        }
+        if(x.at(i) == ';'){
+            semi++;
+        }
+
+    }
+    if(amp > 0){
+        total++;
+    }
+    if(semi > 0){
+        total++;
+    }
+    if(ln > 0){
+        total++;
+    }
+    if(total > 1){
+        return true;
+    }
+    else{
+        return false;
+    }
+}
+
+
 //the function searches for the '#' and
 //removes anything after that character
 string commentRemoval(string x){
@@ -250,17 +289,21 @@ int main(){
 
         //remove anything that is a comment from the users input
         input = commentRemoval(input);
-
-        //determines the size of the input
-        int input_size = input.size()+1;
-        //dynamically allocates a char*[] of the size of the input + 1
-        char* str = new char[input_size];
-        //copies the input into the char* str[]
-        strcpy(str, input.c_str());
-        //calls run on the users entered commands
-        run(str);
-        //after running the dynamically allocated memory is deleted
-        delete[] str;
+        if(!multiConn(input)){
+            //determines the size of the input
+            int input_size = input.size()+1;
+            //dynamically allocates a char*[] of the size of the input + 1
+            char* str = new char[input_size];
+            //copies the input into the char* str[]
+            strcpy(str, input.c_str());
+            //calls run on the users entered commands
+            run(str);
+            //after running the dynamically allocated memory is deleted
+            delete[] str;
+        }
+        else{
+            cerr << "Multiple connector types forbidden" << endl;
+        }
    }
    return 0;
 }

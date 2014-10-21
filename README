@@ -25,6 +25,7 @@ To exit rshell enter the command "exit". This command has the capability of bein
 series of commands connected by any of the connectors.
 Comments can be made by appending the comment after a "#" character within the command, anything after the
 "#" is treated as a comment.
+Using multiple connectors of differing type in a single command will result in a "Multiple connector types forbidden" error
 
 Bugs/Limitations:
 1. If any connector is the first thing to appear in a command it is ignored, and no error is displayed.
