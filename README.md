@@ -17,7 +17,6 @@ RShell is meant to be a basic implementation of the Bash shell written in C++. U
 File List
 ----------
 ```
-.:
 
 Makefile
 
@@ -51,8 +50,13 @@ How to run
 Program Operation
 ---------
 * Multiple commands can be stirnged together on a single line by using the ```&&```, ```||```, or ```;``` connectors.
+* Connecting multiple commands by ```&&``` will cause commands to execute only if the command prior was successful.
+* Connecting multiple commands by ```||``` will cause commands to execute only if the command prior was not successful.
+* Connecting multiple commands by ```;``` will cause command to execute regardless of if the prior command was successful.
 * Using more than one type of connector per line will result in a ```Multiple connector types forbidden``` error message.
 * Excess connectors inserted in the front of a command line, in between commands, or at the end of a command line will be ignored.
+* Comments can be inserted using ```#```, anything after ```#``` will be interpreted as a comment.
+* The ```exit``` command will exit RShell upon execution.
 
 Bugs
 ---------
