@@ -16,7 +16,7 @@ Program Overview
 
 File List
 ----------
-'''
+```
 .:
 
 Makefile
@@ -28,25 +28,25 @@ README.md
 ./src
 
 ./tests
-'''
-'''
+```
+```
 ./src:
 
 hw0.cpp
-'''
-'''
+```
+```
 ./tests:
 
 exec.script
-'''
+```
 
 How to run
 ----------
 
 1. Clone the repository from the link given above
-2. '''cd rshell'''
-3. '''make'''
-4. '''bin/rshell'''
+2. ```cd rshell```
+3. ```make```
+4. ```bin/rshell```
 
 Program Operation
 ---------
