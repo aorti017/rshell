@@ -54,3 +54,6 @@ Program Operation
 
 Bugs
 ---------
+* Using connectors as part of or the parameter for a command may cause the command to not execute properly.
+* "&" and "|" are interpreted as meaning the same thing as the "&&" and "||" connectors when used in place of connectors.
+* When using "&&" connectors if any extra (more than 1) of these connectors are inserted in between any two commands and any of the said extra connectors are seperated by a space any command after the excess connectors will not execute.
