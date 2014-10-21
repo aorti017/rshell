@@ -1,0 +1,332 @@
+Script started on Tue 21 Oct 2014 03:21:42 PM PDT
+~
+aorti017@hammer $ cd rshell
+~/rshell
+aorti017@hammer $ bin/rh[Kshell
+aorti017@hammer.cs.ucr.edu$ #testing execvp by running various commands
+aorti017@hammer.cs.ucr.edu$ ls
+bin  LICENSE  Makefile	README.md  src	tests
+aorti017@hammer.cs.ucr.edu$ pwd
+/home/csmajs/aorti017/rshell
+aorti017@hammer.cs.ucr.edu$ echo "Hello world"
+"Hello world"
+aorti017@hammer.cs.ucr.edu$ #testing ; connector
+aorti017@hammer.cs.ucr.edu$ ls;
+bin  LICENSE  Makefile	README.md  src	tests
+aorti017@hammer.cs.ucr.edu$ ls ; pwd
+bin  LICENSE  Makefile	README.md  src	tests
+/home/csmajs/aorti017/rshell
+aorti017@hammer.cs.ucr.edu$ ls; pwd
+bin  LICENSE  Makefile	README.md  src	tests
+/home/csmajs/aorti017/rshell
+aorti017@hammer.cs.ucr.edu$ ls ;w pwd
+bin  LICENSE  Makefile	README.md  src	tests
+/home/csmajs/aorti017/rshell
+aorti017@hammer.cs.ucr.edu$ ls;pwd
+bin  LICENSE  Makefile	README.md  src	tests
+/home/csmajs/aorti017/rshell
+aorti017@hammer.cs.ucr.edu$ ls     ;     pwd
+bin  LICENSE  Makefile	README.md  src	tests
+/home/csmajs/aorti017/rshell
+aorti017@hammer.cs.ucr.edu$ ls -a;mkdir .secrets; ls -a ;rm -rf .secrets ; ls -a;
+.  ..  bin  .git  LICENSE  Makefile  README.md	src  tests
+.  ..  bin  .git  LICENSE  Makefile  README.md	.secrets  src  tests
+.  ..  bin  .git  LICENSE  Makefile  README.md	src  tests
+aorti017@hammer.cs.ucr.edu$ echo beginning; ls;ls -a ; touch testFile ;touch .secretTestFile ;lsl ; ls-  -a  ; rm testFile ; ls ;rm .secretTestfI  File; eco   ho end
+beginning
+bin  LICENSE  Makefile	README.md  src	tests
+.  ..  bin  .git  LICENSE  Makefile  README.md	src  tests
+bin  LICENSE  Makefile	README.md  src	testFile  tests
+.  ..  bin  .git  LICENSE  Makefile  README.md	.secretTestFile  src  testFile	tests
+bin  LICENSE  Makefile	README.md  src	tests
+end
+aorti017@hammer.cs.ucr.edu$ #testing ; logic
+aorti017@hammer.cs.ucr.edu$ fail ; ls ;pwd
+execvp: No such file or directory
+bin  LICENSE  Makefile	README.md  src	tests
+/home/csmajs/aorti017/rshell
+aorti017@hammer.cs.ucr.edu$ ;s    ls ; fail ; pwd
+bin  LICENSE  Makefile	README.md  src	tests
+execvp: No such file or directory
+/home/csmajs/aorti017/rshell
+aorti017@hammer.cs.ucr.edu$ fail ; fail ; fail
+execvp: No such file or directory
+execvp: No such file or directory
+execvp: No such file or directory
+aorti017@hammer.cs.ucr.edu$ ls ; fail ; pwd ; echo Hey ; fail ;fail ;ls -a; fail;fail;ls -a -l -W Q
+bin  LICENSE  Makefile	README.md  src	tests
+execvp: No such file or directory
+/home/csmajs/aorti017/rshell
+Hey
+execvp: No such file or directory
+execvp: No such file or directory
+.  ..  bin  .git  LICENSE  Makefile  README.md	src  tests
+execvp: No such file or directory
+execvp: No such file or directory
+total 68
+drwx------  6 aorti017 csmajs  4096 Oct 21 15:26 "."
+drwx------ 53 aorti017 csmajs 36864 Oct 21 15:20 ".."
+drwx------  2 aorti017 csmajs  4096 Oct 21 15:21 "bin"
+drwx------  8 aorti017 csmajs  4096 Oct 21 15:20 ".git"
+-rw-------  1 aorti017 csmajs  1486 Oct 21 15:20 "LICENSE"
+-rw-------  1 aorti017 csmajs   180 Oct 21 15:20 "Makefile"
+-rw-------  1 aorti017 csmajs  2124 Oct 21 15:20 "README.md"
+drwx------  2 aorti017 csmajs  4096 Oct 21 15:20 "src"
+drwx------  2 aorti017 csmajs  4096 Oct 21 15:21 "tests"
+aorti017@hammer.cs.ucr.edu$ #testing &&
+aorti017@hammer.cs.ucr.edu$ ls && pwd
+bin  LICENSE  Makefile	README.md  src	tests
+/home/csmajs/aorti017/rshell
+aorti017@hammer.cs.ucr.edu$ ls&&pwd
+bin  LICENSE  Makefile	README.md  src	tests
+/home/csmajs/aorti017/rshell
+aorti017@hammer.cs.ucr.edu$ ls&& pwd
+bin  LICENSE  Makefile	README.md  src	tests
+/home/csmajs/aorti017/rshell
+aorti017@hammer.cs.ucr.edu$ ls &&pwd
+bin  LICENSE  Makefile	README.md  src	tests
+/home/csmajs/aorti017/rshell
+aorti017@hammer.cs.ucr.edu$ ls &&       &&     pwd
+bin  LICENSE  Makefile	README.md  src	tests
+/home/csmajs/aorti017/rshell
+aorti017@hammer.cs.ucr.edu$ ls && touch testFile&&ls &&rm testFile&& ls  &&  ls -a &&k mkdir .secrets  &&  ls -a && rm -rf .secrets  &&  ls -a
+bin  LICENSE  Makefile	README.md  src	tests
+bin  LICENSE  Makefile	README.md  src	testFile  tests
+bin  LICENSE  Makefile	README.md  src	tests
+.  ..  bin  .git  LICENSE  Makefile  README.md	src  tests
+.  ..  bin  .git  LICENSE  Makefile  README.md	.secrets  src  tests
+.  ..  bin  .git  LICENSE  Makefile  README.md	src  tests
+aorti017@hammer.cs.ucr.edu$ echo 1 && echo 2 && echo 3 && 3 echo 4 && echo 5 && echo 6 && ls &&wp  pwd &&  echo     ls -a&&ls -a -Q&& ls-  -a-    -0 l 0 -Q &&e  eh cho end of command
+1
+2
+3
+4
+5
+6
+bin  LICENSE  Makefile	README.md  src	tests
+/home/csmajs/aorti017/rshell
+.  ..  bin  .git  LICENSE  Makefile  README.md	src  tests
+"."  ".."  "bin"  ".git"  "LICENSE"  "Makefile"  "README.md"  "src"  "tests"
+total 68
+drwx------  6 aorti017 csmajs  4096 Oct 21 15:31 "."
+drwx------ 53 aorti017 csmajs 36864 Oct 21 15:20 ".."
+drwx------  2 aorti017 csmajs  4096 Oct 21 15:21 "bin"
+drwx------  8 aorti017 csmajs  4096 Oct 21 15:20 ".git"
+-rw-------  1 aorti017 csmajs  1486 Oct 21 15:20 "LICENSE"
+-rw-------  1 aorti017 csmajs   180 Oct 21 15:20 "Makefile"
+-rw-------  1 aorti017 csmajs  2124 Oct 21 15:20 "README.md"
+drwx------  2 aorti017 csmajs  4096 Oct 21 15:20 "src"
+drwx------  2 aorti017 csmajs  4096 Oct 21 15:21 "tests"
+end of command
+aorti017@hammer.cs.ucr.edu$ #testing | && logic
+aorti017@hammer.cs.ucr.edu$ ls && pwd && echo done
+bin  LICENSE  Makefile	README.md  src	tests
+/home/csmajs/aorti017/rshell
+done
+aorti017@hammer.cs.ucr.edu$ fail && ls && pwd
+execvp: No such file or directory
+aorti017@hammer.cs.ucr.edu$ ls && fail && pwd
+bin  LICENSE  Makefile	README.md  src	tests
+execvp: No such file or directory
+aorti017@hammer.cs.ucr.edu$ ls && pwd && ls -a && echo Hello && echo world && fail && pwd && ls -Q&& echo this will not echo
+bin  LICENSE  Makefile	README.md  src	tests
+/home/csmajs/aorti017/rshell
+.  ..  bin  .git  LICENSE  Makefile  README.md	src  tests
+Hello
+world
+execvp: No such file or directory
+aorti017@hammer.cs.ucr.edu$ #testing ||
+aorti017@hammer.cs.ucr.edu$ ls||pwd
+bin  LICENSE  Makefile	README.md  src	tests
+aorti017@hammer.cs.ucr.edu$ fail || pwd
+execvp: No such file or directory
+/home/csmajs/aorti017/rshell
+aorti017@hammer.cs.ucr.edu$ ls|| pwd        fail||pwd
+execvp: No such file or directory
+/home/csmajs/aorti017/rshell
+aorti017@hammer.cs.ucr.edu$ ls || pwd
+bin  LICENSE  Makefile	README.md  src	tests
+aorti017@hammer.cs.ucr.edu$ ls|| pwd
+bin  LICENSE  Makefile	README.md  src	tests
+aorti017@hammer.cs.ucr.edu$ fail  || pwd
+execvp: No such file or directory
+/home/csmajs/aorti017/rshell
+aorti017@hammer.cs.ucr.edu$ ls ||pwd
+bin  LICENSE  Makefile	README.md  src	tests
+aorti017@hammer.cs.ucr.edu$ fail ||pwd
+execvp: No such file or directory
+/home/csmajs/aorti017/rshell
+aorti017@hammer.cs.ucr.edu$ ls     ||     pwd
+bin  LICENSE  Makefile	README.md  src	tests
+aorti017@hammer.cs.ucr.edu$ fail     ||     pwd
+execvp: No such file or directory
+/home/csmajs/aorti017/rshell
+aorti017@hammer.cs.ucr.edu$ #testing log   || logic /    /long command lines
+aorti017@hammer.cs.ucr.edu$ ls || pwd|| echo hello ||ls -a  L ||pwd
+bin  LICENSE  Makefile	README.md  src	tests
+aorti017@hammer.cs.ucr.edu$ fail|| d fail||fail ||fail || ls -a -Q|| pwd||pwd|| echo hello
+execvp: No such file or directory
+execvp: No such file or directory
+execvp: No such file or directory
+execvp: No such file or directory
+"."  ".."  "bin"  ".git"  "LICENSE"  "Makefile"  "README.md"  "src"  "tests"
+aorti017@hammer.cs.ucr.edu$ fail||fail|| fail ||fail || fi ail || ls
+execvp: No such file or directory
+execvp: No such file or directory
+execvp: No such file or directory
+execvp: No such file or directory
+execvp: No such file or directory
+bin  LICENSE  Makefile	README.md  src	tests
+aorti017@hammer.cs.ucr.edu$ fail || fail || fai  l || fail || fail || fail ||fail ||fail || fail
+execvp: No such file or directory
+execvp: No such file or directory
+execvp: No such file or directory
+execvp: No such file or directory
+execvp: No such file or directory
+execvp: No such file or directory
+execvp: No such file or directory
+execvp: No such file or directory
+execvp: No such file or directory
+aorti017@hammer.cs.ucr.edu$ #testing && when each command fails
+aorti017@hammer.cs.ucr.edu$ fail && fail && fail && fail && fail && fail
+execvp: No such file or directory
+aorti017@hammer.cs.ucr.edu$ #testing commands with various amounts of spcaes inserted in front of, between           of and after c the commands
+aorti017@hammer.cs.ucr.edu$  ls;
+bin  LICENSE  Makefile	README.md  src	tests
+aorti017@hammer.cs.ucr.edu$         ls       ;
+bin  LICENSE  Makefile	README.md  src	tests
+aorti017@hammer.cs.ucr.edu$      ls       &&      pwd     
+bin  LICENSE  Makefile	README.md  src	tests
+/home/csmajs/aorti017/rshell
+aorti017@hammer.cs.ucr.edu$       ls     ;    pwd    ls -a          ;    ls - a  a     ; echo hell lo
+bin  LICENSE  Makefile	README.md  src	tests
+/home/csmajs/aorti017/rshell
+.  ..  bin  .git  LICENSE  Makefile  README.md	src  tests
+hello
+aorti017@hammer.cs.ucr.edu$ #testing Multiple connector types forbidden error
+aorti017@hammer.cs.ucr.edu$ ls && pwd || ls -a
+Multiple connector types forbidden
+aorti017@hammer.cs.ucr.edu$ ls && pwd
+bin  LICENSE  Makefile	README.md  src	tests
+/home/csmajs/aorti017/rshell
+aorti017@hammer.cs.ucr.edu$ ls && pwd ; ls
+Multiple connector types forbidden
+aorti017@hammer.cs.ucr.edu$ ls || pwd ; ls
+Multiple connector types forbidden
+aorti017@hammer.cs.ucr.edu$ ls && pwd ; ls || ls -a
+Multiple connector types forbidden
+aorti017@hammer.cs.ucr.edu$ #testing empty a commands and space commands
+aorti017@hammer.cs.ucr.edu$ 
+aorti017@hammer.cs.ucr.edu$ #^ empty command
+aorti017@hammer.cs.ucr.edu$      
+aorti017@hammer.cs.ucr.edu$ #^space co         space command
+aorti017@hammer.cs.ucr.edu$ #testing connectors appended to the front of the commands a    and the back of the cm ommand
+aorti017@hammer.cs.ucr.edu$ ; ls ; pwd ; ls-  -a
+bin  LICENSE  Makefile	README.md  src	tests
+/home/csmajs/aorti017/rshell
+.  ..  bin  .git  LICENSE  Makefile  README.md	src  tests
+aorti017@hammer.cs.ucr.edu$ ; ; ; ;ls - a ; pwd
+ls: cannot access -: No such file or directory
+ls: cannot access a: No such file or directory
+/home/csmajs/aorti017/rshell
+aorti017@hammer.cs.ucr.edu$ #previous attempt failed due to typo
+aorti017@hammer.cs.ucr.edu$ ; ; ; ;ls -a; pwd
+.  ..  bin  .git  LICENSE  Makefile  README.md	src  tests
+/home/csmajs/aorti017/rshell
+aorti017@hammer.cs.ucr.edu$ ls ; pwd ; ; ; ; 
+bin  LICENSE  Makefile	README.md  src	tests
+/home/csmajs/aorti017/rshell
+aorti017@hammer.cs.ucr.edu$ ls ; ; ; ; 
+bin  LICENSE  Makefile	README.md  src	tests
+aorti017@hammer.cs.ucr.edu$ && && ls
+aorti017@hammer.cs.ucr.edu$ ls && pwd && && && 
+bin  LICENSE  Makefile	README.md  src	tests
+/home/csmajs/aorti017/rshell
+aorti017@hammer.cs.ucr.edu$ || || || ls || pwd
+bin  LICENSE  Makefile	README.md  src	tests
+aorti017@hammer.cs.ucr.edu$ ls || pwd || || ||
+bin  LICENSE  Makefile	README.md  src	tests
+aorti017@hammer.cs.ucr.edu$ #testing excess connectors between commands
+aorti017@hammer.cs.ucr.edu$ ls ; ; ; ; pwd
+bin  LICENSE  Makefile	README.md  src	tests
+/home/csmajs/aorti017/rshell
+aorti017@hammer.cs.ucr.edu$ ls ;;;;; pwd
+bin  LICENSE  Makefile	README.md  src	tests
+/home/csmajs/aorti017/rshell
+aorti017@hammer.cs.ucr.edu$ ls || || || pwd
+bin  LICENSE  Makefile	README.md  src	tests
+aorti017@hammer.cs.ucr.edu$ ls |||||| pwd
+bin  LICENSE  Makefile	README.md  src	tests
+aorti017@hammer.cs.ucr.edu$ fail || || || pwd
+execvp: No such file or directory
+/home/csmajs/aorti017/rshell
+aorti017@hammer.cs.ucr.edu$ fail |||||| pwd
+execvp: No such file or directory
+/home/csmajs/aorti017/rshell
+aorti017@hammer.cs.ucr.edu$ #testing the commenting feature
+aorti017@hammer.cs.ucr.edu$ #this i  s a comment and will not do anything
+aorti017@hammer.cs.ucr.edu$ ls - a  a; pwd; ls; #this is the end of the line
+.  ..  bin  .git  LICENSE  Makefile  README.md	src  tests
+/home/csmajs/aorti017/rshell
+bin  LICENSE  Makefile	README.md  src	tests
+aorti017@hammer.cs.ucr.edu$ ls &&  @ #&& pwd && this     echo t       & echo this wont execute
+bin  LICENSE  Makefile	README.md  src	tests
+aorti017@hammer.cs.ucr.edu$ ls &&# echo this wont execute
+bin  LICENSE  Makefile	README.md  src	tests
+aorti017@hammer.cs.ucr.edu$ #testing the exit command
+aorti017@hammer.cs.ucr.edu$ exit
+~/rshell
+aorti017@hammer $ bin/rshell
+aorti017@hammer.cs.ucr.edu$ ls ; pwd ; exit;    ; ls -a
+bin  LICENSE  Makefile	README.md  src	tests
+/home/csmajs/aorti017/rshell
+~/rshell
+aorti017@hammer $ bin/rshell
+aorti017@hammer.cs.ucr.edu$ this      echo      echo this will not exit
+this will not exit
+aorti017@hammer.cs.ucr.edu$ ls ; ou  touch exit ; ls ; rm - exit;ls
+bin  LICENSE  Makefile	README.md  src	tests
+bin  exit  LICENSE  Makefile  README.md  src  tests
+bin  LICENSE  Makefile	README.md  src	tests
+aorti017@hammer.cs.ucr.edu$ fail || fail || fail || exit || ls ||pwd
+execvp: No such file or directory
+execvp: No such file or directory
+execvp: No such file or directory
+~/rshell
+aorti017@hammer $ bin/rshe;[Kll
+aorti017@hammer.cs.ucr.edu$ gara bagetestexit
+execvp: No such file or directory
+aorti017@hammer.cs.ucr.edu$ exitgarbagetext
+execvp: No such file or directory
+aorti017@hammer.cs.ucr.edu$ #testnig   ing handling failed commands
+aorti017@hammer.cs.ucr.edu$ ls -notaflag
+total 68
+drwx------  6  4096 Oct 21 16:00 .
+drwx------ 53 36864 Oct 21 15:20 ..
+drwx------  8  4096 Oct 21 15:20 .git
+-rw-------  1  1486 Oct 21 15:20 LICENSE
+-rw-------  1   180 Oct 21 15:20 Makefile
+-rw-------  1  2124 Oct 21 15:20 README.md
+drwx------  2  4096 Oct 21 15:20 src
+drwx------  2  4096 Oct 21 15:21 tests
+drwx------  2  4096 Oct 21 15:21 bin
+aorti017@hammer.cs.ucr.edu$ ls -garbageflag
+ls: invalid option -- 'e'
+Try `ls --help' for more information.
+aorti017@hammer.cs.ucr.edu$ this-is-not-valid
+execvp: No such file or directory
+aorti017@hammer.cs.ucr.edu$ rm -rf
+aorti017@hammer.cs.ucr.edu$ pwd fail
+pwd: ignoring non-option arguments
+/home/csmajs/aorti017/rshell
+aorti017@hammer.cs.ucr.edu$ ls /   notadir/notafile
+ls: cannot access notadir/notafile: No such file or directory
+aorti017@hammer.cs.ucr.edu$ ls pwd
+ls: cannot access pwd: No such file or directory
+aorti017@hammer.cs.ucr.edu$ 3 #this concludes testing
+aorti017@hammer.cs.ucr.edu$ exit
+~/rshell
+aorti017@hammer $ exit
+exit
+
+Script done on Tue 21 Oct 2014 04:05:59 PM PDT
