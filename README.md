@@ -55,6 +55,7 @@ Using RShell
 * Connecting multiple commands by ```;``` will cause command to execute regardless of if the prior command was successful.
 * Using more than one type of connector per line will result in a ```Multiple connector types forbidden``` error message.
 * Excess connectors inserted in the front of a command line, in between commands, or at the end of a command line will be ignored.
+* Entering ```&``` as opposed to ```&&```, ```|``` as opposed to ```||``` will result in a ```Unrecognized connector``` error.
 * Comments can be inserted using ```#```, anything after ```#``` will be interpreted as a comment.
 * The ```exit``` command will exit RShell upon execution.
 
@@ -62,5 +63,5 @@ Bugs/Limitations
 ---------
 * Does no support the functionality of quotation marks with commands like ```echo```.
 * Using connectors as part of or the parameter for a command may cause the command to not execute properly.
-* "&" and "|" are interpreted as meaning the same thing as the "&&" and "||" connectors when used in place of connectors.
 * When using "&&" connectors if any extra (more than 1) of these connectors are inserted in between any two commands and any of the said extra connectors are seperated by a space any command after the excess connectors will not execute.
+* ```&``` and ```|``` are interpreted as ```&&``` and ```||```, respectively.

@@ -105,6 +105,7 @@ bool multiConn(string x){
     }
     //if more than one return true
     if(total > 1){
+        cerr << "Multiple connector types forbidden" << endl;
         return true;
     }
     //else false
@@ -271,6 +272,7 @@ void run(char str[]){
     return;
 }
 
+
 //main takes in commands and passes them to run to execute
 int main(){
 
@@ -329,9 +331,6 @@ int main(){
         }
         //if there are more than one connector do not run commands
         //and cerr error
-        else{
-            cerr << "Multiple connector types forbidden" << endl;
-        }
    }
    return 0;
 }
