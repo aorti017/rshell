@@ -42,7 +42,7 @@ exec.script
 How to run
 ----------
 
-1. ```git clone https:/github.com/aorti017/rshell.git```
+1. ```git clone https://github.com/aorti017/rshell.git```
 2. ```cd rshell```
 3. ```make```
 4. ```bin/rshell```
