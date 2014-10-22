@@ -237,9 +237,9 @@ void run(char str[]){
             //wait for any process to exit, in this case I only created on,
             //and store its exit code in status
             if(-1 == waitpid(-1, &status, 0)){
-	        perror("waitpid");
-		exit(1);
-	    }
+    	        perror("waitpid");
+	        	exit(1);
+	         }
 
             //if the value of status is larger than 0
             //it failed
