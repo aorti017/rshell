@@ -200,28 +200,48 @@ bool ls_parse(vector<string> cmd, bool flags[], vector<string> &files){
     return true;
 }
 
-void printLs(bool flags[], queue<string> paths){
+void printLs(bool flags[], queue<string> paths, string path){
     if(paths.empty()){
         return;
     }
+    int cnt = 0;
     struct stat buf;
     string tmp = paths.front();
     string ftmp;
     DIR *dirp = opendir(tmp.c_str());
     dirent *direntp;
+    if(flags[2]){
+        cout << paths.front() << ":" << endl;
+    }
     while((direntp = readdir(dirp))){
         ftmp = direntp->d_name;
-        stat(tmp.c_str(), &buf);
         if(flags[0]){
             cout << direntp->d_name << endl;
         }
         else if(!flags[0] && ftmp.at(0) != '.'){
             cout << direntp->d_name << endl;
         }
+        string tmpPath = paths.front();
+        tmpPath.append("/");
+        tmpPath.append(ftmp);
+        stat(tmpPath.c_str(), &buf);
+        if(S_ISDIR(buf.st_mode) && ftmp != "." && ftmp != ".." && flags[2]){
+            if(tmp != ".git"){
+            if(flags[0]){
+                paths.push(tmpPath);
+                cnt++;
+            }
+            else if(!flags[0] && ftmp.at(0) != '.'){
+                paths.push(tmpPath);
+                cnt++;
+            }
+            }
+        }
     }
     closedir(dirp);
     paths.pop();
-    printLs(flags, paths);
+    cout << endl;
+    printLs(flags, paths, path);
     return;
 }
 
@@ -315,9 +335,10 @@ void run(char str[]){
                 }
                 else{
                     //print files and such
+                    string pth  = ".";
                     queue<string> tmp;
                     tmp.push(".");
-                    printLs(flags, tmp);
+                    printLs(flags, tmp, pth);
                     status = 0;
                 }
                 cmd.clear();
