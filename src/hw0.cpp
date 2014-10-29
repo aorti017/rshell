@@ -1,4 +1,7 @@
 #include <iostream>
+#include <sys/stat.h>
+#include <dirent.h>
+#include <queue>
 #include <stdio.h>
 #include <ctype.h>
 #include <cstring>
@@ -197,6 +200,32 @@ bool ls_parse(vector<string> cmd, bool flags[], vector<string> &files){
     return true;
 }
 
+void printLs(bool flags[], queue<string> paths){
+    if(paths.empty()){
+        return;
+    }
+    struct stat buf;
+    string tmp = paths.front();
+    string ftmp;
+    DIR *dirp = opendir(tmp.c_str());
+    dirent *direntp;
+    while((direntp = readdir(dirp))){
+        ftmp = direntp->d_name;
+        stat(tmp.c_str(), &buf);
+        if(flags[0]){
+            cout << direntp->d_name << endl;
+        }
+        else if(!flags[0] && ftmp.at(0) != '.'){
+            cout << direntp->d_name << endl;
+        }
+    }
+    closedir(dirp);
+    paths.pop();
+    printLs(flags, paths);
+    return;
+}
+
+
 //this function runs the command using fork and execvp
 //and returns once all commands from the entered char[]
 //have been executed
@@ -267,32 +296,33 @@ void run(char str[]){
 
         if(isls(pch)){
             int pid = fork();
-            if(pid == 0){
-            bool flags[3];
-            flags[0] = false;
-            flags[1] = false;
-            flags[2] = false;
-            bool valid = false;
-            vector<string> files;
-            parse(pch, cmd);
-            valid = ls_parse(cmd, flags, files);
-            if(!valid){
-                cerr << "Invalid flag" << endl;
+            if(pid == -1){
+                perror("fork");
                 exit(1);
             }
-            else{
-                cout << flags[0] << " " << flags[1] <<  " " << flags[2] << endl;
-                for(unsigned int i = 0; i < files.size(); i++){
-                    cout << files.at(i) << endl;
+            if(pid == 0){
+                bool flags[3];
+                flags[0] = false;
+                flags[1] = false;
+                flags[2] = false;
+                bool valid = false;
+                vector<string> files;
+                parse(pch, cmd);
+                valid = ls_parse(cmd, flags, files);
+                if(!valid){
+                    cerr << "Invalid flag" << endl;
+                    exit(1);
                 }
-                status = 0;
-            }
-            cmd.clear();
-            files.clear();
-            flags[0] = false;
-            flags[1] = false;
-            flags[2] = false;
-            exit(0);
+                else{
+                    //print files and such
+                    queue<string> tmp;
+                    tmp.push(".");
+                    printLs(flags, tmp);
+                    status = 0;
+                }
+                cmd.clear();
+                files.clear();
+                exit(0);
             }
             else{
                 waitpid(-1, &status, 0);
