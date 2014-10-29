@@ -182,6 +182,9 @@ bool ls_parse(vector<string> cmd, bool flags[], vector<string> &files){
         else if(cmd.at(i) == "-R"){
             flags[2] = true;
         }
+        else if(cmd.at(i) == "-"){
+            return false;
+        }
         else if(cmd.at(i).at(0) == '-'){
             if(!multiCheck(cmd.at(i), flags)){
                 return false;
