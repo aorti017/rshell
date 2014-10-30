@@ -157,11 +157,11 @@ bool run(char str[]){
     //the vector that holds the commands to be converted and executed
     vector<string> cmd;
 
-    //cbegins breaking the entered commands up by connector
-    pch = strtok(str, ";");
-
     string p = str;
     int ogsz = p.size();
+
+    //cbegins breaking the entered commands up by connector
+    pch = strtok(str, ";");
 
     //if the command is empty return
     if(pch==NULL){
