@@ -136,7 +136,7 @@ string commentRemoval(string x){
 //this function runs the command using fork and execvp
 //and returns once all commands from the entered char[]
 //have been executed
-void run(char str[]){
+bool run(char str[]){
 
     //needed to parse with strtok
     char* pch;
@@ -160,9 +160,12 @@ void run(char str[]){
     //cbegins breaking the entered commands up by connector
     pch = strtok(str, ";");
 
+    string p = str;
+    int ogsz = p.size();
+
     //if the command is empty return
     if(pch==NULL){
-        return;
+        return true;
     }
 
     //if using strtok with ";" changed the strz
@@ -176,7 +179,7 @@ void run(char str[]){
     if(pch == strz){
         pch = strtok(str, "&&");
         if(pch == NULL){
-            return;
+            return true ;
         }
         if(pch != strz){
             connector = "&&";
@@ -186,7 +189,7 @@ void run(char str[]){
     if(pch == strz){
         pch = strtok(str, "||");
         if(pch == NULL){
-            return;
+            return true;
         }
         if(pch != strz){
             connector = "||";
@@ -195,20 +198,18 @@ void run(char str[]){
 
     //if the pch is not NULL and is the exit command exit the programm
     if(pch != NULL && isExit(pch)){
-        exit(0);
+        return false;
     }
-
+    int fromHead = 0;
     //this while loop is where fork and execvp execute commands
     while(pch != NULL){
-        //fork the programm
-        int pid = fork();
-        //if pid is -1 the fork failed so exit
-        if(pid == -1){
-            perror("fork");
-            exit(1);
+        string pmt = pch;
+        if(connector != ";"){
+            fromHead += pmt.size() +2;
         }
-        //if the pid is 0 the current id the current process is the child
-        else if(pid == 0){
+        else{
+            fromHead += pmt.size()+1;
+        }
             //call the parsing function on the command and the cmd vector
             //to break it up into command and params
             parse(pch, cmd);
@@ -223,6 +224,16 @@ void run(char str[]){
             }
             //set the last value of argc to be NULL so that execvp will work properly
             argc[cmd.size()] = NULL;
+
+        //fork the programm
+        int pid = fork();
+        //if pid is -1 the fork failed so exit
+        if(pid == -1){
+            perror("fork");
+            exit(1);
+        }
+        //if the pid is 0 the current id the current process is the child
+        else if(pid == 0){
             //call execvp on the first element of argc and the entirety of it
             //if it returns -1 it has failed fo print an error and delete
             //the dynamically allocated memory
@@ -238,9 +249,10 @@ void run(char str[]){
             //and store its exit code in status
             if(-1 == waitpid(-1, &status, 0)){
     	        perror("waitpid");
+                delete[] argc;
 	        	exit(1);
 	         }
-
+            delete[] argc;
             //if the value of status is larger than 0
             //it failed
             if(status > 0){
@@ -256,28 +268,33 @@ void run(char str[]){
 
             //run the next command if the connector logic and value of sucs allow it
             if((connector=="&&" && sucs) || (connector=="||" && !sucs) || (connector==";")){
-                pch = strtok(NULL, connector.c_str());
+                if(ogsz >= fromHead){
+                    pch = strtok(str+fromHead, connector.c_str());
+                }
+                else{
+                    return true;
+                }
             }
             //otherwise return
             else{
-                return;
+                return true;
             }
             //if the next command is not NULL and is exit exit the program
             if(pch != NULL && isExit(pch)){
-                exit(0);
+                return false;
             }
         }
     }
     //if there are no more commands to execute/parse return
-    return;
+    return true;
 }
 
 
 //main takes in commands and passes them to run to execute
 int main(){
-
+    bool cont = true;
     //continue until terminated by a conditional branch within run
-    while(true){
+    while(cont){
 
         //retrieves the login name
         //and checks to make sure there was no error
@@ -325,7 +342,7 @@ int main(){
             //copies the input into the char* str[]
             strcpy(str, input.c_str());
             //calls run on the users entered commands
-            run(str);
+            cont = run(str);
             //after running the dynamically allocated memory is deleted
             delete[] str;
         }
