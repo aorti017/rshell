@@ -214,12 +214,12 @@ bool run(char str[]){
             //to break it up into command and params
             parse(pch, cmd);
             //set the size of the dynamic char** that will be passed into execvp
-            int cmd_size = cmd.size() + 1;
-            char** argc = new char*[cmd_size];
+            int cmd_size = cmd.size();
+            char** argc = new char*[cmd_size + 1];
             //for each string in cmd copy it into argc, which will be passed
             //into execvp
             for(unsigned int i = 0 ; i < cmd.size(); i++ ){
-                argc[i] = new char[cmd.at(i).size()];
+                argc[i] = new char[cmd.at(i).size() + 1];
                 strcpy(argc[i], cmd.at(i).c_str());
             }
             //set the last value of argc to be NULL so that execvp will work properly
@@ -238,9 +238,11 @@ bool run(char str[]){
             //if it returns -1 it has failed fo print an error and delete
             //the dynamically allocated memory
             if(-1 ==  execvp(argc[0], argc)){
-                perror("execvp");
-                delete[] argc;
-                exit(1);
+                    perror("execvp");
+                    exit(1);
+            }
+            else{
+                exit(0);
             }
         }
         //otherwise it is the parrent process
@@ -252,6 +254,9 @@ bool run(char str[]){
                 delete[] argc;
 	        	exit(1);
 	         }
+            for(unsigned int i = 0; i <= cmd.size(); i++){
+                delete[] argc[i];
+            }
             delete[] argc;
             //if the value of status is larger than 0
             //it failed
