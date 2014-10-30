@@ -140,11 +140,21 @@ string commentRemoval(string x){
 
 bool isls(char x[]){
     string tmp = x;
+    string hold = "ls";
+    unsigned int k = 0;
     if(tmp.size() < 2){
         return false;
     }
-    if(tmp.at(0) == 'l' && tmp.at(1) == 's'){
-        return true;
+    for(unsigned int i = 0; i < tmp.size(); i++){
+        if(k != hold.size() && tmp.at(i) == hold.at(k)){
+            k++;
+            if(k == hold.size()){
+                return true;
+            }
+        }
+        else if(tmp.at(i) != ' ' ){
+            return false;
+        }
     }
     return false;
 }
@@ -215,6 +225,12 @@ void printLs(bool flags[], queue<string> paths, string path){
     }
     while((direntp = readdir(dirp))){
         ftmp = direntp->d_name;
+        if(flags[1] && flags [0]){
+            //get and cout info
+        }
+        if(flags[1] && !flags[0] && ftmp.at(0) != '.'){
+            //get and cout info
+        }
         if(flags[0]){
             cout << direntp->d_name << endl;
         }
@@ -227,14 +243,14 @@ void printLs(bool flags[], queue<string> paths, string path){
         stat(tmpPath.c_str(), &buf);
         if(S_ISDIR(buf.st_mode) && ftmp != "." && ftmp != ".." && flags[2]){
             if(tmp != ".git"){
-            if(flags[0]){
-                paths.push(tmpPath);
-                cnt++;
-            }
-            else if(!flags[0] && ftmp.at(0) != '.'){
-                paths.push(tmpPath);
-                cnt++;
-            }
+                if(flags[0]){
+                    paths.push(tmpPath);
+                    cnt++;
+                }
+                else if(!flags[0] && ftmp.at(0) != '.'){
+                    paths.push(tmpPath);
+                    cnt++;
+                }
             }
         }
     }
@@ -313,7 +329,6 @@ void run(char str[]){
 
     //this while loop is where fork and execvp execute commands
     while(pch != NULL){
-
         if(isls(pch)){
             int pid = fork();
             if(pid == -1){
@@ -418,7 +433,7 @@ void run(char str[]){
         if(pch != NULL && isExit(pch)){
             exit(0);
         }
-    }
+        }
     //if there are no more commands to execute/parse return
     return;
 }
