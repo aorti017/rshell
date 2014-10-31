@@ -1,43 +1,12 @@
 RSHELL
 ==========
 
-Licensing information: See LICENSE
+Licensing information: BSD3
 ---
-Source can be downloaded from https://github.com/aorti017/rshell.git
----
-
-Author & Contributor List
-----------
-Alexander Ortiz
 
 Program Overview
 ---------
 RShell is meant to be a basic implementation of the Bash shell written in C++. Utilizing the execvp function RShell can execute commands found in ```/bin```.
-
-File List
-----------
-```
-
-Makefile
-
-LICENSE
-
-README.md
-
-./src
-
-./tests
-```
-```
-./src:
-
-hw0.cpp
-```
-```
-./tests:
-
-exec.script
-```
 
 How to run
 ----------
