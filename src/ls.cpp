@@ -128,7 +128,8 @@ void print_ls(bool flags[], queue<string> paths, string path){
 }
 
 int main(int argc, char* argv[]){
-    int flagCount = argc - 2;
+    unsigned int flagCount = argc - 2;
+    //int flagCount = argc;
     bool flags[3];
     flags[0] = false;
     flags[1] = false;
