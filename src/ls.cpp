@@ -1,4 +1,5 @@
 #include <iostream>
+#include <algorithm>
 #include <string.h>
 #include <queue>
 #include <time.h>
@@ -11,10 +12,20 @@ class Entry{
     string path;
     string name;
     string info;
+    public:
     Entry(string p, string n, string i){
         path = p;
         name = n;
         info = i;
+    }
+    string get_name(){
+        return this->name;
+    }
+    string get_info(){
+        return this->info;
+    }
+    bool operator < (const Entry& x) const{
+        return this->name < x.name;
     }
 };
 
@@ -39,7 +50,8 @@ bool multiCheck(string tmp, bool flags[]){
     return true;
 }
 
-void getInfo(string path, struct stat buf){
+string getInfo(string path, struct stat buf){
+    string ret;
     vector<string> mnth;
     mnth.push_back("Jan");
     mnth.push_back("Feb");
@@ -54,26 +66,27 @@ void getInfo(string path, struct stat buf){
     mnth.push_back("Nov");
     mnth.push_back("Dec");
     if(S_ISLNK(buf.st_mode)){
-        cout << "l";
+        ret.append("l");
     }
     else if(S_ISDIR(buf.st_mode)){
-        cout << "d";
+        ret.append("d");
     }
     else if(S_ISREG(buf.st_mode)){
-        cout << "-";
+        ret.append("-");
     }
-    cout << " ";
+    ret.append(" ");
     time_t secs = buf.st_mtime;
     struct tm * ptm;
     ptm = localtime(&secs);
-    cout << mnth.at(ptm->tm_mon);
-    cout << " ";
-    cout << ptm->tm_mday;
-    cout << " ";
-    cout << ptm->tm_hour;
-    cout << ":";
-    cout << ptm->tm_min;
-    cout << " ";
+    ret.append(mnth.at(ptm->tm_mon));
+    ret.append(" ");
+    ret.append(to_string(ptm->tm_mday));
+    ret.append(" ");
+    ret.append(to_string(ptm->tm_hour));
+    ret.append(":");
+    ret.append(to_string(ptm->tm_min));
+    ret.append(" ");
+    return ret;
 }
 
 void print_ls(bool flags[], queue<string> paths, string path){
@@ -86,7 +99,7 @@ void print_ls(bool flags[], queue<string> paths, string path){
     string ftmp;
     DIR *dirp = opendir(tmp.c_str());
     dirent *direntp;
-    queue<Entry> fileObj;
+    vector<Entry> fileObj;
     if(flags[2]){
         cout << paths.front() << ":" << endl;
     }
@@ -96,20 +109,23 @@ void print_ls(bool flags[], queue<string> paths, string path){
         tmpPath.append("/");
         tmpPath.append(ftmp);
         stat(tmpPath.c_str(), &buf);
+        string i;
         if(flags[1] && flags [0]){
             //return string instead of cout
-            getInfo(tmpPath, buf);
+            i = getInfo(tmpPath, buf);
         }
         if(flags[1] && !flags[0] && ftmp.at(0) != '.'){
             //return string instead pf cout
-            getInfo(tmpPath, buf);
+            i = getInfo(tmpPath, buf);
         }
         if(flags[0]){
-            cout << direntp->d_name << endl;
+            Entry e(tmpPath, direntp->d_name, i);
+            fileObj.push_back(e);
             cnt++;
         }
         else if(!flags[0] && ftmp.at(0) != '.'){
-            cout << direntp->d_name << endl;
+            Entry e(tmpPath, direntp->d_name, i);
+            fileObj.push_back(e);
             cnt++;
         }
         //construct class obj and push into data structure
@@ -125,10 +141,17 @@ void print_ls(bool flags[], queue<string> paths, string path){
             }
         }
     }
-    cout << endl;
+    //sort(fileObj.begin(), fileObj.end());
+    for(unsigned int i = 0; i < fileObj.size(); i++){
+        if(flags[1]){
+            cout << fileObj.at(i).get_info();
+        }
+        cout << fileObj.at(i).get_name() << endl;
+    }
+    fileObj.clear();
     closedir(dirp);
     paths.pop();
-    //prints out queue of classes here
+    cout << endl;
     print_ls(flags, paths, path);
     return;
 }
@@ -165,13 +188,56 @@ int main(int argc, char* argv[]){
             files.push_back(argv[i]);
         }
     }
-   // if(files.size() <= 0){
-        paths.push(".");
-        string pth = ".";
-   // }
-        if(valid){
-        print_ls(flags, paths, pth);
-    }
+    struct stat buf;
+        if(valid && files.size() <=0){
+            paths.push(".");
+            string pth = ".";
+            print_ls(flags, paths, pth);
+        }
+        else{
+            //sort files by name
+            for(unsigned int i = 0; i < files.size(); i++){
+                string pth;
+                if(files.at(i).at(0)  == '.'){
+                    paths.push(files.at(i));
+                    pth = files.at(i);
+                    if(files.size() > 1){
+                        cout << pth << ":" << endl;
+                    }
+                    print_ls(flags, paths, pth);
+                    paths.pop();
+                }
+                else if(files.at(i).at(0) == '/'){
+                    paths.push(files.at(i));
+                    pth = files.at(i);
+                    if(files.size() > 1){
+                        cout << pth << ":" << endl;
+                    }
+                    print_ls(flags, paths, pth);
+                    paths.pop();
+                }
+                else{
+                    string x = "./";
+                    x.append(files.at(i));
+                    if(-1 == stat(x.c_str(), &buf)){
+                        perror("stat");
+                    }
+                    else if(S_ISREG(buf.st_mode)){
+                        cout << files.at(i) << endl << endl;
+                    }
+                    else{
+                        paths.push("./" + files.at(i));
+                        pth = "./" + files.at(i);
+                        if(files.size() > 1){
+                            cout << pth << ":" << endl;
+                        }
+                        print_ls(flags, paths, pth);
+                        paths.pop();
+                    }
+
+                }
+            }
+        }
 
 /*    cout << flags[0] << " " << flags[1] << " "  << flags[2] << endl;
     for(unsigned int i = 0; i < files.size(); i++){
