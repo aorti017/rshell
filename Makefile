@@ -14,5 +14,5 @@ ls:
 	if [ ! -d "./bin" ];\
 	then mkdir bin;\
 	fi
-	g++ -Wall -Werror -ansi -pedantic src/ls.cpp -o bin/ls
+	g++ -Wall -Werror -ansi -pedantic -std=c++0x src/ls.cpp -o bin/ls
 
