@@ -11,6 +11,11 @@ class Entry{
     string path;
     string name;
     string info;
+    Entry(string p, string n, string i){
+        path = p;
+        name = n;
+        info = i;
+    }
 };
 
 
@@ -81,7 +86,7 @@ void print_ls(bool flags[], queue<string> paths, string path){
     string ftmp;
     DIR *dirp = opendir(tmp.c_str());
     dirent *direntp;
-
+    queue<Entry> fileObj;
     if(flags[2]){
         cout << paths.front() << ":" << endl;
     }
@@ -92,11 +97,11 @@ void print_ls(bool flags[], queue<string> paths, string path){
         tmpPath.append(ftmp);
         stat(tmpPath.c_str(), &buf);
         if(flags[1] && flags [0]){
-            //get and cout info
+            //return string instead of cout
             getInfo(tmpPath, buf);
         }
         if(flags[1] && !flags[0] && ftmp.at(0) != '.'){
-            ////get and cout info
+            //return string instead pf cout
             getInfo(tmpPath, buf);
         }
         if(flags[0]){
@@ -107,6 +112,7 @@ void print_ls(bool flags[], queue<string> paths, string path){
             cout << direntp->d_name << endl;
             cnt++;
         }
+        //construct class obj and push into data structure
         if(S_ISDIR(buf.st_mode) && ftmp != "." && ftmp != ".."
             && flags[2]){
             if(tmp != ".git"){
@@ -122,7 +128,7 @@ void print_ls(bool flags[], queue<string> paths, string path){
     cout << endl;
     closedir(dirp);
     paths.pop();
-    cout << endl;
+    //prints out queue of classes here
     print_ls(flags, paths, path);
     return;
 }
@@ -135,9 +141,11 @@ int main(int argc, char* argv[]){
     flags[1] = false;
     flags[2] = false;
 
+    bool valid = true;
+
     vector<string> files;
     queue<string> paths;
-    for(unsigned int i = 2; i < flagCount + 2; i++){
+    for(unsigned int i = 1; i < flagCount + 2; i++){
         string tmp = argv[i];
         if(tmp == "-a"){
             flags[0] = true;
@@ -149,7 +157,9 @@ int main(int argc, char* argv[]){
             flags[2] = true;
         }
         else if(argv[i][0] == '-'){
-            multiCheck(tmp, flags);
+            if(!multiCheck(tmp, flags)){
+                valid = false;
+            }
         }
         else{
             files.push_back(argv[i]);
@@ -159,7 +169,9 @@ int main(int argc, char* argv[]){
         paths.push(".");
         string pth = ".";
    // }
-    print_ls(flags, paths, pth);
+        if(valid){
+        print_ls(flags, paths, pth);
+    }
 
 /*    cout << flags[0] << " " << flags[1] << " "  << flags[2] << endl;
     for(unsigned int i = 0; i < files.size(); i++){
