@@ -29,6 +29,9 @@ class Entry{
     bool operator < (const Entry& e) const{
         string x = this->name;
         string y = e.name;
+        string tmpx = this->name;
+        string tmpy = this->name;
+        //cout << x << " " << y << endl;
         if(x == "."){
             return true;
         }
@@ -41,24 +44,68 @@ class Entry{
         if(y.at(0) == '.'){
             y = y.substr(1,y.size());
         }
-        int k = 0;
+        unsigned int k = 0;
         for(unsigned int i = 0; i < x.size(); i++){
             char im = tolower(x.at(i));
-            char ex = tolower(y.at(i));
+            char ex = tolower(y.at(k));
             if(im < ex){
+                //cout << "T1" << endl;
                 return true;
 
             }
             else if(im > ex){
                 if(im > ex && ex == toupper(ex)){
+                    //cout << "T2" << endl;
                     return true;
                 }
                 return false;
             }
             else if(im == ex){
+                /*cout << x << " " << y << endl;
+                cout << "!" << im << " " << x.at(i) << endl;
+                if(im != x.at(i) && x.size() == y.size()){
+                    cout << "F1" << endl;
+                    return false;
+                }
+                else if(im != x.at(i)){
+                    cout << "T1" << endl;
+                    return true;
+                }
+                //cout << "!" << im << " " << y.at(i) << endl;
+                if(ex != y.at(i)){
+                    //cout << "F2" << endl;
+                    return true;
+                }*/
+                if(x.size() < y.size()){
+                    return true;
+                }
+                else if(x.size() > y.size()){
+                    return false;
+                }
+                else if(x.size() == y.size()){
+                    if(toupper(im) != x.at(i)
+                        && toupper(ex) == y.at(i)){
+                        return true;
+                    }
+                    else if(toupper(im) == x.at(i)
+                        && toupper(ex) != y.at(i)){
+                        return false;
+                    }
+                    if(tmpx.at(0) == '.'){
+                        return false;
+                    }
+                    else if(tmpy.at(0) == '.'){
+                        return true;
+                    }
+                }
                 k++;
+                if(k == y.size()){
+                    //cout << "T3" << endl;
+                    return true;
+                }
             }
         }
+        //cout << "T4" << endl;
         return true;
     }
 };
