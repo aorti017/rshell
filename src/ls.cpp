@@ -3,7 +3,7 @@
 #include <grp.h>
 #include <algorithm>
 #include <string.h>
-#include <queue>
+#include <deque>
 #include <time.h>
 #include <vector>
 #include <sys/stat.h>
@@ -26,8 +26,40 @@ class Entry{
     string get_info(){
         return this->info;
     }
-    bool operator < (const Entry& x) const{
-        return this->name < x.name;
+    bool operator < (const Entry& e) const{
+        string x = this->name;
+        string y = e.name;
+        if(x == "."){
+            return true;
+        }
+        else if(y == "."){
+            return false;
+        }
+        if(x.at(0) == '.'){
+            x = x.substr(1,x.size());
+        }
+        if(y.at(0) == '.'){
+            y = y.substr(1,y.size());
+        }
+        int k = 0;
+        for(unsigned int i = 0; i < x.size(); i++){
+            char im = tolower(x.at(i));
+            char ex = tolower(y.at(i));
+            if(im < ex){
+                return true;
+
+            }
+            else if(im > ex){
+                if(im > ex && ex == toupper(ex)){
+                    return true;
+                }
+                return false;
+            }
+            else if(im == ex){
+                k++;
+            }
+        }
+        return true;
     }
 };
 
@@ -103,7 +135,7 @@ string getInfo(string path, struct stat buf){
     return ret;
 }
 
-void print_ls(bool flags[], queue<string> paths, string path){
+void print_ls(bool flags[], deque<string> paths, string path){
     if(paths.empty()){
         return;
     }
@@ -147,24 +179,25 @@ void print_ls(bool flags[], queue<string> paths, string path){
             && flags[2]){
             if(tmp != ".git"){
                 if(flags[0]){
-                    paths.push(tmpPath);
+                    paths.push_back(tmpPath);
                 }
                 else if(!flags[0] && ftmp.at(0) != '.'){
-                    paths.push(tmpPath);
+                    paths.push_back(tmpPath);
                 }
             }
         }
     }
-    //sort(fileObj.begin(), fileObj.end());
+    sort(fileObj.begin(), fileObj.end());
     for(unsigned int i = 0; i < fileObj.size(); i++){
         if(flags[1]){
             cout << fileObj.at(i).get_info();
         }
         cout << fileObj.at(i).get_name() << endl;
     }
+    sort(begin(paths), end(paths));
     fileObj.clear();
     closedir(dirp);
-    paths.pop();
+    paths.pop_front();
     cout << endl;
     print_ls(flags, paths, path);
     return;
@@ -181,7 +214,7 @@ int main(int argc, char* argv[]){
     bool valid = true;
 
     vector<string> files;
-    queue<string> paths;
+    deque<string> paths;
     for(unsigned int i = 1; i < flagCount + 2; i++){
         string tmp = argv[i];
         if(tmp == "-a"){
@@ -202,33 +235,35 @@ int main(int argc, char* argv[]){
             files.push_back(argv[i]);
         }
     }
+    sort(files.begin(), files.end());
     struct stat buf;
     if(valid && files.size() <=0){
-        paths.push(".");
+        paths.push_back(".");
         string pth = ".";
         print_ls(flags, paths, pth);
+        paths.pop_front();
     }
     else if(valid && files.size() > 0){
         //sort files by name
         for(unsigned int i = 0; i < files.size(); i++){
             string pth;
             if(files.at(i).at(0)  == '.'){
-                paths.push(files.at(i));
+                paths.push_back(files.at(i));
                 pth = files.at(i);
                 if(files.size() > 1){
                     cout << pth << ":" << endl;
                 }
                 print_ls(flags, paths, pth);
-                paths.pop();
+                paths.pop_front();
             }
             else if(files.at(i).at(0) == '/'){
-                paths.push(files.at(i));
+                paths.push_back(files.at(i));
                 pth = files.at(i);
                 if(files.size() > 1){
                     cout << pth << ":" << endl;
                 }
                 print_ls(flags, paths, pth);
-                paths.pop();
+                paths.pop_front();
             }
             else{
                 string x = "./";
@@ -240,13 +275,14 @@ int main(int argc, char* argv[]){
                     cout << files.at(i) << endl << endl;
                 }
                 else{
-                    paths.push("./" + files.at(i));
-                    pth = "./" + files.at(i);
+                    paths.push_back("./" + files.at(i));
+                    //pth = "./" + files.at(i);
                     if(files.size() > 1){
-                        cout << pth << ":" << endl;
+                        //cout << pth << ":" << endl;
+                        cout << files.at(i) << ":" << endl;
                     }
                     print_ls(flags, paths, pth);
-                    paths.pop();
+                    paths.pop_front();
                 }
             }
         }
