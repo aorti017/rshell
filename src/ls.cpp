@@ -1,4 +1,6 @@
 #include <iostream>
+#include <pwd.h>
+#include <grp.h>
 #include <algorithm>
 #include <string.h>
 #include <queue>
@@ -74,6 +76,18 @@ string getInfo(string path, struct stat buf){
     else if(S_ISREG(buf.st_mode)){
         ret.append("-");
     }
+    ret.append(" ");
+    int l = buf.st_nlink;
+    ret.append(to_string(l));
+    ret.append(" ");
+    struct passwd *pw = getpwuid(buf.st_uid);
+    ret.append(pw->pw_name);
+    ret.append(" ");
+    struct group *gr = getgrgid(buf.st_gid);
+    ret.append(gr->gr_name);
+    ret.append(" ");
+    int t = buf.st_size;
+    ret.append(to_string(t));
     ret.append(" ");
     time_t secs = buf.st_mtime;
     struct tm * ptm;
