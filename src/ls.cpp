@@ -189,59 +189,56 @@ int main(int argc, char* argv[]){
         }
     }
     struct stat buf;
-        if(valid && files.size() <=0){
-            paths.push(".");
-            string pth = ".";
-            print_ls(flags, paths, pth);
-        }
-        else{
-            //sort files by name
-            for(unsigned int i = 0; i < files.size(); i++){
-                string pth;
-                if(files.at(i).at(0)  == '.'){
-                    paths.push(files.at(i));
-                    pth = files.at(i);
-                    if(files.size() > 1){
-                        cout << pth << ":" << endl;
-                    }
-                    print_ls(flags, paths, pth);
-                    paths.pop();
+    if(valid && files.size() <=0){
+        paths.push(".");
+        string pth = ".";
+        print_ls(flags, paths, pth);
+    }
+    else if(valid && files.size() > 0){
+        //sort files by name
+        for(unsigned int i = 0; i < files.size(); i++){
+            string pth;
+            if(files.at(i).at(0)  == '.'){
+                paths.push(files.at(i));
+                pth = files.at(i);
+                if(files.size() > 1){
+                    cout << pth << ":" << endl;
                 }
-                else if(files.at(i).at(0) == '/'){
-                    paths.push(files.at(i));
-                    pth = files.at(i);
-                    if(files.size() > 1){
-                        cout << pth << ":" << endl;
-                    }
-                    print_ls(flags, paths, pth);
-                    paths.pop();
+                print_ls(flags, paths, pth);
+                paths.pop();
+            }
+            else if(files.at(i).at(0) == '/'){
+                paths.push(files.at(i));
+                pth = files.at(i);
+                if(files.size() > 1){
+                    cout << pth << ":" << endl;
+                }
+                print_ls(flags, paths, pth);
+                paths.pop();
+            }
+            else{
+                string x = "./";
+                x.append(files.at(i));
+                if(-1 == stat(x.c_str(), &buf)){
+                    perror("stat");
+                }
+                else if(S_ISREG(buf.st_mode)){
+                    cout << files.at(i) << endl << endl;
                 }
                 else{
-                    string x = "./";
-                    x.append(files.at(i));
-                    if(-1 == stat(x.c_str(), &buf)){
-                        perror("stat");
+                    paths.push("./" + files.at(i));
+                    pth = "./" + files.at(i);
+                    if(files.size() > 1){
+                        cout << pth << ":" << endl;
                     }
-                    else if(S_ISREG(buf.st_mode)){
-                        cout << files.at(i) << endl << endl;
-                    }
-                    else{
-                        paths.push("./" + files.at(i));
-                        pth = "./" + files.at(i);
-                        if(files.size() > 1){
-                            cout << pth << ":" << endl;
-                        }
-                        print_ls(flags, paths, pth);
-                        paths.pop();
-                    }
-
+                    print_ls(flags, paths, pth);
+                    paths.pop();
                 }
             }
         }
-
-/*    cout << flags[0] << " " << flags[1] << " "  << flags[2] << endl;
-    for(unsigned int i = 0; i < files.size(); i++){
-        cout << files.at(i) << endl;
-    }*/
+    }
+    else{
+        cerr << "No such flag" << endl;
+    }
     return 0;
 }
