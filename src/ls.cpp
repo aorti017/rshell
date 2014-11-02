@@ -295,22 +295,32 @@ int main(int argc, char* argv[]){
         for(unsigned int i = 0; i < files.size(); i++){
             string pth;
             if(files.at(i).at(0)  == '.'){
-                paths.push_back(files.at(i));
-                pth = files.at(i);
-                if(files.size() > 1){
-                    cout << pth << ":" << endl;
+                if(-1 == stat(files.at(i).c_str(), &buf)){
+                    perror("stat");
                 }
-                print_ls(flags, paths, pth);
-                paths.pop_front();
+                else{
+                    paths.push_back(files.at(i));
+                    pth = files.at(i);
+                    if(files.size() > 1){
+                        cout << pth << ":" << endl;
+                    }
+                    print_ls(flags, paths, pth);
+                    paths.pop_front();
+                }
             }
             else if(files.at(i).at(0) == '/'){
-                paths.push_back(files.at(i));
-                pth = files.at(i);
-                if(files.size() > 1){
-                    cout << pth << ":" << endl;
+                if(-1 == stat(files.at(i).c_str(), &buf)){
+                    perror("stat");
                 }
-                print_ls(flags, paths, pth);
-                paths.pop_front();
+                else{
+                    paths.push_back(files.at(i));
+                    pth = files.at(i);
+                    if(files.size() > 1){
+                        cout << pth << ":" << endl;
+                    }
+                    print_ls(flags, paths, pth);
+                    paths.pop_front();
+                }
             }
             else{
                 string x = "./";
