@@ -10,6 +10,8 @@
 #include <dirent.h>
 using namespace std;
 
+int total_block_size = 0;
+
 class Retain{
     string path;
     string compare;
@@ -185,6 +187,7 @@ bool multiCheck(string tmp, bool flags[]){
 
 string getInfo(string path, struct stat buf){
     string ret;
+    total_block_size += buf.st_blocks;
     vector<string> mnth;
     mnth.push_back("Jan");
     mnth.push_back("Feb");
@@ -233,7 +236,14 @@ string getInfo(string path, struct stat buf){
     ret.append(" ");
     return ret;
 }
-
+int getTotalChars(vector<Entry> v){
+    int n = 0;
+    for(unsigned int i = 0; i < v.size(); i++){
+        n += 2;
+        n += v.at(i).get_name().size();
+    }
+    return n;
+}
 void print_ls(bool flags[], deque<Retain> paths, string mainPath){
     if(paths.empty()){
         return;
@@ -296,12 +306,50 @@ void print_ls(bool flags[], deque<Retain> paths, string mainPath){
             }
         }
     }
+    if(flags[1]){
+        cout << "total " << total_block_size / 2 << endl;
+    }
+    unsigned int line_size = 0;
     sort(fileObj.begin(), fileObj.end());
-    for(unsigned int i = 0; i < fileObj.size(); i++){
-        if(flags[1]){
-            cout << fileObj.at(i).get_info();
+    double  total_line = getTotalChars(fileObj);
+    unsigned int int_total_line = (total_line / 50) + 0.5;
+    unsigned int counter = 0;
+    if(int_total_line <= 1){
+        for(unsigned int i = 0; i < fileObj.size(); i++){
+            if(flags[1]){
+                cout << fileObj.at(i).get_info();
+                line_size += fileObj.at(i).get_info().size();
+            }
+            if(!flags[1]){
+                line_size += fileObj.at(i).get_name().size() + 2;
+                if(line_size >= 60){
+                    cout << endl;
+                    line_size = 0;
+                }
+                cout << fileObj.at(i).get_name() << "  ";
+            }
+            else{
+             cout << fileObj.at(i).get_name() << endl;
+            }
+            counter++;
         }
-        cout << fileObj.at(i).get_name() << endl;
+        if(counter > 0){
+            cout << endl;
+        }
+    }
+    else{
+        unsigned int k = 0;
+        while(k < int_total_line){
+            for(unsigned int i = k; i < fileObj.size();
+                i += int_total_line){
+                cout << fileObj.at(i).get_name() << "  ";
+            }
+            k++;
+            if(k < int_total_line){
+                cout << endl;
+            }
+        }
+        cout << endl;
     }
     paths.pop_front();
     sort(paths.begin(), paths.end());
