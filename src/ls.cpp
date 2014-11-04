@@ -1,4 +1,5 @@
 #include <iostream>
+#include <iomanip>
 #include <pwd.h>
 #include <grp.h>
 #include <algorithm>
@@ -86,7 +87,7 @@ class Entry{
     bool operator < (const Entry& e) const{
         string x = this->name;
         string y = e.name;
-        /*if(x == "bin" || y == "bin"){
+        /*if(x == "Secs" || y == "Secs"){
             cout << x << " " << y << endl;
         }*/
         string tmpx = this->name;
@@ -116,50 +117,66 @@ class Entry{
 
             }
             else if(im > ex){
-                if(im > ex && ex == toupper(ex)){
-                    //cout << "T2" << endl;
-                    return true;
-                }
-                //cout << "F1" << endl;
+                //cout << "T2" << endl;
                 return false;
             }
             else if(im == ex){
-                if(x.size() < y.size()){
-                    //cout << "T3" << endl;
+                if(toupper(im) != x.at(i) && toupper(ex) == y.at(i)){
+                    //cout << "T4" << endl;
+                    if(x.size() > y.size()){
+                        return false;
+                    }
+                    else{
+                        return true;
+                    }
+                }
+                else if(toupper(im) == x.at(i) && toupper(ex) != y.at(i)){
+                    //cout << "F3" << endl;
+                    if(x.size() >= y.size()){
+                        return false;
+                    }
+                    else{
+                        return true;
+                    }
+                }
+                //if it gets here that means both chars are uppercase
+                /*if(tmpy.at(0) == '.'){
+                    cout << "F4" << endl;
                     return true;
                 }
-                else if(x.size() > y.size()){
-                    //cout << "F2" << endl;
+                else if(tmpx.at(0) == '.'){
+                    cout << "T5" << endl;
                     return false;
-                }
-                else if(x.size() == y.size()){
-                    if(toupper(im) != x.at(i)
-                        && toupper(ex) == y.at(i)){
-                        //cout << "T4" << endl;
-                        return true;
-                    }
-                    else if(toupper(im) == x.at(i)
-                        && toupper(ex) != y.at(i)){
-                        //cout << "F3" << endl;
-                        return false;
-                    }
-                    if(tmpy.at(0) == '.'){
-                        //cout << "F4" << endl;
-                        return false;
-                    }
-                    else if(tmpx.at(0) == '.'){
-                        //cout << "T5" << endl;
-                        return true;
-                    }
-                }
-                k++;
-                if(k == y.size()){
-                    //cout << "T6" << endl;
-                    return true;
-                }
+                }*/
+            }
+            k++;
+            if(k == y.size() && i+1 != x.size()){
+                //cout << "AT" << endl;
+                return false;
             }
         }
-        //cout << "T7" << endl;
+        //cout << k << endl;
+        //cout << "Q" << endl;
+        //echeck for '.'
+        if(tmpx.at(0) == '.' && tmpy.at(0) != '.'){
+            //cout << "FQ" << endl;
+            return false;
+        }
+        else if(tmpx.at(0) != '.' && tmpy.at(0) == '.'){
+            //cout << "TQ" << endl;
+            return true;
+        }
+        else if(tmpx.at(0) == '.' && tmpy.at(0) == '.'){
+            if(x.size() < y.size()){
+                // cout << "ST" << endl;
+                return true;
+            }
+            else{
+                //cout << "SF" << endl;
+                return false;
+            }
+        }
+        //cout << "ERROR" << endl;
         return true;
     }
 };
@@ -312,7 +329,7 @@ void print_ls(bool flags[], deque<Retain> paths, string mainPath){
     unsigned int line_size = 0;
     sort(fileObj.begin(), fileObj.end());
     double  total_line = getTotalChars(fileObj);
-    unsigned int int_total_line = (total_line / 50) + 0.5;
+    unsigned int int_total_line = (total_line / 60) + 0.5;
     unsigned int counter = 0;
     if(int_total_line <= 1){
         for(unsigned int i = 0; i < fileObj.size(); i++){
@@ -322,7 +339,7 @@ void print_ls(bool flags[], deque<Retain> paths, string mainPath){
             }
             if(!flags[1]){
                 line_size += fileObj.at(i).get_name().size() + 2;
-                if(line_size >= 60){
+                if(line_size >= 80){
                     cout << endl;
                     line_size = 0;
                 }
@@ -333,6 +350,10 @@ void print_ls(bool flags[], deque<Retain> paths, string mainPath){
             }
             counter++;
         }
+        paths.pop_front();
+        if(!paths.empty()){
+            cout << endl;
+        }
         if(counter > 0){
             cout << endl;
         }
@@ -341,21 +362,24 @@ void print_ls(bool flags[], deque<Retain> paths, string mainPath){
         unsigned int k = 0;
         while(k < int_total_line){
             for(unsigned int i = k; i < fileObj.size();
-                i += int_total_line){
-                cout << fileObj.at(i).get_name() << "  ";
+                i +=  int_total_line){
+                cout << setw(5) << left << fileObj.at(i).get_name() << "  ";
+                //cout << fileObj.at(i).get_name() << endl;
             }
             k++;
+            //k = int_total_line;
             if(k < int_total_line){
                 cout << endl;
             }
         }
-        cout << endl;
+        paths.pop_front();
+        if(!paths.empty()){
+            cout << endl;
+        }
     }
-    paths.pop_front();
     sort(paths.begin(), paths.end());
     fileObj.clear();
     closedir(dirp);
-    cout << endl;
     if(paths.empty()){
         return;
     }
