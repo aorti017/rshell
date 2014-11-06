@@ -22,100 +22,97 @@ int main(int argc, char* argv[])
     {
         all = true;
     }
-    /*struct stat buf;
-    string path = argv[1];
+string path;
+string tmp;
+struct stat buf;
+int file1;
+int file2;
+if(all && argv[1][0] == '-'){
+    if(argv[1][1] != 'a'){
+        cerr << "Invalid flag" << endl;
+        return 0;
+    }
+    file1 = 2;
+    file2 = 3;
+}
+else if(all && argv[2][0] == '-'){
+    if(argv[2][1] != 'a'){
+        cerr << "Invalid lag" << endl;
+        return 0;
+    }
+    file1 = 1;
+    file2 = 3;
+}
+else if(all && argv[3][0] == '-'){
+    if(argv[3][1] != 'a'){
+        cerr << "Invalid flag" << endl;
+        return 0;
+    }
+    file1 = 1;
+    file2 = 2;
+}
+else{
+    file1 = 1;
+    file2 = 2;
+}
+if(argv[file1][0] != '.' && argv[file1][0] != '/' ){
+    path = argv[file1];
     string tmp = "./";
     path = tmp + path;
     if(stat(path.c_str(), &buf) == -1){
-        perror("stat, asdasd");
+        perror("stat");
         exit(0);
     }
     if(S_ISDIR(buf.st_mode)){
-        cerr << "input file error " << endl;
+        cerr << "Input file is dir" << endl;
+        exit(0);
+    }
+}
+else{
+    if(stat(argv[file1], &buf)){
+        perror("stat");
+        exit(0);
+    }
+    if(S_ISDIR(buf.st_mode)){
+        cerr << "Input files if dir" << endl;
+        exit(0);
+    }
+}
+if(ifstream(argv[file2])){
+    cerr << "Output file already exists" << endl;
+    return 0;
+}
+else{
+    ofstream tmp(argv[file2]);
+    if(!tmp.good()){
+        cerr << "Unable to open file" << endl;
         return 0;
     }
-
-    path = argv[2];
+    tmp.close();
+}
+if(argv[file2][0] != '.' && argv[file2][0] != '/'){
+    path = argv[file2];
     tmp = "./";
     path = tmp + path;
-
-    if(stat(path.c_str(), &buf) == -1)
-    {
-        perror("stat, asdadasdasd");
+    if(stat(path.c_str(), &buf) == -1){
+        perror("stat");
         exit(0);
     }
     if(S_ISDIR(buf.st_mode)){
-        cerr << "output file error " << endl;
-        return 0;
+        cerr << "Input file is dir" << endl;
+        exit(0);
     }
-*/
-
-    if(ifstream(argv[2]))
-    {
-        cerr << "ERror" << endl;
-        return 0;
+}
+else{
+    if(stat(argv[file2], &buf) == -1){
+        perror("stat");
+        exit(0);
     }
-    else
-    {
-        ofstream tmp(argv[2]);
-        if(!tmp.good())
-        {
-            cerr << "unable to open" << endl;
-            return 0;
-        }
-
+    if(S_ISDIR(buf.st_mode)){
+        cerr << "Input file is dir" << endl;
+        exit(0);
     }
-string path;
-    string tmp;
-    struct stat buf;
-    if(argv[1][0] != '.' && argv[1][0] != '/' ){
-        path = argv[1];
-        string tmp = "./";
-        path = tmp + path;
-        if(stat(path.c_str(), &buf) == -1){
-            perror("stat");
-            exit(0);
-        }
-        if(S_ISDIR(buf.st_mode)){
-            cerr << "Input file is dir" << endl;
-            exit(0);
-        }
-    }
-    else{
-        if(stat(argv[1], &buf)){
-            perror("stat");
-            exit(0);
-        }
-        if(S_ISDIR(buf.st_mode)){
-            cerr << "Input files if dir" << endl;
-            exit(0);
-        }
-    }
-    if(argv[2][0] != '.' && argv[2][0] != '/'){
-        path = argv[2];
-        tmp = "./";
-        path = tmp + path;
-        if(stat(path.c_str(), &buf) == -1){
-            perror("stat");
-            exit(0);
-        }
-        if(S_ISDIR(buf.st_mode)){
-            cerr << "Input file is dir" << endl;
-            exit(0);
-        }
-    }
-    else{
-        if(stat(argv[2], &buf) == -1){
-            perror("stat");
-            exit(0);
-        }
-        if(S_ISDIR(buf.st_mode)){
-            cerr << "Input file is dir" << endl;
-            exit(0);
-        }
-    }
-
-
+}
     if(all)
     {
     Timer t;
@@ -141,11 +138,11 @@ string path;
     }
     cout << "Method 1" << endl;
     t.elapsedWallclockTime(eTime);
-    cout << eTime << endl;
+    cout << "Wall clock time: " << eTime << endl;
     t.elapsedUserTime(eTime);
-    cout << eTime << endl;
+    cout << "User time: " << eTime << endl;
     t.elapsedSystemTime(eTime);
-    cout << eTime << endl;
+    cout << "System time: " << eTime << endl;
 
     inpoo.close();
     outpoo.close();
@@ -156,15 +153,15 @@ string path;
     Timer t;
     double eTime;
     t.start();
-    int in = open(argv[1], O_RDONLY);
-    int out = open(argv[2], O_WRONLY);
+    int in = open(argv[file1], O_RDONLY);
+    int out = open(argv[file2], O_WRONLY);
     char buf;
     int n;
     if(out == -1)
     {
-        ofstream create(argv[2]);
+        ofstream create(argv[file2]);
         create.close();
-        out = open(argv[2], O_WRONLY);
+        out = open(argv[file2], O_WRONLY);
     }
 
     while((n = read(in, &buf, 1)))
@@ -185,11 +182,11 @@ string path;
     close(out);
     cout << "Method 2" << endl;
     t.elapsedWallclockTime(eTime);
-    cout << eTime << endl;
+    cout << "Wall clock time: " << eTime << endl;
     t.elapsedUserTime(eTime);
-    cout << eTime << endl;
+    cout << "User time: " << eTime << endl;
     t.elapsedSystemTime(eTime);
-    cout << eTime << endl;
+    cout << "System time: " << eTime << endl;
     }
     //next
     if(all)
@@ -197,18 +194,18 @@ string path;
     Timer t;
     double eTime;
     t.start();
-    int in = open(argv[1], O_RDONLY);
+    int in = open(argv[file1], O_RDONLY);
     if(in == -1){
         perror("open");
         return 0;
     }
-    int out = open(argv[2], O_WRONLY);
+    int out = open(argv[file2], O_WRONLY);
 
     if(out == -1)
     {
-        ofstream create(argv[2]);
+        ofstream create(argv[file2]);
         create.close();
-        out = open(argv[2], O_WRONLY);
+        out = open(argv[file2], O_WRONLY);
     }
     char* buf = new char[BUFSIZ];
     int n = read(in, buf, BUFSIZ);
@@ -226,11 +223,11 @@ string path;
     delete [] buf;
     cout << "Method 3" << endl;
     t.elapsedWallclockTime(eTime);
-    cout << eTime << endl;
+    cout << "Wall clock time: " << eTime << endl;
     t.elapsedUserTime(eTime);
-    cout << eTime << endl;
+    cout << "User time: " << eTime << endl;
     t.elapsedSystemTime(eTime);
-    cout << eTime << endl;
+    cout << "System time: " << eTime << endl;
 
     close(in);
     close(out);
@@ -239,18 +236,18 @@ string path;
         Timer t;
     double eTime;
     t.start();
-    int in = open(argv[1], O_RDONLY);
+    int in = open(argv[file1], O_RDONLY);
     if(in == -1){
         perror("open");
         return 0;
     }
-    int out = open(argv[2], O_WRONLY);
+    int out = open(argv[file2], O_WRONLY);
 
     if(out == -1)
     {
-        ofstream create(argv[2]);
+        ofstream create(argv[file2]);
         create.close();
-        out = open(argv[2], O_WRONLY);
+        out = open(argv[file2], O_WRONLY);
     }
     char* buf = new char[BUFSIZ];
     int n = read(in, buf, BUFSIZ);
