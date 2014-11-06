@@ -193,6 +193,60 @@ string getInfo(string path, struct stat buf){
     else if(S_ISREG(buf.st_mode)){
         ret.append("-");
     }
+    if(S_IRUSR & buf.st_mode){
+        ret.append("r");
+    }
+    else{
+        ret.append("-");
+    }
+    if(S_IWUSR & buf.st_mode){
+        ret.append("w");
+    }
+    else{
+        ret.append("-");
+    }
+    if(S_IXUSR & buf.st_mode){
+        ret.append("x");
+    }
+    else{
+        ret.append("-");
+    }
+    if(S_IRGRP & buf.st_mode){
+        ret.append("r");
+    }
+    else{
+        ret.append("-");
+    }
+    if(S_IWGRP & buf.st_mode){
+        ret.append("w");
+    }
+    else{
+        ret.append("-");
+    }
+    if(S_IXGRP & buf.st_mode){
+        ret.append("x");
+    }
+    else{
+        ret.append("-");
+    }
+    if(S_IROTH & buf.st_mode){
+        ret.append("r");
+    }
+    else{
+        ret.append("-");
+    }
+    if(S_IWOTH & buf.st_mode){
+        ret.append("w");
+    }
+    else{
+        ret.append("-");
+    }
+    if(S_IXOTH & buf.st_mode){
+        ret.append("x");
+    }
+    else{
+        ret.append("-");
+    }
     ret.append(" ");
     int l = buf.st_nlink;
     ret.append(to_string(l));
