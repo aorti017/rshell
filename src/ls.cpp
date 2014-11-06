@@ -13,61 +13,6 @@ using namespace std;
 
 int total_block_size = 0;
 
-class Retain{
-    string path;
-    string compare;
-    public:
-    Retain(string p, string c){
-        path = p;
-        compare = c;
-        for(unsigned int i = 0; i < compare.size(); i++){
-            compare.at(i) = tolower(compare.at(i));
-        }
-    }
-    string get_path(){
-        return this->path;
-    }
-    bool operator < (const Retain &r) const{
-        unsigned int k = 0;
-        string x = this->compare;
-        string y = r.compare;
-        for(unsigned int i = 0; i < x.size(); i++){
-            if(x.at(i) == '.'){
-                i++;
-            }
-            if(y.at(k) == '.'){
-                k++;
-                if(k == y.size()){
-                    return true;
-                }
-            }
-            if(x.at(i) < y.at(k)){
-                return true;
-            }
-            else if(x.at(i) > y.at(k)){
-                return false;
-            }
-            else if(x.at(i) == y.at(k)){
-                if(this->path.at(i) == x.at(i)
-                    && r.compare.at(k) != y.at(k)){
-                    return true;
-                }
-                else if(r.path.at(k) == y.at(k)
-                    && this->path.at(i) != x.at(i)){
-                    return false;
-                }
-                else{
-                    k++;
-                    if(k == y.size()){
-                        return true;
-                    }
-                }
-            }
-        }
-        return true;
-    }
-};
-
 class Entry{
     string path;
     string name;
@@ -78,6 +23,11 @@ class Entry{
         name = n;
         info = i;
     }
+    Entry(string p, string n){
+        path = p;
+        name = n;
+        info = "";
+    }
     string get_name(){
         return this->name;
     }
@@ -87,7 +37,7 @@ class Entry{
     bool operator < (const Entry& e) const{
         string x = this->name;
         string y = e.name;
-        /*if(x == "Secs" || y == "Secs"){
+        /*if(x == ".secs" || y == ".secs"){
             cout << x << " " << y << endl;
         }*/
         string tmpx = this->name;
@@ -111,26 +61,42 @@ class Entry{
         for(unsigned int i = 0; i < x.size(); i++){
             char im = tolower(x.at(i));
             char ex = tolower(y.at(k));
+            if(x.at(i) == '.' && i + 1 < x.size()){
+                i++;
+                im = tolower(x.at(i));
+            }
+            else if(i + 1 >=  x.size() && x.at(i) == '.'){
+                return true;
+            }
+            if(y.at(k) == '.' && k + 1 < y.size()){
+                k++;
+                ex = tolower(y.at(k));
+            }
+            else if(k + 1 >=  y.size() && y.at(k) == '.'){
+                return true;
+            }
+            //cout << im << " " << ex << endl;
             if(im < ex){
                 //cout << "T1" << endl;
                 return true;
 
             }
             else if(im > ex){
-                //cout << "T2" << endl;
+                //cout << "F2" << endl;
                 return false;
             }
             else if(im == ex){
-                if(toupper(im) != x.at(i) && toupper(ex) == y.at(i)){
+                if(toupper(im) != x.at(i) && toupper(ex) == y.at(k)){
                     //cout << "T4" << endl;
-                    if(x.size() > y.size()){
+                    if(x.size() ==  y.size()){
+                        //cout << "oh" << endl;
                         return false;
                     }
                     else{
                         return true;
                     }
                 }
-                else if(toupper(im) == x.at(i) && toupper(ex) != y.at(i)){
+                else if(toupper(im) == x.at(i) && toupper(ex) != y.at(k)){
                     //cout << "F3" << endl;
                     if(x.size() >= y.size()){
                         return false;
@@ -150,7 +116,7 @@ class Entry{
                 }*/
             }
             k++;
-            if(k == y.size() && i+1 != x.size()){
+            if(k >= y.size() && i+1 < x.size()){
                 //cout << "AT" << endl;
                 return false;
             }
@@ -168,7 +134,7 @@ class Entry{
         }
         else if(tmpx.at(0) == '.' && tmpy.at(0) == '.'){
             if(x.size() < y.size()){
-                // cout << "ST" << endl;
+                //cout << "ST" << endl;
                 return true;
             }
             else{
@@ -249,6 +215,9 @@ string getInfo(string path, struct stat buf){
     ret.append(" ");
     ret.append(to_string(ptm->tm_hour));
     ret.append(":");
+    if(ptm->tm_min < 10){
+        ret.append("0");
+    }
     ret.append(to_string(ptm->tm_min));
     ret.append(" ");
     return ret;
@@ -261,7 +230,7 @@ int getTotalChars(vector<Entry> v){
     }
     return n;
 }
-void print_ls(bool flags[], deque<Retain> paths, string mainPath){
+void print_ls(bool flags[], deque<Entry> paths, string mainPath){
     if(paths.empty()){
         return;
     }
@@ -311,65 +280,55 @@ void print_ls(bool flags[], deque<Retain> paths, string mainPath){
         }
         if(S_ISDIR(buf.st_mode) && ftmp != "." && ftmp != ".."
             && flags[2]){
-            if(tmp != ".git"){
-                if(flags[0]){
-                    Retain r(tmpPath, tmpPath);
-                    paths.push_back(r);
-                }
-                else if(!flags[0] && ftmp.at(0) != '.'){
-                    Retain r(tmpPath, tmpPath);
-                    paths.push_back(r);
-                }
+            if(flags[0]){
+                Entry r(tmpPath, tmpPath);
+                paths.push_back(r);
+            }
+            else if(!flags[0] && ftmp.at(0) != '.'){
+                Entry r(tmpPath, tmpPath);
+                paths.push_back(r);
             }
         }
     }
     if(flags[1]){
         cout << "total " << total_block_size / 2 << endl;
     }
-    unsigned int line_size = 0;
     sort(fileObj.begin(), fileObj.end());
     double  total_line = getTotalChars(fileObj);
     unsigned int int_total_line = (total_line / 60) + 0.5;
-    unsigned int counter = 0;
-    if(int_total_line <= 1){
+    unsigned int count = 0;
+    if(int_total_line <= 1 || flags[1]){
         for(unsigned int i = 0; i < fileObj.size(); i++){
             if(flags[1]){
                 cout << fileObj.at(i).get_info();
-                line_size += fileObj.at(i).get_info().size();
+                cout << fileObj.at(i).get_name() << endl;
+                count++;
             }
             if(!flags[1]){
-                line_size += fileObj.at(i).get_name().size() + 2;
-                if(line_size >= 80){
-                    cout << endl;
-                    line_size = 0;
-                }
                 cout << fileObj.at(i).get_name() << "  ";
+                count++;
             }
-            else{
-             cout << fileObj.at(i).get_name() << endl;
-            }
-            counter++;
         }
         paths.pop_front();
+        if((paths.empty() || flags[2]) && !flags[1] && count > 0){
+            cout << /* "a" <<*/ endl;
+        }
         if(!paths.empty()){
-            cout << endl;
+            cout << /* "b" <<*/ endl;
         }
-        if(counter > 0){
-            cout << endl;
-        }
+        count = 0;
     }
     else{
         unsigned int k = 0;
         while(k < int_total_line){
             for(unsigned int i = k; i < fileObj.size();
                 i +=  int_total_line){
-                cout << setw(5) << left << fileObj.at(i).get_name() << "  ";
-                //cout << fileObj.at(i).get_name() << endl;
+                cout << setw(5) << left <<
+                    fileObj.at(i).get_name() << "  ";
             }
             k++;
-            //k = int_total_line;
-            if(k < int_total_line){
-                cout << endl;
+            if(k <= int_total_line){
+                cout << /*"c" <<*/  endl;
             }
         }
         paths.pop_front();
@@ -383,7 +342,8 @@ void print_ls(bool flags[], deque<Retain> paths, string mainPath){
     if(paths.empty()){
         return;
     }
-    print_ls(flags, paths, paths.front().get_path());
+    total_block_size = 0;
+    print_ls(flags, paths, paths.front().get_name());
     return;
 }
 
@@ -398,7 +358,7 @@ int main(int argc, char* argv[]){
     bool valid = true;
 
     vector<string> files;
-    deque<Retain> paths;
+    deque<Entry> paths;
     for(unsigned int i = 1; i < flagCount + 2; i++){
         string tmp = argv[i];
         if(tmp == "-a"){
@@ -422,7 +382,7 @@ int main(int argc, char* argv[]){
     sort(files.begin(), files.end());
     struct stat buf;
     if(valid && files.size() <=0){
-        Retain r(".", ".");
+        Entry r(".", ".");
         paths.push_back(r);
         string pth = ".";
         print_ls(flags, paths, pth);
@@ -433,11 +393,15 @@ int main(int argc, char* argv[]){
         for(unsigned int i = 0; i < files.size(); i++){
             string pth;
             if(files.at(i).at(0)  == '.'){
+                string tmp = files.at(i);
+                if(tmp.at(tmp.size()-1) == '/'){
+                    files.at(i) = tmp.substr(0, tmp.size()-1);
+                }
                 if(-1 == stat(files.at(i).c_str(), &buf)){
                     perror("stat");
                 }
                 else{
-                    Retain r(files.at(i), files.at(i));
+                    Entry r(files.at(i), files.at(i));
                     paths.push_back(r);
                     pth = files.at(i);
                     if(files.size() > 1 && !flags[2]){
@@ -448,11 +412,16 @@ int main(int argc, char* argv[]){
                 }
             }
             else if(files.at(i).at(0) == '/'){
+                string tmp = files.at(i);
+                if(tmp.at(tmp.size()-1) == '/'){
+                    files.at(i) = tmp.substr(0, tmp.size()-1);
+                }
+
                 if(-1 == stat(files.at(i).c_str(), &buf)){
                     perror("stat");
                 }
                 else{
-                    Retain r(files.at(i), files.at(i));
+                    Entry r(files.at(i), files.at(i));
                     paths.push_back(r);
                     pth = files.at(i);
 
@@ -466,6 +435,11 @@ int main(int argc, char* argv[]){
             else{
                 string x = "./";
                 x.append(files.at(i));
+                string tmp = files.at(i);
+                if(tmp.at(tmp.size()-1) == '/'){
+                    files.at(i) = tmp.substr(0, tmp.size()-1);
+                }
+
                 if(-1 == stat(x.c_str(), &buf)){
                     perror("stat");
                 }
@@ -473,7 +447,7 @@ int main(int argc, char* argv[]){
                     cout << files.at(i) << endl << endl;
                 }
                 else{
-                    Retain r("./" + files.at(i), "./"
+                    Entry r("./" + files.at(i), "./"
                         + files.at(i));
                     paths.push_back(r);
                     pth = "./" + files.at(i);
