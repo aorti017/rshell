@@ -17,16 +17,47 @@ class Entry{
     string path;
     string name;
     string info;
+    bool dir;
+    bool hidden;
+    bool ex;
     public:
+    bool isDir(){
+        return dir;
+    }
+    bool isEx(){
+        return ex;
+    }
     Entry(string p, string n, string i){
         path = p;
         name = n;
         info = i;
+        dir = false;
+        hidden = false;
+        ex = false;
     }
     Entry(string p, string n){
         path = p;
         name = n;
         info = "";
+        dir = false;
+        hidden = false;
+        ex = false;
+    }
+    Entry(string p, string n, string i, bool d, bool h, bool e){
+        path = p;
+        name = n;
+        info = i;
+        dir = d;
+        hidden = h;
+        ex = e;
+    }
+    Entry(string p, string n, bool d, bool h, bool e){
+        path = p;
+        name = n;
+        info = "";
+        dir = d;
+        hidden = h;
+        ex = e;
     }
     string get_name(){
         return this->name;
@@ -51,12 +82,20 @@ class Entry{
             //cout << "F0" << endl;
             return false;
         }
+        if(x == ".." && y != "."){
+            return true;
+        }
+        else if(x != "." && y == ".."){
+            return false;
+        }
         if(x.at(0) == '.'){
             x = x.substr(1,x.size());
         }
         if(y.at(0) == '.'){
             y = y.substr(1,y.size());
         }
+        unsigned int x_size = x.size();
+        unsigned int y_size = y.size();
         unsigned int k = 0;
         for(unsigned int i = 0; i < x.size(); i++){
             char im = tolower(x.at(i));
@@ -64,6 +103,7 @@ class Entry{
             if(x.at(i) == '.' && i + 1 < x.size()){
                 i++;
                 im = tolower(x.at(i));
+                x_size--;
             }
             else if(i + 1 >=  x.size() && x.at(i) == '.'){
                 return true;
@@ -71,6 +111,7 @@ class Entry{
             if(y.at(k) == '.' && k + 1 < y.size()){
                 k++;
                 ex = tolower(y.at(k));
+                y_size--;
             }
             else if(k + 1 >=  y.size() && y.at(k) == '.'){
                 return true;
@@ -86,10 +127,10 @@ class Entry{
                 return false;
             }
             else if(im == ex){
-                if(toupper(im) != x.at(i) && toupper(ex) == y.at(k)){
+                if(toupper(im) != x.at(i)
+                        && toupper(ex) == y.at(k)){
                     //cout << "T4" << endl;
-                    if(x.size() ==  y.size()){
-                        //cout << "oh" << endl;
+                    if(x_size >  y_size){
                         return false;
                     }
                     else{
@@ -98,7 +139,7 @@ class Entry{
                 }
                 else if(toupper(im) == x.at(i) && toupper(ex) != y.at(k)){
                     //cout << "F3" << endl;
-                    if(x.size() >= y.size()){
+                    if(x_size >=  y_size){
                         return false;
                     }
                     else{
@@ -295,7 +336,7 @@ void print_ls(bool flags[], deque<Entry> paths, string mainPath){
     DIR *dirp = opendir(tmp.c_str());
     if(dirp == NULL){
         perror("opendir");
-        return;
+        exit(0);
     }
     dirent *direntp;
     vector<Entry> fileObj;
@@ -305,7 +346,7 @@ void print_ls(bool flags[], deque<Entry> paths, string mainPath){
     while((direntp = readdir(dirp))){
         if(direntp == NULL){
             perror("readdir");
-            return;
+            exit(0);
         }
         ftmp = direntp->d_name;
         string tmpPath = mainPath;
@@ -313,7 +354,7 @@ void print_ls(bool flags[], deque<Entry> paths, string mainPath){
         tmpPath.append(ftmp);
         if(stat(tmpPath.c_str(), &buf) == -1){
             perror("stat");
-            //break;
+            exit(0);
         }
         string i;
         if(flags[1] && flags [0]){
@@ -323,23 +364,66 @@ void print_ls(bool flags[], deque<Entry> paths, string mainPath){
             i = getInfo(tmpPath, buf);
         }
         if(flags[0]){
-            Entry e(tmpPath, direntp->d_name, i);
+            bool dir;
+            if(S_ISDIR(buf.st_mode)){
+                dir = true;
+            }
+            else{
+                dir = false;
+            }
+            bool ex;
+            if((S_IEXEC & buf.st_mode)){
+                ex = true;
+            }
+            else{
+                ex = false;
+            }
+            bool hide;
+            if(ftmp.at(0) == '.'){
+                hide = true;
+            }
+            else{
+                hide = false;
+            }
+            Entry e(tmpPath, direntp->d_name, i, dir, hide, ex);
             fileObj.push_back(e);
             cnt++;
         }
         else if(!flags[0] && ftmp.at(0) != '.'){
-            Entry e(tmpPath, direntp->d_name, i);
+            bool dir;
+            if(S_ISDIR(buf.st_mode)){
+                dir = true;
+            }
+            else{
+                dir = false;
+            }
+            bool ex;
+            if((S_IEXEC & buf.st_mode)){
+                ex = true;
+            }
+            else{
+                ex = false;
+            }
+
+            Entry e(tmpPath, direntp->d_name, i, dir, false, ex);
             fileObj.push_back(e);
             cnt++;
         }
         if(S_ISDIR(buf.st_mode) && ftmp != "." && ftmp != ".."
             && flags[2]){
             if(flags[0]){
-                Entry r(tmpPath, tmpPath);
+                bool hide;
+                if(ftmp.at(0) == '.'){
+                    hide = true;
+                }
+                else{
+                    hide = false;
+                }
+                Entry r(tmpPath, tmpPath, true, hide, false);
                 paths.push_back(r);
             }
             else if(!flags[0] && ftmp.at(0) != '.'){
-                Entry r(tmpPath, tmpPath);
+                Entry r(tmpPath, tmpPath, true, false, false);
                 paths.push_back(r);
             }
         }
@@ -355,11 +439,31 @@ void print_ls(bool flags[], deque<Entry> paths, string mainPath){
         for(unsigned int i = 0; i < fileObj.size(); i++){
             if(flags[1]){
                 cout << fileObj.at(i).get_info();
-                cout << fileObj.at(i).get_name() << endl;
+                if(fileObj.at(i).isDir()){
+                    cout << "\033[34m" << fileObj.at(i).get_name()
+                        << "\033[0m" << endl;
+                }
+                else if(fileObj.at(i).isEx()){
+                    cout << "\033[32m" << fileObj.at(i).get_name()
+                        << "\033[0m" << endl;
+                }
+                else{
+                    cout << fileObj.at(i).get_name() << endl;
+                }
                 count++;
             }
             if(!flags[1]){
-                cout << fileObj.at(i).get_name() << "  ";
+                if(fileObj.at(i).isDir()){
+                    cout << "\033[34m" << fileObj.at(i).get_name()
+                        <<"\033[0m" << "  ";
+                }
+                else if(fileObj.at(i).isEx()){
+                    cout << "\033[32m" << fileObj.at(i).get_name()
+                        << "\033[0m" << "  ";
+                }
+                else{
+                    cout << fileObj.at(i).get_name() << "  ";
+                }
                 count++;
             }
         }
@@ -436,7 +540,7 @@ int main(int argc, char* argv[]){
     sort(files.begin(), files.end());
     struct stat buf;
     if(valid && files.size() <=0){
-        Entry r(".", ".");
+        Entry r(".", ".", true, true, false);
         paths.push_back(r);
         string pth = ".";
         print_ls(flags, paths, pth);
@@ -453,6 +557,7 @@ int main(int argc, char* argv[]){
                 }
                 if(-1 == stat(files.at(i).c_str(), &buf)){
                     perror("stat");
+                    exit(0);
                 }
                 else{
                     Entry r(files.at(i), files.at(i));
@@ -473,6 +578,7 @@ int main(int argc, char* argv[]){
 
                 if(-1 == stat(files.at(i).c_str(), &buf)){
                     perror("stat");
+                    exit(0);
                 }
                 else{
                     Entry r(files.at(i), files.at(i));
@@ -496,6 +602,7 @@ int main(int argc, char* argv[]){
 
                 if(-1 == stat(x.c_str(), &buf)){
                     perror("stat");
+                    exit(0);
                 }
                 else if(S_ISREG(buf.st_mode)){
                     cout << files.at(i) << endl << endl;
