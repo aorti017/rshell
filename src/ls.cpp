@@ -559,6 +559,9 @@ int main(int argc, char* argv[]){
                     perror("stat");
                     exit(0);
                 }
+                else if(S_ISREG(buf.st_mode)){
+                    cout << files.at(i) << endl;
+                }
                 else{
                     Entry r(files.at(i), files.at(i));
                     paths.push_back(r);
@@ -579,6 +582,9 @@ int main(int argc, char* argv[]){
                 if(-1 == stat(files.at(i).c_str(), &buf)){
                     perror("stat");
                     exit(0);
+                }
+                else if(S_ISREG(buf.st_mode)){
+                    cout << files.at(i) << endl;
                 }
                 else{
                     Entry r(files.at(i), files.at(i));
@@ -605,7 +611,7 @@ int main(int argc, char* argv[]){
                     exit(0);
                 }
                 else if(S_ISREG(buf.st_mode)){
-                    cout << files.at(i) << endl << endl;
+                    cout << files.at(i) << endl;
                 }
                 else{
                     Entry r("./" + files.at(i), "./"
