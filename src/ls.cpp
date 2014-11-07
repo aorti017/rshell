@@ -62,24 +62,21 @@ class Entry{
     string get_name(){
         return this->name;
     }
+    string get_path(){
+        return this->path;
+    }
     string get_info(){
         return this->info;
     }
     bool operator < (const Entry& e) const{
         string x = this->name;
         string y = e.name;
-        /*if(x == ".secs" || y == ".secs"){
-            cout << x << " " << y << endl;
-        }*/
         string tmpx = this->name;
         string tmpy = this->name;
-        //cout << x << " " << y << endl;
         if(x == "."){
-            //cout << "T0" << endl;
             return true;
         }
         else if(y == "."){
-            //cout << "F0" << endl;
             return false;
         }
         if(x == ".." && y != "."){
@@ -94,13 +91,39 @@ class Entry{
         if(y.at(0) == '.'){
             y = y.substr(1,y.size());
         }
-        unsigned int x_size = x.size();
-        unsigned int y_size = y.size();
+        string x_lower = x;
+        string y_lower = y;
+        transform(x_lower.begin(), x_lower.end(), x_lower.begin(), ::tolower);
+        transform(y_lower.begin(), y_lower.end(), y_lower.begin(), ::tolower);
+        if(x_lower == y_lower){
+            unsigned int k = 0;
+            for(unsigned int i = 0; i < x.size(); i++){
+                char im = tolower(x.at(i));
+                char ex = tolower(y.at(i));
+                if(toupper(im) != x.at(i) && toupper(ex) == y.at(k)){
+                    return true;
+                }
+                else if(toupper(ex) != y.at(k) && toupper(im) == x.at(i)){
+                    return false;
+                }
+                k++;
+                if(k == y.size()){
+                    if(tmpx.at(0) == '.'){
+                        return false;
+                    }
+                    else if(tmpy.at(0) == '.'){
+                        return true;
+                    }
+                }
+            }
+        }
+        //unsigned int x_size = x.size();
+        //unsigned int y_size = y.size();
         unsigned int k = 0;
         for(unsigned int i = 0; i < x.size(); i++){
             char im = tolower(x.at(i));
             char ex = tolower(y.at(k));
-            if(x.at(i) == '.' && i + 1 < x.size()){
+            /*if(x.at(i) == '.' && i + 1 < x.size()){
                 i++;
                 im = tolower(x.at(i));
                 x_size--;
@@ -115,21 +138,17 @@ class Entry{
             }
             else if(k + 1 >=  y.size() && y.at(k) == '.'){
                 return true;
-            }
-            //cout << im << " " << ex << endl;
+            }*/
             if(im < ex){
-                //cout << "T1" << endl;
                 return true;
 
             }
             else if(im > ex){
-                //cout << "F2" << endl;
                 return false;
             }
-            else if(im == ex){
+            /*else if(im == ex){
                 if(toupper(im) != x.at(i)
                         && toupper(ex) == y.at(k)){
-                    //cout << "T4" << endl;
                     if(x_size >  y_size){
                         return false;
                     }
@@ -138,7 +157,6 @@ class Entry{
                     }
                 }
                 else if(toupper(im) == x.at(i) && toupper(ex) != y.at(k)){
-                    //cout << "F3" << endl;
                     if(x_size >=  y_size){
                         return false;
                     }
@@ -146,44 +164,26 @@ class Entry{
                         return true;
                     }
                 }
-                //if it gets here that means both chars are uppercase
-                /*if(tmpy.at(0) == '.'){
-                    cout << "F4" << endl;
-                    return true;
-                }
-                else if(tmpx.at(0) == '.'){
-                    cout << "T5" << endl;
-                    return false;
-                }*/
-            }
+            }*/
             k++;
             if(k >= y.size() && i+1 < x.size()){
-                //cout << "AT" << endl;
                 return false;
             }
         }
-        //cout << k << endl;
-        //cout << "Q" << endl;
-        //echeck for '.'
         if(tmpx.at(0) == '.' && tmpy.at(0) != '.'){
-            //cout << "FQ" << endl;
             return false;
         }
         else if(tmpx.at(0) != '.' && tmpy.at(0) == '.'){
-            //cout << "TQ" << endl;
             return true;
         }
         else if(tmpx.at(0) == '.' && tmpy.at(0) == '.'){
             if(x.size() < y.size()){
-                //cout << "ST" << endl;
                 return true;
             }
             else{
-                //cout << "SF" << endl;
                 return false;
             }
         }
-        //cout << "ERROR" << endl;
         return true;
     }
 };
@@ -290,7 +290,7 @@ string getInfo(string path, struct stat buf){
     }
     ret.append(" ");
     int l = buf.st_nlink;
-    ret.append(to_string(l));
+    ret.append(to_string(static_cast<long long>(l)));
     ret.append(" ");
     struct passwd *pw = getpwuid(buf.st_uid);
     ret.append(pw->pw_name);
@@ -299,21 +299,21 @@ string getInfo(string path, struct stat buf){
     ret.append(gr->gr_name);
     ret.append(" ");
     int t = buf.st_size;
-    ret.append(to_string(t));
+    ret.append(to_string(static_cast<long long>(t)));
     ret.append(" ");
     time_t secs = buf.st_mtime;
     struct tm * ptm;
     ptm = localtime(&secs);
     ret.append(mnth.at(ptm->tm_mon));
     ret.append(" ");
-    ret.append(to_string(ptm->tm_mday));
+    ret.append(to_string(static_cast<long long>(ptm->tm_mday)));
     ret.append(" ");
-    ret.append(to_string(ptm->tm_hour));
+    ret.append(to_string(static_cast<long long>(ptm->tm_hour)));
     ret.append(":");
     if(ptm->tm_min < 10){
         ret.append("0");
     }
-    ret.append(to_string(ptm->tm_min));
+    ret.append(to_string(static_cast<long long>(ptm->tm_min)));
     ret.append(" ");
     return ret;
 }
@@ -419,11 +419,11 @@ void print_ls(bool flags[], deque<Entry> paths, string mainPath){
                 else{
                     hide = false;
                 }
-                Entry r(tmpPath, tmpPath, true, hide, false);
+                Entry r(tmpPath, direntp->d_name, true, hide, false);
                 paths.push_back(r);
             }
             else if(!flags[0] && ftmp.at(0) != '.'){
-                Entry r(tmpPath, tmpPath, true, false, false);
+                Entry r(tmpPath, direntp->d_name, true, false, false);
                 paths.push_back(r);
             }
         }
@@ -432,10 +432,11 @@ void print_ls(bool flags[], deque<Entry> paths, string mainPath){
         cout << "total " << total_block_size / 2 << endl;
     }
     sort(fileObj.begin(), fileObj.end());
-    double  total_line = getTotalChars(fileObj);
-    unsigned int int_total_line = (total_line / 60) + 0.5;
+    //double  total_line = getTotalChars(fileObj);
+    //unsigned int int_total_line = (total_line / 60) + 0.5;
     unsigned int count = 0;
-    if(int_total_line <= 1 || flags[1]){
+    unsigned int c_count = 0;
+    //if(int_total_line <= 1 || flags[1]){
         for(unsigned int i = 0; i < fileObj.size(); i++){
             if(flags[1]){
                 cout << fileObj.at(i).get_info();
@@ -450,21 +451,45 @@ void print_ls(bool flags[], deque<Entry> paths, string mainPath){
                 else{
                     cout << fileObj.at(i).get_name() << endl;
                 }
-                count++;
+                c_count++;
             }
             if(!flags[1]){
                 if(fileObj.at(i).isDir()){
+                    unsigned int tmp = fileObj.at(i).get_name().size();
+                    tmp += 2;
+                    count += tmp;
+                    if(count >= 80){
+                        count = tmp;
+                        cout << endl;
+                    }
                     cout << "\033[34m" << fileObj.at(i).get_name()
-                        <<"\033[0m" << "  ";
+                        <<"\033[0m";
+                    cout << "  ";
                 }
                 else if(fileObj.at(i).isEx()){
+                    unsigned int tmp = fileObj.at(i).get_name().size();
+                    tmp += 2;
+                    count += tmp;
+                    if(count >= 80){
+                        count = tmp;
+                        cout << endl;
+                    }
                     cout << "\033[32m" << fileObj.at(i).get_name()
-                        << "\033[0m" << "  ";
+                        << "\033[0m";
+                    cout << "  ";
                 }
                 else{
-                    cout << fileObj.at(i).get_name() << "  ";
+                    unsigned int tmp = fileObj.at(i).get_name().size();
+                    tmp += 2;
+                    count += tmp;
+                    if(count >= 80){
+                        count = tmp;
+                        cout << endl;
+                    }
+                    cout << fileObj.at(i).get_name();
+                    cout << "  ";
                 }
-                count++;
+                c_count++;
             }
         }
         paths.pop_front();
@@ -475,25 +500,6 @@ void print_ls(bool flags[], deque<Entry> paths, string mainPath){
             cout << /* "b" <<*/ endl;
         }
         count = 0;
-    }
-    else{
-        unsigned int k = 0;
-        while(k < int_total_line){
-            for(unsigned int i = k; i < fileObj.size();
-                i +=  int_total_line){
-                cout << setw(5) << left <<
-                    fileObj.at(i).get_name() << "  ";
-            }
-            k++;
-            if(k <= int_total_line){
-                cout << /*"c" <<*/  endl;
-            }
-        }
-        paths.pop_front();
-        if(!paths.empty()){
-            cout << endl;
-        }
-    }
     sort(paths.begin(), paths.end());
     fileObj.clear();
     closedir(dirp);
@@ -501,7 +507,7 @@ void print_ls(bool flags[], deque<Entry> paths, string mainPath){
         return;
     }
     total_block_size = 0;
-    print_ls(flags, paths, paths.front().get_name());
+    print_ls(flags, paths, paths.front().get_path());
     return;
 }
 
