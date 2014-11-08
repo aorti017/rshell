@@ -99,20 +99,30 @@ class Entry{
             unsigned int k = 0;
             for(unsigned int i = 0; i < x.size(); i++){
                 char im = tolower(x.at(i));
-                char ex = tolower(y.at(i));
-                if(toupper(im) != x.at(i) && toupper(ex) == y.at(k)){
+                char ex = tolower(y.at(k));
+                if(x.at(i) == '.' && i + 1 < x.size()){
+                    i++;
+                    im = tolower(x.at(i));
+                }
+                if(y.at(k) == '.' && k + 1 < y.size()){
+                    k++;
+                    ex = tolower(y.at(k));
+                }
+                if(toupper(im) != x.at(i)
+                    && toupper(ex) == y.at(k)){
                     return true;
                 }
-                else if(toupper(ex) != y.at(k) && toupper(im) == x.at(i)){
+                else if(toupper(ex) != y.at(k)
+                    && toupper(im) == x.at(i)){
                     return false;
                 }
                 k++;
                 if(k == y.size()){
                     if(tmpx.at(0) == '.'){
-                        return false;
+                        return true;
                     }
                     else if(tmpy.at(0) == '.'){
-                        return true;
+                        return false;
                     }
                 }
             }
@@ -121,24 +131,43 @@ class Entry{
         //unsigned int y_size = y.size();
         unsigned int k = 0;
         for(unsigned int i = 0; i < x.size(); i++){
-            char im = tolower(x.at(i));
-            char ex = tolower(y.at(k));
-            /*if(x.at(i) == '.' && i + 1 < x.size()){
+            char imtmp = x.at(i);
+            char extmp = y.at(k);
+            char im = tolower(imtmp);
+            char ex = tolower(extmp);
+            if(x.at(i) == '.' && i + 1 < x.size()){
                 i++;
+                imtmp = x.at(i);
                 im = tolower(x.at(i));
-                x_size--;
+                //x_size--;
             }
-            else if(i + 1 >=  x.size() && x.at(i) == '.'){
-                return true;
-            }
+            //else if(i + 1 >=  x.size() && x.at(i) == '.'){
+                //return true;
+            //}
             if(y.at(k) == '.' && k + 1 < y.size()){
                 k++;
+                extmp = y.at(k);
                 ex = tolower(y.at(k));
-                y_size--;
+                //y_size--;
             }
-            else if(k + 1 >=  y.size() && y.at(k) == '.'){
+            //else if(k + 1 >=  y.size() && y.at(k) == '.'){
+                //return true;
+            //}
+            if(!isalnum(imtmp) && isalnum(extmp)){
                 return true;
-            }*/
+            }
+            else if(!isalnum(extmp) && isalnum(imtmp)){
+                return false;
+            }
+            else if(!isalnum(imtmp) && !isalnum(extmp)){
+                return imtmp < extmp;
+            }
+            if(!isdigit(imtmp) && isdigit(extmp)){
+                return false;
+            }
+            else if(!isdigit(extmp) && isdigit(imtmp)){
+                return true;
+            }
             if(im < ex){
                 return true;
 
@@ -171,10 +200,10 @@ class Entry{
             }
         }
         if(tmpx.at(0) == '.' && tmpy.at(0) != '.'){
-            return false;
+            return true;
         }
         else if(tmpx.at(0) != '.' && tmpy.at(0) == '.'){
-            return true;
+            return false;
         }
         else if(tmpx.at(0) == '.' && tmpy.at(0) == '.'){
             if(x.size() < y.size()){
