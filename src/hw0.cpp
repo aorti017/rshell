@@ -1,9 +1,4 @@
 #include <iostream>
-#include <string>
-#include <time.h>
-#include <sys/stat.h>
-#include <dirent.h>
-#include <queue>
 #include <stdio.h>
 #include <ctype.h>
 #include <cstring>
@@ -138,177 +133,10 @@ string commentRemoval(string x){
     }
 }
 
-
-
-bool isls(char x[]){
-    string tmp = x;
-    string hold = "ls";
-    unsigned int k = 0;
-    if(tmp.size() < 2){
-        return false;
-    }
-    for(unsigned int i = 0; i < tmp.size(); i++){
-        if(k != hold.size() && tmp.at(i) == hold.at(k)){
-            k++;
-            if(k == hold.size()){
-                return true;
-            }
-        }
-        else if(tmp.at(i) != ' ' ){
-            return false;
-        }
-    }
-    return false;
-}
-
-bool multiCheck(string x, bool flags[]){
-    string chk = "alR";
-    for(unsigned int i = 1; i < x.size(); i++){
-        if(chk.find(x.at(i)) < 0 || chk.find(x.at(i)) >= x.size()){
-            return false;
-        }
-        else if(x.at(i) == 'a'){
-            flags[0] = true;
-        }
-        else if(x.at(i) == 'l'){
-            flags[1] = true;
-        }
-        else if(x.at(i) == 'R'){
-            flags[2] = true;
-        }
-    }
-    return true;
-}
-
-bool ls_parse(vector<string> cmd, bool flags[], vector<string> &files){
-    if(cmd.size() < 0){
-        return false;
-    }
-    if(cmd.at(0) != "ls"){
-        return false;
-    }
-    for(unsigned int i = 1; i < cmd.size(); i++){
-        if(cmd.at(i) == "-a"){
-            flags[0] = true;
-        }
-        else if(cmd.at(i) == "-l"){
-            flags[1] = true;
-        }
-        else if(cmd.at(i) == "-R"){
-            flags[2] = true;
-        }
-        else if(cmd.at(i) == "-"){
-            return false;
-        }
-        else if(cmd.at(i).at(0) == '-'){
-            if(!multiCheck(cmd.at(i), flags)){
-                return false;
-            }
-        }
-        else{
-            files.push_back(cmd.at(i));
-        }
-    }
-    return true;
-}
-
-void getInfo(string path, struct stat buf){
-    vector<string> mnth;
-    mnth.push_back("Jan");
-    mnth.push_back("Feb");
-    mnth.push_back("Mar");
-    mnth.push_back("Apr");
-    mnth.push_back("May");
-    mnth.push_back("Jun");
-    mnth.push_back("Jul");
-    mnth.push_back("Aug");
-    mnth.push_back("Sep");
-    mnth.push_back("Oct");
-    mnth.push_back("Nov");
-    mnth.push_back("Dec");
-    if(S_ISLNK(buf.st_mode)){
-        cout << "l";
-    }
-    else if(S_ISDIR(buf.st_mode)){
-        cout << "d";
-    }
-    else if(S_ISREG(buf.st_mode)){
-        cout << "-";
-    }
-    cout << " ";
-    time_t secs = buf.st_mtime;
-    struct tm * ptm;
-    ptm = localtime(&secs);
-    cout << mnth.at(ptm->tm_mon);
-    cout << " ";
-    cout << ptm->tm_mday;
-    cout << " ";
-    cout << ptm->tm_hour;
-    cout << ":";
-    cout << ptm->tm_min;
-    cout << " ";
-}
-
-
-
-void printLs(bool flags[], queue<string> paths, string path){
-    if(paths.empty()){
-        return;
-    }
-    int cnt = 0;
-    struct stat buf;
-    string tmp = paths.front();
-    string ftmp;
-    DIR *dirp = opendir(tmp.c_str());
-    dirent *direntp;
-    if(flags[2]){
-        cout << paths.front() << ":" << endl;
-    }
-    while((direntp = readdir(dirp))){
-        ftmp = direntp->d_name;
-
-        string tmpPath = paths.front();
-        tmpPath.append("/");
-        tmpPath.append(ftmp);
-        stat(tmpPath.c_str(), &buf);
-        if(flags[1] && flags [0]){
-            //get and cout info
-            getInfo(tmpPath, buf);
-        }
-        if(flags[1] && !flags[0] && ftmp.at(0) != '.'){
-            //get and cout info
-            getInfo(tmpPath, buf);
-        }
-        if(flags[0]){
-            cout << direntp->d_name << endl;
-        }
-        else if(!flags[0] && ftmp.at(0) != '.'){
-            cout << direntp->d_name << endl;
-        }
-        if(S_ISDIR(buf.st_mode) && ftmp != "." && ftmp != ".." && flags[2]){
-            if(tmp != ".git"){
-                if(flags[0]){
-                    paths.push(tmpPath);
-                    cnt++;
-                }
-                else if(!flags[0] && ftmp.at(0) != '.'){
-                    paths.push(tmpPath);
-                    cnt++;
-                }
-            }
-        }
-    }
-    closedir(dirp);
-    paths.pop();
-    cout << endl;
-    printLs(flags, paths, path);
-    return;
-}
-
 //this function runs the command using fork and execvp
 //and returns once all commands from the entered char[]
 //have been executed
-void run(char str[]){
+bool run(char str[]){
 
     //needed to parse with strtok
     char* pch;
@@ -329,12 +157,15 @@ void run(char str[]){
     //the vector that holds the commands to be converted and executed
     vector<string> cmd;
 
+    string p = str;
+    int ogsz = p.size();
+
     //cbegins breaking the entered commands up by connector
     pch = strtok(str, ";");
 
     //if the command is empty return
     if(pch==NULL){
-        return;
+        return true;
     }
 
     //if using strtok with ";" changed the strz
@@ -348,7 +179,7 @@ void run(char str[]){
     if(pch == strz){
         pch = strtok(str, "&&");
         if(pch == NULL){
-            return;
+            return true ;
         }
         if(pch != strz){
             connector = "&&";
@@ -358,7 +189,7 @@ void run(char str[]){
     if(pch == strz){
         pch = strtok(str, "||");
         if(pch == NULL){
-            return;
+            return true;
         }
         if(pch != strz){
             connector = "||";
@@ -367,126 +198,108 @@ void run(char str[]){
 
     //if the pch is not NULL and is the exit command exit the programm
     if(pch != NULL && isExit(pch)){
-        exit(0);
+        return false;
     }
-
+    int fromHead = 0;
     //this while loop is where fork and execvp execute commands
     while(pch != NULL){
-        if(isls(pch)){
-            int pid = fork();
-            if(pid == -1){
-                perror("fork");
-                exit(1);
-            }
-            if(pid == 0){
-                bool flags[3];
-                flags[0] = false;
-                flags[1] = false;
-                flags[2] = false;
-                bool valid = false;
-                vector<string> files;
-                parse(pch, cmd);
-                valid = ls_parse(cmd, flags, files);
-                if(!valid){
-                    cerr << "Invalid flag" << endl;
-                    exit(1);
-                }
-                else{
-                    //print files and such
-                    string pth  = ".";
-                    queue<string> tmp;
-                    tmp.push(".");
-                    printLs(flags, tmp, pth);
-                    status = 0;
-                }
-                cmd.clear();
-                files.clear();
-                exit(0);
-            }
-            else{
-                waitpid(-1, &status, 0);
-            }
+        string pmt = pch;
+        if(connector != ";"){
+            fromHead += pmt.size() +2;
         }
-
         else{
-            //fork the programm
-            int pid = fork();
-            //if pid is -1 the fork failed so exit
-            if(pid == -1){
-                perror("fork");
-                exit(1);
-            }
-            //if the pid is 0 the current id the current process is the child
-            else if(pid == 0){
-                //call the parsing function on the command and the cmd vector
+            fromHead += pmt.size()+1;
+        }
+            //call the parsing function on the command and the cmd vector
             //to break it up into command and params
             parse(pch, cmd);
             //set the size of the dynamic char** that will be passed into execvp
-            int cmd_size = cmd.size() + 1;
-            char** argc = new char*[cmd_size];
+            int cmd_size = cmd.size();
+            char** argc = new char*[cmd_size + 1];
             //for each string in cmd copy it into argc, which will be passed
-                //into execvp
+            //into execvp
             for(unsigned int i = 0 ; i < cmd.size(); i++ ){
-                argc[i] = new char[cmd.at(i).size()];
+                argc[i] = new char[cmd.at(i).size() + 1];
                 strcpy(argc[i], cmd.at(i).c_str());
             }
             //set the last value of argc to be NULL so that execvp will work properly
             argc[cmd.size()] = NULL;
-                //call execvp on the first element of argc and the entirety of it
-                //if it returns -1 it has failed fo print an error and delete
-                //the dynamically allocated memory
-                if(-1 ==  execvp(argc[0], argc)){
+
+        //fork the programm
+        int pid = fork();
+        //if pid is -1 the fork failed so exit
+        if(pid == -1){
+            perror("fork");
+            exit(1);
+        }
+        //if the pid is 0 the current id the current process is the child
+        else if(pid == 0){
+            //call execvp on the first element of argc and the entirety of it
+            //if it returns -1 it has failed fo print an error and delete
+            //the dynamically allocated memory
+            if(-1 ==  execvp(argc[0], argc)){
                     perror("execvp");
-                    delete[] argc;
                     exit(1);
-                }
             }
-            //otherwise it is the parrent process
             else{
-                //wait for any process to exit, in this case I only created on,
-                //and store its exit code in status
-                if(-1 == waitpid(-1, &status, 0)){
-        	        perror("waitpid");
-    	        	exit(1);
-                }
+                exit(0);
             }
         }
-        //if the value of status is larger than 0
-        //it failed
-        if(status > 0){
-            sucs = false;
-        }
-        //otherwise if succeeded
+        //otherwise it is the parrent process
         else{
-            sucs = true;
-        }
+            //wait for any process to exit, in this case I only created on,
+            //and store its exit code in status
+            if(-1 == waitpid(-1, &status, 0)){
+    	        perror("waitpid");
+                delete[] argc;
+	        	exit(1);
+	         }
+            for(unsigned int i = 0; i <= cmd.size(); i++){
+                delete[] argc[i];
+            }
+            delete[] argc;
+            //if the value of status is larger than 0
+            //it failed
+            if(status > 0){
+                sucs = false;
+            }
+            //otherwise if succeeded
+            else{
+                sucs = true;
+            }
 
-        //clear the vector holding the command to execute
-         cmd.clear();
+            //clear the vector holding the command to execute
+	        cmd.clear();
 
-        //run the next command if the connector logic and value of sucs allow it
-        if((connector=="&&" && sucs) || (connector=="||" && !sucs) || (connector==";")){
-            pch = strtok(NULL, connector.c_str());
+            //run the next command if the connector logic and value of sucs allow it
+            if((connector=="&&" && sucs) || (connector=="||" && !sucs) || (connector==";")){
+                if(ogsz >= fromHead){
+                    pch = strtok(str+fromHead, connector.c_str());
+                }
+                else{
+                    return true;
+                }
+            }
+            //otherwise return
+            else{
+                return true;
+            }
+            //if the next command is not NULL and is exit exit the program
+            if(pch != NULL && isExit(pch)){
+                return false;
+            }
         }
-        //otherwise return
-        else{
-            return;
-        }
-        //if the next command is not NULL and is exit exit the program
-        if(pch != NULL && isExit(pch)){
-            exit(0);
-        }
-        }
+    }
     //if there are no more commands to execute/parse return
-    return;
+    return true;
 }
 
 
 //main takes in commands and passes them to run to execute
 int main(){
-
+    bool cont = true;
     //continue until terminated by a conditional branch within run
-    while(true){
+    while(cont){
 
         //retrieves the login name
         //and checks to make sure there was no error
@@ -534,7 +347,7 @@ int main(){
             //copies the input into the char* str[]
             strcpy(str, input.c_str());
             //calls run on the users entered commands
-            run(str);
+            cont = run(str);
             //after running the dynamically allocated memory is deleted
             delete[] str;
         }
