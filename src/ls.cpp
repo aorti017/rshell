@@ -20,7 +20,7 @@ int getBlk(unordered_map<string, string> m, vector<string> v){
     string path;
     for(unsigned int i = 0; i < v.size(); i++){
         path = m[v.at(i)];
-        if(-1 == stat(path.c_str(), &buf)){
+        if(-1 == lstat(path.c_str(), &buf)){
             perror("stat");
             exit(0);
         }
@@ -67,7 +67,7 @@ bool multiCheck(string tmp, bool flags[]){
 
 string getInfo(string path){
     struct stat buf;
-    if(-1 == stat(path.c_str(), &buf)){
+    if(-1 == lstat(path.c_str(), &buf)){
         perror("stat");
         exit(0);
     }
@@ -207,7 +207,7 @@ void print_ls(bool flags[], deque<string> paths, string mainPath){
         string tmpPath = mainPath;
         tmpPath.append("/");
         tmpPath.append(ftmp);
-        if(stat(tmpPath.c_str(), &buf) == -1){
+        if(lstat(tmpPath.c_str(), &buf) == -1){
             perror("stat");
             exit(0);
         }
@@ -266,8 +266,7 @@ void print_ls(bool flags[], deque<string> paths, string mainPath){
                         count = tmp;
                         cout << endl;
                     }
-                    cout << "\033[34m" << fileObj.at(i)
-                        <<"\033[0m";
+                    cout << "\033[34m" << fileObj.at(i) <<"\033[0m";
                     cout << "  ";
                 }
                 else if(isEx(filehash[fileObj.at(i)])){
@@ -372,7 +371,7 @@ int main(int argc, char* argv[]){
                 if(tmp.at(tmp.size()-1) == '/'){
                     files.at(i) = tmp.substr(0, tmp.size()-1);
                 }
-                if(-1 == stat(files.at(i).c_str(), &buf)){
+                if(-1 == lstat(files.at(i).c_str(), &buf)){
                     perror("stat");
                     exit(0);
                 }
@@ -395,7 +394,7 @@ int main(int argc, char* argv[]){
                     files.at(i) = tmp.substr(0, tmp.size()-1);
                 }
 
-                if(-1 == stat(files.at(i).c_str(), &buf)){
+                if(-1 == lstat(files.at(i).c_str(), &buf)){
                     perror("stat");
                     exit(0);
                 }
@@ -421,7 +420,7 @@ int main(int argc, char* argv[]){
                     files.at(i) = tmp.substr(0, tmp.size()-1);
                 }
 
-                if(-1 == stat(x.c_str(), &buf)){
+                if(-1 == lstat(x.c_str(), &buf)){
                     perror("stat");
                     exit(0);
                 }
