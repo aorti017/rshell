@@ -21,7 +21,7 @@ int getBlk(unordered_map<string, string> m, vector<string> v){
     for(unsigned int i = 0; i < v.size(); i++){
         path = m[v.at(i)];
         if(-1 == lstat(path.c_str(), &buf)){
-            perror("stat");
+            perror("lstat");
             exit(0);
         }
         blocks += buf.st_blocks;
@@ -32,7 +32,7 @@ int getBlk(unordered_map<string, string> m, vector<string> v){
 bool isDir(string path){
     struct stat buf;
     if(-1 == lstat(path.c_str(), &buf)){
-        perror("stat");
+        perror("lstat");
     }
     return S_ISDIR(buf.st_mode);
 }
@@ -40,7 +40,7 @@ bool isDir(string path){
 bool isEx(string path){
     struct stat buf;
     if(-1 == lstat(path.c_str(), &buf)){
-        perror("stat");
+        perror("lstat");
     }
     return buf.st_mode & S_IXUSR;
 }
@@ -68,7 +68,7 @@ bool multiCheck(string tmp, bool flags[]){
 string getInfo(string path){
     struct stat buf;
     if(-1 == lstat(path.c_str(), &buf)){
-        perror("stat");
+        perror("lstat");
         exit(0);
     }
     string ret;
@@ -208,7 +208,7 @@ void print_ls(bool flags[], deque<string> paths, string mainPath){
         tmpPath.append("/");
         tmpPath.append(ftmp);
         if(lstat(tmpPath.c_str(), &buf) == -1){
-            perror("stat");
+            perror("lstat");
             exit(0);
         }
         if(flags[0]){
@@ -491,7 +491,7 @@ int main(int argc, char* argv[]){
                     files.at(i) = tmp.substr(0, tmp.size()-1);
                 }
                 if(-1 == lstat(files.at(i).c_str(), &buf)){
-                    perror("stat");
+                    perror("lstat");
                     exit(0);
                 }
                 else{
@@ -512,7 +512,7 @@ int main(int argc, char* argv[]){
                 }
 
                 if(-1 == lstat(files.at(i).c_str(), &buf)){
-                    perror("stat");
+                    perror("lstat");
                     exit(0);
                 }
                 else{
@@ -535,7 +535,7 @@ int main(int argc, char* argv[]){
                     files.at(i) = tmp.substr(0, tmp.size()-1);
                 }
                 if(-1 == lstat(x.c_str(), &buf)){
-                    perror("stat");
+                    perror("lstat");
                     exit(0);
                 }
                 else{
