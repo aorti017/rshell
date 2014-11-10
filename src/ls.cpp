@@ -31,7 +31,7 @@ int getBlk(unordered_map<string, string> m, vector<string> v){
 
 bool isDir(string path){
     struct stat buf;
-    if(-1 == stat(path.c_str(), &buf)){
+    if(-1 == lstat(path.c_str(), &buf)){
         perror("stat");
     }
     return S_ISDIR(buf.st_mode);
@@ -39,7 +39,7 @@ bool isDir(string path){
 
 bool isEx(string path){
     struct stat buf;
-    if(-1 == stat(path.c_str(), &buf)){
+    if(-1 == lstat(path.c_str(), &buf)){
         perror("stat");
     }
     return buf.st_mode & S_IXUSR;
@@ -364,6 +364,125 @@ int main(int argc, char* argv[]){
         paths.pop_front();
     }
     else if(valid && files.size() > 0){
+        vector<string> Files;
+        unsigned int reg_count = 0;
+        bool exec = false;
+        for(unsigned int i = 0; i < files.size(); i++){
+            if(files.at(i).at(0) == '.'){
+                if (-1 == lstat(files.at(i).c_str(), &buf)){
+                    perror("lstat");
+                    exit(0);
+                }
+                if(S_ISREG(buf.st_mode) && flags[1]){
+                    cout << getInfo(files.at(i));
+                    if((exec = isEx(files.at(i)))){
+                        cout << "\033[32m";
+                    }
+                    cout << files.at(i) << endl;
+                    if(exec){
+                        cout << "\033[0m";
+                        exec = false;
+                    }
+                    reg_count++;
+                }
+                else if(S_ISREG(buf.st_mode)){
+                    if((exec = isEx(files.at(i)))){
+                        cout << "\033[32m";
+                    }
+                    cout << files.at(i);
+                    if(exec){
+                        cout << "\033[0m";
+                        exec = false;
+                    }
+                    cout << " ";
+                    reg_count++;
+                }
+                else{
+                    Files.push_back(files.at(i));
+                }
+            }
+            else if(files.at(i).at(0) == '/'){
+                if (-1 == lstat(files.at(i).c_str(), &buf)){
+                    perror("lstat");
+                    exit(0);
+                }
+                if(S_ISREG(buf.st_mode) && flags[1]){
+                    cout << getInfo(files.at(i));
+                    if((exec = isEx(files.at(i)))){
+                        cout << "\033[32m";
+                    }
+                    cout << files.at(i) << endl;
+                    if(exec){
+                        cout << "\033[0m";
+                        exec = false;
+                    }
+                    reg_count++;
+                }
+                else if(S_ISREG(buf.st_mode)){
+                    if((exec = isEx(files.at(i)))){
+                        cout << "\033[32m";
+                    }
+                    cout << files.at(i);
+                    if(exec){
+                        cout << "\033[0m";
+                        exec = false;
+                    }
+                    cout << " ";
+                    reg_count++;
+                }
+                else{
+                    Files.push_back(files.at(i));
+                }
+            }
+            else{
+                string x = "./";
+                x.append(files.at(i));
+                string tmp = files.at(i);
+                if(tmp.at(tmp.size()-1) == '/'){
+                    files.at(i) = tmp.substr(0, tmp.size()-1);
+                }
+                if (-1 == lstat(files.at(i).c_str(), &buf)){
+                    perror("lstat");
+                    exit(0);
+                }
+                if(S_ISREG(buf.st_mode) && flags[1]){
+                    cout << getInfo(files.at(i));
+                    if((exec = isEx(files.at(i)))){
+                        cout << "\033[32m";
+                    }
+                    cout << files.at(i) << endl;
+                    if(exec){
+                        cout << "\033[0m";
+                        exec = false;
+                    }
+                    reg_count++;
+                }
+                else if(S_ISREG(buf.st_mode)){
+                    if((exec = isEx(files.at(i)))){
+                        cout << "\033[32m";
+                    }
+                    cout << files.at(i);
+                    if(exec){
+                        cout << "\033[0m";
+                        exec = false;
+                    }
+                    cout << " ";
+                    reg_count++;
+                }
+                else{
+                    Files.push_back(files.at(i));
+                }
+            }
+        }
+        if(reg_count > 0){
+            if(!flags[1]){
+                cout << endl;
+            }
+            if(Files.size() > 0){
+                cout << endl;
+            }
+        }
+        files = Files;
         for(unsigned int i = 0; i < files.size(); i++){
             string pth;
             if(files.at(i).at(0)  == '.'){
@@ -375,13 +494,11 @@ int main(int argc, char* argv[]){
                     perror("stat");
                     exit(0);
                 }
-                else if(S_ISREG(buf.st_mode)){
-                    cout << files.at(i) << endl;
-                }
                 else{
                     paths.push_back(files.at(i));
                     pth = files.at(i);
-                    if(files.size() > 1 && !flags[2]){
+                    if((reg_count > 0 || files.size() > 1)
+                             && !flags[2]){
                         cout << pth << ":" << endl;
                     }
                     print_ls(flags, paths, pth);
@@ -398,14 +515,12 @@ int main(int argc, char* argv[]){
                     perror("stat");
                     exit(0);
                 }
-                else if(S_ISREG(buf.st_mode)){
-                    cout << files.at(i) << endl;
-                }
                 else{
                     paths.push_back(files.at(i));
                     pth = files.at(i);
 
-                    if(files.size() > 1 && !flags[2]){
+                    if((reg_count > 0 || files.size() > 1)
+                            && !flags[2]){
                         cout << pth << ":" << endl;
                     }
                     print_ls(flags, paths, pth);
@@ -419,23 +534,23 @@ int main(int argc, char* argv[]){
                 if(tmp.at(tmp.size()-1) == '/'){
                     files.at(i) = tmp.substr(0, tmp.size()-1);
                 }
-
                 if(-1 == lstat(x.c_str(), &buf)){
                     perror("stat");
                     exit(0);
                 }
-                else if(S_ISREG(buf.st_mode)){
-                    cout << files.at(i) << endl;
-                }
                 else{
                     paths.push_back("./"+files.at(i));
                     pth = "./" + files.at(i);
-                    if(files.size() > 1 && !flags[2]){
+                    if(( reg_count > 0 || files.size() > 1)
+                            && !flags[2]){
                         cout << files.at(i) << ":" << endl;
                     }
                     print_ls(flags, paths, pth);
                     paths.pop_front();
                 }
+            }
+            if(i + 1 < files.size() && !S_ISREG(buf.st_mode)){
+                cout << endl;
             }
         }
     }
