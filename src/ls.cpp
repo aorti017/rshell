@@ -440,7 +440,7 @@ int main(int argc, char* argv[]){
             if(files.at(i).at(0) == '.'){
                 if (-1 == lstat(files.at(i).c_str(), &buf)){
                     perror("lstat");
-                    exit(0);
+                    continue;
                 }
                 if(S_ISREG(buf.st_mode) && flags[1]){
                     cout << getInfo(files.at(i));
@@ -473,7 +473,7 @@ int main(int argc, char* argv[]){
             else if(files.at(i).at(0) == '/'){
                 if (-1 == lstat(files.at(i).c_str(), &buf)){
                     perror("lstat");
-                    exit(0);
+                    continue;
                 }
                 if(S_ISREG(buf.st_mode) && flags[1]){
                     cout << getInfo(files.at(i));
@@ -512,7 +512,7 @@ int main(int argc, char* argv[]){
                 }
                 if (-1 == lstat(files.at(i).c_str(), &buf)){
                     perror("lstat");
-                    exit(0);
+                    continue;
                 }
                 if(S_ISREG(buf.st_mode) && flags[1]){
                     cout << getInfo(files.at(i));
