@@ -45,7 +45,7 @@ How to run
 1. ```git clone https://github.com/aorti017/rshell.git```
 2. ```cd rshell```
 3. ```make```
-4. ```bin/rshell```
+4. ```bin/rshell``` or  ```bin/ls```
 
 Using RShell
 ---------
@@ -57,6 +57,16 @@ Using RShell
 * Excess connectors inserted in the front of a command line, in between commands, or at the end of a command line will be ignored.
 * Comments can be inserted using ```#```, anything after ```#``` will be interpreted as a comment.
 * The ```exit``` command will exit RShell upon execution.
+* The ```cp``` command can be used to copy a the contents of a source file into a destination file.
+* ```cp``` can be used with the ```-a``` flag, which will copy using all methods. If no flag is specified it will be copied
+  using the fastest method.
+* ```cp``` will output an error if the destination file already exists, or if either the source or destination are directories.
+* The ```bin/ls``` command can be used with any combination of, or none of, the optional flags ```-a```, ```-l```, or ```-R```.
+* ```-a``` displays all files including those that are hidden.
+* ```-l``` displays all of the information associated with a file.
+* ```-R``` recursivley outputs the contents of all the directories in the starting directory.
+* When using the ```bin/ls``` command directories are displayed in blue, executables in green, and hidden files with a grey background.
+
 
 Bugs/Limitations
 ---------
@@ -65,3 +75,4 @@ Bugs/Limitations
 * Using connectors as part of or the parameter for a command may cause the command to not execute properly, if at all.
 * When using ```&&``` connectors if any extra (more than 1) of these connectors are inserted in between any two commands, or in the front of the command line, and any of the said extra connectors are seperated by a space any command after the excess connectors will not execute.
 * ```&``` and ```|``` are interpreted as ```&&``` and ```||```, respectively.
+* ```bin/ls``` can not be used with regular expressions.
