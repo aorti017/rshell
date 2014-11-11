@@ -215,7 +215,13 @@ void print_ls(bool flags[], deque<string> paths, string mainPath){
     if(flags[2]){
         cout << tmp  << ":" << endl;
     }
-    while((direntp = readdir(dirp))){
+    errno = 0;
+    direntp = readdir(dirp);
+    if(errno !=  0){
+            perror("readdir");
+            exit(0);
+        }
+    while(direntp){
         if(direntp == NULL){
             perror("readdir");
             exit(0);
@@ -246,6 +252,12 @@ void print_ls(bool flags[], deque<string> paths, string mainPath){
             else if(!flags[0] && ftmp.at(0) != '.'){
                 paths.push_back(tmpPath);
             }
+        }
+        errno = 0;
+        direntp = readdir(dirp);
+        if(errno != 0){
+            perror("readdir");
+            exit(0);
         }
     }
     total_block_size += getBlk(filehash, fileObj);
