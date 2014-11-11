@@ -14,6 +14,16 @@ using namespace std;
 
 int total_block_size = 0;
 
+int get_total_len(vector<string> v){
+    int s = 0;
+    for(unsigned int i = 0; i < v.size(); i++){
+        s+= v.at(i).size();
+    }
+    cout << s << endl;
+    return s / 80;
+}
+
+
 int getBlk(unordered_map<string, string> m, vector<string> v){
     int blocks = 0;
     struct stat buf;
@@ -27,6 +37,13 @@ int getBlk(unordered_map<string, string> m, vector<string> v){
         blocks += buf.st_blocks;
     }
     return blocks;
+}
+
+bool isHide(string path){
+    if(path.at(0) == '.'){
+        return true;
+    }
+    return false;
 }
 
 bool isDir(string path){
@@ -237,6 +254,8 @@ void print_ls(bool flags[], deque<string> paths, string mainPath){
     }
     total_block_size = 0;
     sort(fileObj.begin(), fileObj.end(), locale("en_US.UTF-8"));
+    //int l = get_total_len(fileObj);
+    //cout << endl << l << endl;
     unsigned int count = 0;
     unsigned int c_count = 0;
         for(unsigned int i = 0; i < fileObj.size(); i++){
@@ -244,15 +263,39 @@ void print_ls(bool flags[], deque<string> paths, string mainPath){
                 //total_block_size += getBlk(filehash, fileObj);
                 cout << getInfo(filehash[fileObj.at(i)]);
                 if(isDir(filehash[fileObj.at(i)])){
-                    cout << "\033[34m" << fileObj.at(i)
-                        << "\033[0m" << endl;
+                    if(isHide(fileObj.at(i))){
+                        cout << "\033[34;100m";
+                        cout << fileObj.at(i);
+                        cout << "\033[0m";
+                        cout << endl;
+                    }
+                    else{
+                        cout << "\033[34m" << fileObj.at(i)
+                            << "\033[0m" << endl;
+                    }
                 }
                 else if(isEx(filehash[fileObj.at(i)])){
-                    cout << "\033[32m" << fileObj.at(i)
-                        << "\033[0m" << endl;
+                    if(isHide(fileObj.at(i))){
+                        cout << "\033[32;100m";
+                        cout << fileObj.at(i);
+                        cout << "\033[0m";
+                        cout << endl;
+                    }
+                    else{
+                        cout << "\033[32m" << fileObj.at(i)
+                            << "\033[0m" << endl;
+                    }
                 }
                 else{
-                    cout << fileObj.at(i) << endl;
+                    if(isHide(fileObj.at(i))){
+                        cout << "\033[32;100m";
+                        cout << fileObj.at(i);
+                        cout << "\033[0m";
+                        cout << endl;
+                    }
+                    else{
+                        cout << fileObj.at(i) << endl;
+                    }
                 }
                 c_count++;
             }
@@ -266,8 +309,17 @@ void print_ls(bool flags[], deque<string> paths, string mainPath){
                         count = tmp;
                         cout << endl;
                     }
-                    cout << "\033[34m" << fileObj.at(i) <<"\033[0m";
-                    cout << "  ";
+                    if(isHide(fileObj.at(i))){
+                        cout << "\033[34;100m";
+                        cout << fileObj.at(i);
+                        cout << "\033[0m";
+                    }
+                    else{
+                        cout << "\033[34m" << fileObj.at(i)
+                            <<"\033[0m";
+                    }
+                    cout << setw(2) << right;
+                    cout << "";
                 }
                 else if(isEx(filehash[fileObj.at(i)])){
                     unsigned int tmp = fileObj.at(i).size();
@@ -277,9 +329,17 @@ void print_ls(bool flags[], deque<string> paths, string mainPath){
                         count = tmp;
                         cout << endl;
                     }
-                    cout << "\033[32m" << fileObj.at(i)
-                        << "\033[0m";
-                    cout << "  ";
+                    if(isHide(fileObj.at(i))){
+                        cout << "\033[32;100m";
+                        cout << fileObj.at(i);
+                        cout << "\033[0m";
+                    }
+                    else{
+                        cout << "\033[32m" << fileObj.at(i)
+                            << "\033[0m";
+                    }
+                    cout << setw(2) << right;
+                    cout << "";
                 }
                 else{
                     unsigned int tmp = fileObj.at(i).size();
@@ -289,8 +349,17 @@ void print_ls(bool flags[], deque<string> paths, string mainPath){
                         count = tmp;
                         cout << endl;
                     }
-                    cout << fileObj.at(i);
-                    cout << "  ";
+                    if(isHide(fileObj.at(i))){
+                        cout << "\033[100m";
+                        cout << fileObj.at(i);
+                        cout << "\033[0m";
+                    }
+                    else{
+                        cout << fileObj.at(i);
+                    }
+                    cout << "\033[0m";
+                    cout << setw(2) << right;
+                    cout << "";
                 }
                 c_count++;
             }
