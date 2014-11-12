@@ -1,537 +1,212 @@
-Script started on Tue 11 Nov 2014 10:18:14 AM PST
-]0;alexander@Lahela: ~/cs100/rshellalexander@Lahela:~/cs100/rshell$ #testing ls in current dir with flags
+Script started on Tue 11 Nov 2014 08:21:38 PM PST
+]0;alexander@Lahela: ~/cs100/rshellalexander@Lahela:~/cs100/rshell$ #testing ls in u[Kcurrent dir with and wi thout flags
 ]0;alexander@Lahela: ~/cs100/rshellalexander@Lahela:~/cs100/rshell$ bin/ls
-[34mbin[0m  LICENSE[0m  [32mLiLink[0m  Makefile[0m  README.md[0m  [34msrc[0m  [32msrcLink[0m  [34mtests[0m  
-]0;alexander@Lahela: ~/cs100/rshellalexander@Lahela:~/cs100/rshell$ bin/ls -a
-[34;100m.[0m  [34;100m..[0m  [34mbin[0m  [34;100m.git[0m  [100m.hidden[0m[0m  [32;100m.hide[0m  LICENSE[0m  [32mLiLink[0m  Makefile[0m  README.md[0m  [34msrc[0m  
-[32msrcLink[0m  [34mtests[0m  
+[34mbin[0m  [32mbin_link[0m  LICENSE[0m  Makefile[0m  README.md[0m  [34msrc[0m  [34mtests[0m  
 ]0;alexander@Lahela: ~/cs100/rshellalexander@Lahela:~/cs100/rshell$ bin/ls -l
 total 24
-drwxrwxr-x 2 alexander alexander 4096 Nov 11 10:17 [34mbin[0m
--rw-rw-r-- 1 alexander alexander 1486 Nov 7 23:57 LICENSE
-lrwxrwxrwx 1 alexander alexander 7 Nov 9 7:51 [32mLiLink[0m
--rw-rw-r-- 1 alexander alexander 410 Nov 7 23:57 Makefile
--rw-rw-r-- 1 alexander alexander 3119 Nov 11 10:09 README.md
-drwxrwxr-x 2 alexander alexander 4096 Nov 10 22:08 [34msrc[0m
-lrwxrwxrwx 1 alexander alexander 3 Nov 9 7:50 [32msrcLink[0m
-drwxrwxr-x 2 alexander alexander 4096 Nov 11 10:18 [34mtests[0m
-]0;alexander@Lahela: ~/cs100/rshellalexander@Lahela:~/cs100/rshell$ bin/ls -R
+drwxrwxr-x 2 alexander alexander 4096 Nov 11 20:21 [34mbin[0m
+lrwxrwxrwx 1 alexander alexander 3 Nov 11 19:38 [32mbin_link[0m
+-rw-rw-r-- 1 alexander alexander 1486 Nov 11 19:19 LICENSE
+-rw-rw-r-- 1 alexander alexander 573 Nov 11 19:27 Makefile
+-rw-rw-r-- 1 alexander alexander 2854 Nov 11 19:27 README.md
+drwxrwxr-x 2 alexander alexander 4096 Nov 11 20:19 [34msrc[0m
+drwxrwxr-x 2 alexander alexander 4096 Nov 11 20:21 [34mtests[0m
+]0;alexander@Lahela: ~/cs100/rshellalexander@Lahela:~/cs100/rshell$ bin/ls -a
+[34;100m.[0m  [34;100m..[0m  [34mbin[0m  [32mbin_link[0m  [34;100m.git[0m  [100m.hidden[0m[0m  LICENSE[0m  Makefile[0m  README.md[0m  [34msrc[0m  [34mtests[0m  
+]0;alexander@Lahela: ~/cs100/rshellalexander@Lahela:~/cs100/rshell$ bin/ls -l[KR
 .:
-[34mbin[0m  LICENSE[0m  [32mLiLink[0m  Makefile[0m  README.md[0m  [34msrc[0m  [32msrcLink[0m  [34mtests[0m  
+[34mbin[0m  [32mbin_link[0m  LICENSE[0m  Makefile[0m  README.md[0m  [34msrc[0m  [34mtests[0m  
 
 ./bin:
-[32mls[0m  [32mrshell[0m  
+[32mcp[0m  [32mls[0m  [32mrshell[0m  
 
 ./src:
-hw0.cpp[0m  ls.cpp[0m  
+cp.cpp[0m  hw0.cpp[0m  ls.cpp[0m  Timer.h[0m  
 
 ./tests:
 exec.script[0m  ls.script[0m  
-]0;alexander@Lahela: ~/cs100/rshellalexander@Lahela:~/cs100/rshell$ #testing ls when passing in various com binations of flags
+]0;alexander@Lahela: ~/cs100/rshellalexander@Lahela:~/cs100/rshell$ #testing ls whn[Ken passing in [Kv[K various co mbinations of flags
 ]0;alexander@Lahela: ~/cs100/rshellalexander@Lahela:~/cs100/rshell$ bin/ls -a -l
-total 192
-drwxrwxr-x 6 alexander alexander 4096 Nov 11 10:17 [34;100m.[0m
-drwxrwxr-x 5 alexander alexander 4096 Nov 9 17:42 [34;100m..[0m
-drwxrwxr-x 2 alexander alexander 4096 Nov 11 10:17 [34mbin[0m
-drwxrwxr-x 8 alexander alexander 4096 Nov 11 10:09 [34;100m.git[0m
--rw-rw-r-- 1 alexander alexander 0 Nov 9 16:53 [32;100m.hidden[0m
--rwxrwxr-x 1 alexander alexander 158761 Nov 10 18:45 [32;100m.hide[0m
--rw-rw-r-- 1 alexander alexander 1486 Nov 7 23:57 LICENSE
-lrwxrwxrwx 1 alexander alexander 7 Nov 9 7:51 [32mLiLink[0m
--rw-rw-r-- 1 alexander alexander 410 Nov 7 23:57 Makefile
--rw-rw-r-- 1 alexander alexander 3119 Nov 11 10:09 README.md
-drwxrwxr-x 2 alexander alexander 4096 Nov 10 22:08 [34msrc[0m
-lrwxrwxrwx 1 alexander alexander 3 Nov 9 7:50 [32msrcLink[0m
-drwxrwxr-x 2 alexander alexander 4096 Nov 11 10:18 [34mtests[0m
+total 36
+drwxrwxr-x 6 alexander alexander 4096 Nov 11 19:44 [34;100m.[0m
+drwxrwxr-x 5 alexander alexander 4096 Nov 11 19:19 [34;100m..[0m
+drwxrwxr-x 2 alexander alexander 4096 Nov 11 20:21 [34mbin[0m
+lrwxrwxrwx 1 alexander alexander 3 Nov 11 19:38 [32mbin_link[0m
+drwxrwxr-x 8 alexander alexander 4096 Nov 11 20:20 [34;100m.git[0m
+-rw-rw-r-- 1 alexander alexander 0 Nov 11 19:44 [100m.hidden[0m
+-rw-rw-r-- 1 alexander alexander 1486 Nov 11 19:19 LICENSE
+-rw-rw-r-- 1 alexander alexander 573 Nov 11 19:27 Makefile
+-rw-rw-r-- 1 alexander alexander 2854 Nov 11 19:27 README.md
+drwxrwxr-x 2 alexander alexander 4096 Nov 11 20:19 [34msrc[0m
+drwxrwxr-x 2 alexander alexander 4096 Nov 11 20:21 [34mtests[0m
 ]0;alexander@Lahela: ~/cs100/rshellalexander@Lahela:~/cs100/rshell$ bin/ls -la
-total 192
-drwxrwxr-x 6 alexander alexander 4096 Nov 11 10:17 [34;100m.[0m
-drwxrwxr-x 5 alexander alexander 4096 Nov 9 17:42 [34;100m..[0m
-drwxrwxr-x 2 alexander alexander 4096 Nov 11 10:17 [34mbin[0m
-drwxrwxr-x 8 alexander alexander 4096 Nov 11 10:09 [34;100m.git[0m
--rw-rw-r-- 1 alexander alexander 0 Nov 9 16:53 [32;100m.hidden[0m
--rwxrwxr-x 1 alexander alexander 158761 Nov 10 18:45 [32;100m.hide[0m
--rw-rw-r-- 1 alexander alexander 1486 Nov 7 23:57 LICENSE
-lrwxrwxrwx 1 alexander alexander 7 Nov 9 7:51 [32mLiLink[0m
--rw-rw-r-- 1 alexander alexander 410 Nov 7 23:57 Makefile
--rw-rw-r-- 1 alexander alexander 3119 Nov 11 10:09 README.md
-drwxrwxr-x 2 alexander alexander 4096 Nov 10 22:08 [34msrc[0m
-lrwxrwxrwx 1 alexander alexander 3 Nov 9 7:50 [32msrcLink[0m
-drwxrwxr-x 2 alexander alexander 4096 Nov 11 10:18 [34mtests[0m
+total 36
+drwxrwxr-x 6 alexander alexander 4096 Nov 11 19:44 [34;100m.[0m
+drwxrwxr-x 5 alexander alexander 4096 Nov 11 19:19 [34;100m..[0m
+drwxrwxr-x 2 alexander alexander 4096 Nov 11 20:21 [34mbin[0m
+lrwxrwxrwx 1 alexander alexander 3 Nov 11 19:38 [32mbin_link[0m
+drwxrwxr-x 8 alexander alexander 4096 Nov 11 20:20 [34;100m.git[0m
+-rw-rw-r-- 1 alexander alexander 0 Nov 11 19:44 [100m.hidden[0m
+-rw-rw-r-- 1 alexander alexander 1486 Nov 11 19:19 LICENSE
+-rw-rw-r-- 1 alexander alexander 573 Nov 11 19:27 Makefile
+-rw-rw-r-- 1 alexander alexander 2854 Nov 11 19:27 README.md
+drwxrwxr-x 2 alexander alexander 4096 Nov 11 20:19 [34msrc[0m
+drwxrwxr-x 2 alexander alexander 4096 Nov 11 20:21 [34mtests[0m
 ]0;alexander@Lahela: ~/cs100/rshellalexander@Lahela:~/cs100/rshell$ bin/ls -Rl
 .:
 total 24
-drwxrwxr-x 2 alexander alexander 4096 Nov 11 10:17 [34mbin[0m
--rw-rw-r-- 1 alexander alexander 1486 Nov 7 23:57 LICENSE
-lrwxrwxrwx 1 alexander alexander 7 Nov 9 7:51 [32mLiLink[0m
--rw-rw-r-- 1 alexander alexander 410 Nov 7 23:57 Makefile
--rw-rw-r-- 1 alexander alexander 3119 Nov 11 10:09 README.md
-drwxrwxr-x 2 alexander alexander 4096 Nov 10 22:08 [34msrc[0m
-lrwxrwxrwx 1 alexander alexander 3 Nov 9 7:50 [32msrcLink[0m
-drwxrwxr-x 2 alexander alexander 4096 Nov 11 10:18 [34mtests[0m
+drwxrwxr-x 2 alexander alexander 4096 Nov 11 20:21 [34mbin[0m
+lrwxrwxrwx 1 alexander alexander 3 Nov 11 19:38 [32mbin_link[0m
+-rw-rw-r-- 1 alexander alexander 1486 Nov 11 19:19 LICENSE
+-rw-rw-r-- 1 alexander alexander 573 Nov 11 19:27 Makefile
+-rw-rw-r-- 1 alexander alexander 2854 Nov 11 19:27 README.md
+drwxrwxr-x 2 alexander alexander 4096 Nov 11 20:19 [34msrc[0m
+drwxrwxr-x 2 alexander alexander 4096 Nov 11 20:21 [34mtests[0m
 
 ./bin:
-total 204
--rwxrwxr-x 1 alexander alexander 158761 Nov 11 10:17 [32mls[0m
--rwxrwxr-x 1 alexander alexander 45870 Nov 11 10:17 [32mrshell[0m
-
-./src:
-total 36
--rw-rw-r-- 1 alexander alexander 12544 Nov 9 19:06 hw0.cpp
--rw-rw-r-- 1 alexander alexander 18524 Nov 10 22:02 ls.cpp
-
-./tests:
-total 20
--rw-rw-r-- 1 alexander alexander 15164 Nov 7 23:57 exec.script
--rw-rw-r-- 1 alexander alexander 4096 Nov 11 10:26 ls.script
-]0;alexander@Lahela: ~/cs100/rshellalexander@Lahela:~/cs100/rshell$ bin/ls -a -lR
-.:
-total 192
-drwxrwxr-x 6 alexander alexander 4096 Nov 11 10:17 [34;100m.[0m
-drwxrwxr-x 5 alexander alexander 4096 Nov 9 17:42 [34;100m..[0m
-drwxrwxr-x 2 alexander alexander 4096 Nov 11 10:17 [34mbin[0m
-drwxrwxr-x 8 alexander alexander 4096 Nov 11 10:09 [34;100m.git[0m
--rw-rw-r-- 1 alexander alexander 0 Nov 9 16:53 [32;100m.hidden[0m
--rwxrwxr-x 1 alexander alexander 158761 Nov 10 18:45 [32;100m.hide[0m
--rw-rw-r-- 1 alexander alexander 1486 Nov 7 23:57 LICENSE
-lrwxrwxrwx 1 alexander alexander 7 Nov 9 7:51 [32mLiLink[0m
--rw-rw-r-- 1 alexander alexander 410 Nov 7 23:57 Makefile
--rw-rw-r-- 1 alexander alexander 3119 Nov 11 10:09 README.md
-drwxrwxr-x 2 alexander alexander 4096 Nov 10 22:08 [34msrc[0m
-lrwxrwxrwx 1 alexander alexander 3 Nov 9 7:50 [32msrcLink[0m
-drwxrwxr-x 2 alexander alexander 4096 Nov 11 10:18 [34mtests[0m
-
-./bin:
-total 212
-drwxrwxr-x 2 alexander alexander 4096 Nov 11 10:17 [34;100m.[0m
-drwxrwxr-x 6 alexander alexander 4096 Nov 11 10:17 [34;100m..[0m
--rwxrwxr-x 1 alexander alexander 158761 Nov 11 10:17 [32mls[0m
--rwxrwxr-x 1 alexander alexander 45870 Nov 11 10:17 [32mrshell[0m
-
-./.git:
-total 56
-drwxrwxr-x 8 alexander alexander 4096 Nov 11 10:09 [34;100m.[0m
-drwxrwxr-x 6 alexander alexander 4096 Nov 11 10:17 [34;100m..[0m
-drwxrwxr-x 2 alexander alexander 4096 Nov 7 23:57 [34mbranches[0m
--rw-rw-r-- 1 alexander alexander 68 Nov 10 22:16 COMMIT_EDITMSG
--rw-rw-r-- 1 alexander alexander 255 Nov 7 23:57 config
--rw-rw-r-- 1 alexander alexander 73 Nov 7 23:57 description
--rw-rw-r-- 1 alexander alexander 19 Nov 7 23:57 HEAD
-drwxrwxr-x 2 alexander alexander 4096 Nov 7 23:57 [34mhooks[0m
--rw-rw-r-- 1 alexander alexander 568 Nov 10 22:15 index
-drwxrwxr-x 2 alexander alexander 4096 Nov 7 23:57 [34minfo[0m
-drwxrwxr-x 3 alexander alexander 4096 Nov 7 23:57 [34mlogs[0m
-drwxrwxr-x 35 alexander alexander 4096 Nov 10 22:16 [34mobjects[0m
--rw-rw-r-- 1 alexander alexander 292 Nov 7 23:57 packed-refs
-drwxrwxr-x 5 alexander alexander 4096 Nov 7 23:57 [34mrefs[0m
-
-./.git/branches:
-total 8
-drwxrwxr-x 2 alexander alexander 4096 Nov 7 23:57 [34;100m.[0m
-drwxrwxr-x 8 alexander alexander 4096 Nov 11 10:09 [34;100m..[0m
-
-./.git/hooks:
-total 48
-drwxrwxr-x 2 alexander alexander 4096 Nov 7 23:57 [34;100m.[0m
-drwxrwxr-x 8 alexander alexander 4096 Nov 11 10:09 [34;100m..[0m
--rwxrwxr-x 1 alexander alexander 452 Nov 7 23:57 [32mapplypatch-msg.sample[0m
--rwxrwxr-x 1 alexander alexander 896 Nov 7 23:57 [32mcommit-msg.sample[0m
--rwxrwxr-x 1 alexander alexander 189 Nov 7 23:57 [32mpost-update.sample[0m
--rwxrwxr-x 1 alexander alexander 398 Nov 7 23:57 [32mpre-applypatch.sample[0m
--rwxrwxr-x 1 alexander alexander 1642 Nov 7 23:57 [32mpre-commit.sample[0m
--rwxrwxr-x 1 alexander alexander 1239 Nov 7 23:57 [32mprepare-commit-msg.sample[0m
--rwxrwxr-x 1 alexander alexander 1352 Nov 7 23:57 [32mpre-push.sample[0m
--rwxrwxr-x 1 alexander alexander 4898 Nov 7 23:57 [32mpre-rebase.sample[0m
--rwxrwxr-x 1 alexander alexander 3611 Nov 7 23:57 [32mupdate.sample[0m
-
-./.git/info:
-total 12
-drwxrwxr-x 2 alexander alexander 4096 Nov 7 23:57 [34;100m.[0m
-drwxrwxr-x 8 alexander alexander 4096 Nov 11 10:09 [34;100m..[0m
--rw-rw-r-- 1 alexander alexander 240 Nov 7 23:57 exclude
-
-./.git/logs:
-total 16
-drwxrwxr-x 3 alexander alexander 4096 Nov 7 23:57 [34;100m.[0m
-drwxrwxr-x 8 alexander alexander 4096 Nov 11 10:09 [34;100m..[0m
--rw-rw-r-- 1 alexander alexander 1654 Nov 10 22:16 HEAD
-drwxrwxr-x 4 alexander alexander 4096 Nov 7 23:57 [34mrefs[0m
-
-./.git/logs/refs:
-total 16
-drwxrwxr-x 4 alexander alexander 4096 Nov 7 23:57 [34;100m.[0m
-drwxrwxr-x 3 alexander alexander 4096 Nov 7 23:57 [34;100m..[0m
-drwxrwxr-x 2 alexander alexander 4096 Nov 7 23:57 [34mheads[0m
-drwxrwxr-x 3 alexander alexander 4096 Nov 7 23:57 [34mremotes[0m
-
-./.git/logs/refs/heads:
-total 12
-drwxrwxr-x 2 alexander alexander 4096 Nov 7 23:57 [34;100m.[0m
-drwxrwxr-x 4 alexander alexander 4096 Nov 7 23:57 [34;100m..[0m
--rw-rw-r-- 1 alexander alexander 1654 Nov 10 22:16 ls
-
-./.git/logs/refs/remotes:
-total 12
-drwxrwxr-x 3 alexander alexander 4096 Nov 7 23:57 [34;100m.[0m
-drwxrwxr-x 4 alexander alexander 4096 Nov 7 23:57 [34;100m..[0m
-drwxrwxr-x 2 alexander alexander 4096 Nov 7 23:57 [34morigin[0m
-
-./.git/logs/refs/remotes/origin:
-total 12
-drwxrwxr-x 2 alexander alexander 4096 Nov 7 23:57 [34;100m.[0m
-drwxrwxr-x 3 alexander alexander 4096 Nov 7 23:57 [34;100m..[0m
--rw-rw-r-- 1 alexander alexander 185 Nov 7 23:57 HEAD
-
-./.git/objects:
-total 140
-drwxrwxr-x 35 alexander alexander 4096 Nov 10 22:16 [34;100m.[0m
-drwxrwxr-x 8 alexander alexander 4096 Nov 11 10:09 [34;100m..[0m
-drwxrwxr-x 2 alexander alexander 4096 Nov 9 17:15 [34m02[0m
-drwxrwxr-x 2 alexander alexander 4096 Nov 9 7:54 [34m06[0m
-drwxrwxr-x 2 alexander alexander 4096 Nov 9 17:37 [34m0d[0m
-drwxrwxr-x 2 alexander alexander 4096 Nov 10 18:59 [34m16[0m
-drwxrwxr-x 2 alexander alexander 4096 Nov 8 8:39 [34m19[0m
-drwxrwxr-x 2 alexander alexander 4096 Nov 8 8:38 [34m29[0m
-drwxrwxr-x 2 alexander alexander 4096 Nov 9 17:15 [34m2c[0m
-drwxrwxr-x 2 alexander alexander 4096 Nov 10 22:16 [34m2d[0m
-drwxrwxr-x 2 alexander alexander 4096 Nov 9 7:54 [34m36[0m
-drwxrwxr-x 2 alexander alexander 4096 Nov 10 18:59 [34m42[0m
-drwxrwxr-x 2 alexander alexander 4096 Nov 8 8:35 [34m52[0m
-drwxrwxr-x 2 alexander alexander 4096 Nov 9 7:53 [34m5a[0m
-drwxrwxr-x 2 alexander alexander 4096 Nov 8 8:35 [34m5b[0m
-drwxrwxr-x 2 alexander alexander 4096 Nov 9 17:15 [34m5d[0m
-drwxrwxr-x 2 alexander alexander 4096 Nov 8 8:38 [34m62[0m
-drwxrwxr-x 2 alexander alexander 4096 Nov 10 22:15 [34m6b[0m
-drwxrwxr-x 2 alexander alexander 4096 Nov 10 22:16 [34m75[0m
-drwxrwxr-x 2 alexander alexander 4096 Nov 8 8:39 [34m77[0m
-drwxrwxr-x 2 alexander alexander 4096 Nov 8 8:35 [34m7a[0m
-drwxrwxr-x 2 alexander alexander 4096 Nov 9 17:15 [34m81[0m
-drwxrwxr-x 2 alexander alexander 4096 Nov 10 18:59 [34m86[0m
-drwxrwxr-x 2 alexander alexander 4096 Nov 9 17:37 [34m91[0m
-drwxrwxr-x 2 alexander alexander 4096 Nov 8 8:35 [34m9a[0m
-drwxrwxr-x 2 alexander alexander 4096 Nov 8 8:39 [34ma0[0m
-drwxrwxr-x 2 alexander alexander 4096 Nov 10 18:59 [34ma9[0m
-drwxrwxr-x 2 alexander alexander 4096 Nov 9 17:37 [34mca[0m
-drwxrwxr-x 2 alexander alexander 4096 Nov 8 8:38 [34md7[0m
-drwxrwxr-x 2 alexander alexander 4096 Nov 9 17:36 [34md9[0m
-drwxrwxr-x 2 alexander alexander 4096 Nov 9 17:37 [34me8[0m
-drwxrwxr-x 2 alexander alexander 4096 Nov 9 17:37 [34mf3[0m
-drwxrwxr-x 2 alexander alexander 4096 Nov 10 22:16 [34mff[0m
-drwxrwxr-x 2 alexander alexander 4096 Nov 7 23:57 [34minfo[0m
-drwxrwxr-x 2 alexander alexander 4096 Nov 7 23:57 [34mpack[0m
-
-./.git/objects/02:
-total 12
-drwxrwxr-x 2 alexander alexander 4096 Nov 9 17:15 [34;100m.[0m
-drwxrwxr-x 35 alexander alexander 4096 Nov 10 22:16 [34;100m..[0m
--r--r--r-- 1 alexander alexander 198 Nov 9 17:15 a880a760118ed7b23d741239fb68b1238b8efa
-
-./.git/objects/06:
-total 12
-drwxrwxr-x 2 alexander alexander 4096 Nov 9 7:54 [34;100m.[0m
-drwxrwxr-x 35 alexander alexander 4096 Nov 10 22:16 [34;100m..[0m
--r--r--r-- 1 alexander alexander 177 Nov 9 7:54 1162da9cab967bc80293ae7e2853eb987a6aa6
-
-./.git/objects/0d:
-total 12
-drwxrwxr-x 2 alexander alexander 4096 Nov 9 17:37 [34;100m.[0m
-drwxrwxr-x 35 alexander alexander 4096 Nov 10 22:16 [34;100m..[0m
--r--r--r-- 1 alexander alexander 2899 Nov 9 17:37 47d7b83c1174c1547a72f6c83b9a2666b8585e
-
-./.git/objects/16:
-total 12
-drwxrwxr-x 2 alexander alexander 4096 Nov 10 18:59 [34;100m.[0m
-drwxrwxr-x 35 alexander alexander 4096 Nov 10 22:16 [34;100m..[0m
--r--r--r-- 1 alexander alexander 182 Nov 10 18:59 14d0c9876c79278afec8764488e70ccfc8a854
-
-./.git/objects/19:
-total 12
-drwxrwxr-x 2 alexander alexander 4096 Nov 8 8:39 [34;100m.[0m
-drwxrwxr-x 35 alexander alexander 4096 Nov 10 22:16 [34;100m..[0m
--r--r--r-- 1 alexander alexander 170 Nov 8 8:39 c527549742260d820ac75a5de92301e88d9531
-
-./.git/objects/29:
-total 12
-drwxrwxr-x 2 alexander alexander 4096 Nov 8 8:38 [34;100m.[0m
-drwxrwxr-x 35 alexander alexander 4096 Nov 10 22:16 [34;100m..[0m
--r--r--r-- 1 alexander alexander 173 Nov 8 8:38 5cad5193322164e689d50a7b2b0867e66afb90
-
-./.git/objects/2c:
-total 12
-drwxrwxr-x 2 alexander alexander 4096 Nov 9 17:15 [34;100m.[0m
-drwxrwxr-x 35 alexander alexander 4096 Nov 10 22:16 [34;100m..[0m
--r--r--r-- 1 alexander alexander 177 Nov 9 17:15 02dc3d4b267bb4f30fa9b4f6dd8acf9473092c
-
-./.git/objects/2d:
-total 12
-drwxrwxr-x 2 alexander alexander 4096 Nov 10 22:16 [34;100m.[0m
-drwxrwxr-x 35 alexander alexander 4096 Nov 10 22:16 [34;100m..[0m
--r--r--r-- 1 alexander alexander 79 Nov 10 22:16 8d59082b4c61c6801cc6249de4565a5d08c40d
-
-./.git/objects/36:
-total 12
-drwxrwxr-x 2 alexander alexander 4096 Nov 9 7:54 [34;100m.[0m
-drwxrwxr-x 35 alexander alexander 4096 Nov 10 22:16 [34;100m..[0m
--r--r--r-- 1 alexander alexander 180 Nov 9 7:54 2473d6b5893cd2e68a34d1ddbf3deea51a6a2f
-
-./.git/objects/42:
-total 12
-drwxrwxr-x 2 alexander alexander 4096 Nov 10 18:59 [34;100m.[0m
-drwxrwxr-x 35 alexander alexander 4096 Nov 10 22:16 [34;100m..[0m
--r--r--r-- 1 alexander alexander 79 Nov 10 18:59 7cb82bd6fd32b8d6fb35e27794c616a4b73289
-
-./.git/objects/52:
-total 12
-drwxrwxr-x 2 alexander alexander 4096 Nov 8 8:35 [34;100m.[0m
-drwxrwxr-x 35 alexander alexander 4096 Nov 10 22:16 [34;100m..[0m
--r--r--r-- 1 alexander alexander 79 Nov 8 8:35 1b02e61880a256eaf24e91080c666f4337a8a1
-
-./.git/objects/5a:
-total 12
-drwxrwxr-x 2 alexander alexander 4096 Nov 9 7:53 [34;100m.[0m
-drwxrwxr-x 35 alexander alexander 4096 Nov 10 22:16 [34;100m..[0m
--r--r--r-- 1 alexander alexander 2570 Nov 9 7:53 1735c67c5c453cc23ff8bd0b8fa036241a4eac
-
-./.git/objects/5b:
-total 12
-drwxrwxr-x 2 alexander alexander 4096 Nov 8 8:35 [34;100m.[0m
-drwxrwxr-x 35 alexander alexander 4096 Nov 10 22:16 [34;100m..[0m
--r--r--r-- 1 alexander alexander 2561 Nov 8 8:35 9e3ad7d6c59ef0d7bc8ea5624b136147796d79
-
-./.git/objects/5d:
-total 12
-drwxrwxr-x 2 alexander alexander 4096 Nov 9 17:15 [34;100m.[0m
-drwxrwxr-x 35 alexander alexander 4096 Nov 10 22:16 [34;100m..[0m
--r--r--r-- 1 alexander alexander 79 Nov 9 17:15 fbddb9269578be7f494bd5fd37db07ee1b4cc4
-
-./.git/objects/62:
-total 12
-drwxrwxr-x 2 alexander alexander 4096 Nov 8 8:38 [34;100m.[0m
-drwxrwxr-x 35 alexander alexander 4096 Nov 10 22:16 [34;100m..[0m
--r--r--r-- 1 alexander alexander 178 Nov 8 8:38 d4690041477d6a103edf7fae4fcc76912fb13e
-
-./.git/objects/6b:
-total 12
-drwxrwxr-x 2 alexander alexander 4096 Nov 10 22:15 [34;100m.[0m
-drwxrwxr-x 35 alexander alexander 4096 Nov 10 22:16 [34;100m..[0m
--r--r--r-- 1 alexander alexander 3151 Nov 10 22:15 de4938f956a49f5f725d77aabbe8527321c396
-
-./.git/objects/75:
-total 12
-drwxrwxr-x 2 alexander alexander 4096 Nov 10 22:16 [34;100m.[0m
-drwxrwxr-x 35 alexander alexander 4096 Nov 10 22:16 [34;100m..[0m
--r--r--r-- 1 alexander alexander 199 Nov 10 22:16 78a27ab5294d2f40a27c3db52745e257759aef
-
-./.git/objects/77:
-total 12
-drwxrwxr-x 2 alexander alexander 4096 Nov 8 8:39 [34;100m.[0m
-drwxrwxr-x 35 alexander alexander 4096 Nov 10 22:16 [34;100m..[0m
--r--r--r-- 1 alexander alexander 177 Nov 8 8:39 138fb22d8076992bc40d84ee05530e5e0efc9d
-
-./.git/objects/7a:
-total 12
-drwxrwxr-x 2 alexander alexander 4096 Nov 8 8:35 [34;100m.[0m
-drwxrwxr-x 35 alexander alexander 4096 Nov 10 22:16 [34;100m..[0m
--r--r--r-- 1 alexander alexander 185 Nov 8 8:35 a063e7e46f0914cd17fa072189ca10e2437df7
-
-./.git/objects/81:
-total 12
-drwxrwxr-x 2 alexander alexander 4096 Nov 9 17:15 [34;100m.[0m
-drwxrwxr-x 35 alexander alexander 4096 Nov 10 22:16 [34;100m..[0m
--r--r--r-- 1 alexander alexander 2911 Nov 9 17:15 65ac1d9213e378b65d9f5354c956fe1e1db3b5
-
-./.git/objects/86:
-total 12
-drwxrwxr-x 2 alexander alexander 4096 Nov 10 18:59 [34;100m.[0m
-drwxrwxr-x 35 alexander alexander 4096 Nov 10 22:16 [34;100m..[0m
--r--r--r-- 1 alexander alexander 177 Nov 10 18:59 ea40bd2e15d852d8b4242a36bf58df4c473979
-
-./.git/objects/91:
-total 16
-drwxrwxr-x 2 alexander alexander 4096 Nov 9 17:37 [34;100m.[0m
-drwxrwxr-x 35 alexander alexander 4096 Nov 10 22:16 [34;100m..[0m
--r--r--r-- 1 alexander alexander 176 Nov 9 17:37 020d366926fd7b644cfa7effacec372a1dd28f
--r--r--r-- 1 alexander alexander 79 Nov 9 7:54 b32a4e192ab9a56376db02e2c22843bda2bd10
-
-./.git/objects/9a:
-total 12
-drwxrwxr-x 2 alexander alexander 4096 Nov 8 8:35 [34;100m.[0m
-drwxrwxr-x 35 alexander alexander 4096 Nov 10 22:16 [34;100m..[0m
--r--r--r-- 1 alexander alexander 177 Nov 8 8:35 5a15f333ba55ed3a4d3827af711a8f0d7f9207
-
-./.git/objects/a0:
-total 12
-drwxrwxr-x 2 alexander alexander 4096 Nov 8 8:39 [34;100m.[0m
-drwxrwxr-x 35 alexander alexander 4096 Nov 10 22:16 [34;100m..[0m
--r--r--r-- 1 alexander alexander 79 Nov 8 8:39 9370e2a30ebc26bbf280fde04bd601ae811137
-
-./.git/objects/a9:
-total 12
-drwxrwxr-x 2 alexander alexander 4096 Nov 10 18:59 [34;100m.[0m
-drwxrwxr-x 35 alexander alexander 4096 Nov 10 22:16 [34;100m..[0m
--r--r--r-- 1 alexander alexander 3138 Nov 10 18:59 576f9fb9f3870fa14aa308ddb55c97cc2947c5
-
-./.git/objects/ca:
-total 12
-drwxrwxr-x 2 alexander alexander 4096 Nov 9 17:37 [34;100m.[0m
-drwxrwxr-x 35 alexander alexander 4096 Nov 10 22:16 [34;100m..[0m
--r--r--r-- 1 alexander alexander 176 Nov 9 17:37 cffb586fb7a5962d92cf3c3ce3b2e688a99495
-
-./.git/objects/d7:
-total 12
-drwxrwxr-x 2 alexander alexander 4096 Nov 8 8:38 [34;100m.[0m
-drwxrwxr-x 35 alexander alexander 4096 Nov 10 22:16 [34;100m..[0m
--r--r--r-- 1 alexander alexander 107 Nov 8 8:38 0750ec57c0e096b3b07b51e29cd9b62aa8e4a2
-
-./.git/objects/d9:
-total 16
-drwxrwxr-x 2 alexander alexander 4096 Nov 9 17:36 [34;100m.[0m
-drwxrwxr-x 35 alexander alexander 4096 Nov 10 22:16 [34;100m..[0m
--r--r--r-- 1 alexander alexander 5078 Nov 9 17:36 e14b2492410e2974e17848824cee368ddb6c61
-
-./.git/objects/e8:
-total 12
-drwxrwxr-x 2 alexander alexander 4096 Nov 9 17:37 [34;100m.[0m
-drwxrwxr-x 35 alexander alexander 4096 Nov 10 22:16 [34;100m..[0m
--r--r--r-- 1 alexander alexander 79 Nov 9 17:37 0c172742a742df006a275e9c288e4689b303a1
-
-./.git/objects/f3:
-total 12
-drwxrwxr-x 2 alexander alexander 4096 Nov 9 17:37 [34;100m.[0m
-drwxrwxr-x 35 alexander alexander 4096 Nov 10 22:16 [34;100m..[0m
--r--r--r-- 1 alexander alexander 83 Nov 9 17:37 793619e806711fe4f76444a37e0bc6d5880c60
-
-./.git/objects/ff:
-total 12
-drwxrwxr-x 2 alexander alexander 4096 Nov 10 22:16 [34;100m.[0m
-drwxrwxr-x 35 alexander alexander 4096 Nov 10 22:16 [34;100m..[0m
--r--r--r-- 1 alexander alexander 176 Nov 10 22:16 4f99e261bfcddacca72bfd89d93a3a155e3cc9
-
-./.git/objects/info:
-total 8
-drwxrwxr-x 2 alexander alexander 4096 Nov 7 23:57 [34;100m.[0m
-drwxrwxr-x 35 alexander alexander 4096 Nov 10 22:16 [34;100m..[0m
-
-./.git/objects/pack:
-total 80
-drwxrwxr-x 2 alexander alexander 4096 Nov 7 23:57 [34;100m.[0m
-drwxrwxr-x 35 alexander alexander 4096 Nov 10 22:16 [34;100m..[0m
--r--r--r-- 1 alexander alexander 9836 Nov 7 23:57 pack-c6d99528060a41f0d956ae18c6241f38590f0788.idx
--r--r--r-- 1 alexander alexander 61173 Nov 7 23:57 pack-c6d99528060a41f0d956ae18c6241f38590f0788.pack
-
-./.git/refs:
-total 20
-drwxrwxr-x 5 alexander alexander 4096 Nov 7 23:57 [34;100m.[0m
-drwxrwxr-x 8 alexander alexander 4096 Nov 11 10:09 [34;100m..[0m
-drwxrwxr-x 2 alexander alexander 4096 Nov 10 22:16 [34mheads[0m
-drwxrwxr-x 3 alexander alexander 4096 Nov 7 23:57 [34mremotes[0m
-drwxrwxr-x 2 alexander alexander 4096 Nov 7 23:57 [34mtags[0m
-
-./.git/refs/heads:
-total 12
-drwxrwxr-x 2 alexander alexander 4096 Nov 10 22:16 [34;100m.[0m
-drwxrwxr-x 5 alexander alexander 4096 Nov 7 23:57 [34;100m..[0m
--rw-rw-r-- 1 alexander alexander 41 Nov 10 22:16 ls
-
-./.git/refs/remotes:
-total 12
-drwxrwxr-x 3 alexander alexander 4096 Nov 7 23:57 [34;100m.[0m
-drwxrwxr-x 5 alexander alexander 4096 Nov 7 23:57 [34;100m..[0m
-drwxrwxr-x 2 alexander alexander 4096 Nov 7 23:57 [34morigin[0m
-
-./.git/refs/remotes/origin:
-total 12
-drwxrwxr-x 2 alexander alexander 4096 Nov 7 23:57 [34;100m.[0m
-drwxrwxr-x 3 alexander alexander 4096 Nov 7 23:57 [34;100m..[0m
--rw-rw-r-- 1 alexander alexander 32 Nov 7 23:57 HEAD
-
-./.git/refs/tags:
-total 8
-drwxrwxr-x 2 alexander alexander 4096 Nov 7 23:57 [34;100m.[0m
-drwxrwxr-x 5 alexander alexander 4096 Nov 7 23:57 [34;100m..[0m
+total 216
+-rwxrwxr-x 1 alexander alexander 24435 Nov 11 20:21 [32mcp[0m
+-rwxrwxr-x 1 alexander alexander 158823 Nov 11 20:21 [32mls[0m
+-rwxrwxr-x 1 alexander alexander 33183 Nov 11 20:21 [32mrshell[0m
 
 ./src:
 total 44
-drwxrwxr-x 2 alexander alexander 4096 Nov 10 22:08 [34;100m.[0m
-drwxrwxr-x 6 alexander alexander 4096 Nov 11 10:17 [34;100m..[0m
--rw-rw-r-- 1 alexander alexander 12544 Nov 9 19:06 hw0.cpp
--rw-rw-r-- 1 alexander alexander 18524 Nov 10 22:02 ls.cpp
+-rw-rw-r-- 1 alexander alexander 5903 Nov 11 19:19 cp.cpp
+-rw-rw-r-- 1 alexander alexander 10341 Nov 11 19:19 hw0.cpp
+-rw-rw-r-- 1 alexander alexander 18768 Nov 11 20:19 ls.cpp
+-rw-rw-r-- 1 alexander alexander 4025 Nov 11 19:19 Timer.h
 
 ./tests:
-total 60
-drwxrwxr-x 2 alexander alexander 4096 Nov 11 10:18 [34;100m.[0m
-drwxrwxr-x 6 alexander alexander 4096 Nov 11 10:17 [34;100m..[0m
--rw-rw-r-- 1 alexander alexander 15164 Nov 7 23:57 exec.script
--rw-rw-r-- 1 alexander alexander 20480 Nov 11 10:26 ls.script
--rw-r--r-- 1 alexander alexander 16384 Nov 11 10:15 [32;100m.ls.script.swp[0m
-]0;alexander@Lahela: ~/cs100/rshellalexander@Lahela:~/cs100/rshell$ #testing ls when passing in file/dir th at is in the same dir
+total 20
+-rw-rw-r-- 1 alexander alexander 15164 Nov 11 19:19 exec.script
+-rw-rw-r-- 1 alexander alexander 4096 Nov 11 20:22 ls.script
+]0;alexander@Lahela: ~/cs100/rshellalexander@Lahela:~/cs100/rshell$ bin/ls -l -R
+.:
+total 24
+drwxrwxr-x 2 alexander alexander 4096 Nov 11 20:21 [34mbin[0m
+lrwxrwxrwx 1 alexander alexander 3 Nov 11 19:38 [32mbin_link[0m
+-rw-rw-r-- 1 alexander alexander 1486 Nov 11 19:19 LICENSE
+-rw-rw-r-- 1 alexander alexander 573 Nov 11 19:27 Makefile
+-rw-rw-r-- 1 alexander alexander 2854 Nov 11 19:27 README.md
+drwxrwxr-x 2 alexander alexander 4096 Nov 11 20:19 [34msrc[0m
+drwxrwxr-x 2 alexander alexander 4096 Nov 11 20:21 [34mtests[0m
+
+./bin:
+total 216
+-rwxrwxr-x 1 alexander alexander 24435 Nov 11 20:21 [32mcp[0m
+-rwxrwxr-x 1 alexander alexander 158823 Nov 11 20:21 [32mls[0m
+-rwxrwxr-x 1 alexander alexander 33183 Nov 11 20:21 [32mrshell[0m
+
+./src:
+total 44
+-rw-rw-r-- 1 alexander alexander 5903 Nov 11 19:19 cp.cpp
+-rw-rw-r-- 1 alexander alexander 10341 Nov 11 19:19 hw0.cpp
+-rw-rw-r-- 1 alexander alexander 18768 Nov 11 20:19 ls.cpp
+-rw-rw-r-- 1 alexander alexander 4025 Nov 11 19:19 Timer.h
+
+./tests:
+total 20
+-rw-rw-r-- 1 alexander alexander 15164 Nov 11 19:19 exec.script
+-rw-rw-r-- 1 alexander alexander 4096 Nov 11 20:22 ls.script
+]0;alexander@Lahela: ~/cs100/rshellalexander@Lahela:~/cs100/rshell$ #testing ls wjem [K[K[K[Khen passing in multiple f lags of same type
+]0;alexander@Lahela: ~/cs100/rshellalexander@Lahela:~/cs100/rshell$ bin/ls -l -l -l -l a[K-a
+total 36
+drwxrwxr-x 6 alexander alexander 4096 Nov 11 19:44 [34;100m.[0m
+drwxrwxr-x 5 alexander alexander 4096 Nov 11 19:19 [34;100m..[0m
+drwxrwxr-x 2 alexander alexander 4096 Nov 11 20:21 [34mbin[0m
+lrwxrwxrwx 1 alexander alexander 3 Nov 11 19:38 [32mbin_link[0m
+drwxrwxr-x 8 alexander alexander 4096 Nov 11 20:20 [34;100m.git[0m
+-rw-rw-r-- 1 alexander alexander 0 Nov 11 19:44 [100m.hidden[0m
+-rw-rw-r-- 1 alexander alexander 1486 Nov 11 19:19 LICENSE
+-rw-rw-r-- 1 alexander alexander 573 Nov 11 19:27 Makefile
+-rw-rw-r-- 1 alexander alexander 2854 Nov 11 19:27 README.md
+drwxrwxr-x 2 alexander alexander 4096 Nov 11 20:19 [34msrc[0m
+drwxrwxr-x 2 alexander alexander 4096 Nov 11 20:21 [34mtests[0m
+]0;alexander@Lahela: ~/cs100/rshellalexander@Lahela:~/cs100/rshell$ bin/ls -a -a -a -a -l
+total 36
+drwxrwxr-x 6 alexander alexander 4096 Nov 11 19:44 [34;100m.[0m
+drwxrwxr-x 5 alexander alexander 4096 Nov 11 19:19 [34;100m..[0m
+drwxrwxr-x 2 alexander alexander 4096 Nov 11 20:21 [34mbin[0m
+lrwxrwxrwx 1 alexander alexander 3 Nov 11 19:38 [32mbin_link[0m
+drwxrwxr-x 8 alexander alexander 4096 Nov 11 20:20 [34;100m.git[0m
+-rw-rw-r-- 1 alexander alexander 0 Nov 11 19:44 [100m.hidden[0m
+-rw-rw-r-- 1 alexander alexander 1486 Nov 11 19:19 LICENSE
+-rw-rw-r-- 1 alexander alexander 573 Nov 11 19:27 Makefile
+-rw-rw-r-- 1 alexander alexander 2854 Nov 11 19:27 README.md
+drwxrwxr-x 2 alexander alexander 4096 Nov 11 20:19 [34msrc[0m
+drwxrwxr-x 2 alexander alexander 4096 Nov 11 20:21 [34mtests[0m
+]0;alexander@Lahela: ~/cs100/rshellalexander@Lahela:~/cs100/rshell$ bin/ls -lllllllllllaaaaaaaaaa
+total 36
+drwxrwxr-x 6 alexander alexander 4096 Nov 11 19:44 [34;100m.[0m
+drwxrwxr-x 5 alexander alexander 4096 Nov 11 19:19 [34;100m..[0m
+drwxrwxr-x 2 alexander alexander 4096 Nov 11 20:21 [34mbin[0m
+lrwxrwxrwx 1 alexander alexander 3 Nov 11 19:38 [32mbin_link[0m
+drwxrwxr-x 8 alexander alexander 4096 Nov 11 20:20 [34;100m.git[0m
+-rw-rw-r-- 1 alexander alexander 0 Nov 11 19:44 [100m.hidden[0m
+-rw-rw-r-- 1 alexander alexander 1486 Nov 11 19:19 LICENSE
+-rw-rw-r-- 1 alexander alexander 573 Nov 11 19:27 Makefile
+-rw-rw-r-- 1 alexander alexander 2854 Nov 11 19:27 README.md
+drwxrwxr-x 2 alexander alexander 4096 Nov 11 20:19 [34msrc[0m
+drwxrwxr-x 2 alexander alexander 4096 Nov 11 20:21 [34mtests[0m
+]0;alexander@Lahela: ~/cs100/rshellalexander@Lahela:~/cs100/rshell$ #testing ls when a[Kpassing in file/dir t hat is in the same dir as ls
 ]0;alexander@Lahela: ~/cs100/rshellalexander@Lahela:~/cs100/rshell$ bin/ls src
-hw0.cpp[0m  ls.cpp[0m  
+cp.cpp[0m  hw0.cpp[0m  ls.cpp[0m  Timer.h[0m  
 ]0;alexander@Lahela: ~/cs100/rshellalexander@Lahela:~/cs100/rshell$ bin/ls ./src
-hw0.cpp[0m  ls.cpp[0m  
-]0;alexander@Lahela: ~/cs100/rshellalexander@Lahela:~/cs100/rshell$ bin/sl[K[Kls ./src/
-hw0.cpp[0m  ls.cpp[0m  
-]0;alexander@Lahela: ~/cs100/rshellalexander@Lahela:~/cs100/rshell$ bin/ls src/
-hw0.cpp[0m  ls.cpp[0m  
-]0;alexander@Lahela: ~/cs100/rshellalexander@Lahela:~/cs100/rshell$ bin/ls src tests
+cp.cpp[0m  hw0.cpp[0m  ls.cpp[0m  Timer.h[0m  
+]0;alexander@Lahela: ~/cs100/rshellalexander@Lahela:~/cs100/rshell$ bin/ls ./src/
+cp.cpp[0m  hw0.cpp[0m  ls.cpp[0m  Timer.h[0m  
+]0;alexander@Lahela: ~/cs100/rshellalexander@Lahela:~/cs100/rshell$ bin/s[Kls src/
+cp.cpp[0m  hw0.cpp[0m  ls.cpp[0m  Timer.h[0m  
+]0;alexander@Lahela: ~/cs100/rshellalexander@Lahela:~/cs100/rshell$ bin/ls tests src
 src:
-hw0.cpp[0m  ls.cpp[0m  
+cp.cpp[0m  hw0.cpp[0m  ls.cpp[0m  Timer.h[0m  
 
 tests:
 exec.script[0m  ls.script[0m  
-]0;alexander@Lahela: ~/cs100/rshellalexander@Lahela:~/cs100/rshell$ bin/ls sr[K[K-l src -a tests -R
-./src:
-total 44
-drwxrwxr-x 2 alexander alexander 4096 Nov 10 22:08 [34;100m.[0m
-drwxrwxr-x 6 alexander alexander 4096 Nov 11 10:17 [34;100m..[0m
--rw-rw-r-- 1 alexander alexander 12544 Nov 9 19:06 hw0.cpp
--rw-rw-r-- 1 alexander alexander 18524 Nov 10 22:02 ls.cpp
+]0;alexander@Lahela: ~/cs100/rshellalexander@Lahela:~/cs100/rshell$ bin/ls src -a test [Ks -l
+src:
+total 52
+drwxrwxr-x 2 alexander alexander 4096 Nov 11 20:19 [34;100m.[0m
+drwxrwxr-x 6 alexander alexander 4096 Nov 11 19:44 [34;100m..[0m
+-rw-rw-r-- 1 alexander alexander 5903 Nov 11 19:19 cp.cpp
+-rw-rw-r-- 1 alexander alexander 10341 Nov 11 19:19 hw0.cpp
+-rw-rw-r-- 1 alexander alexander 18768 Nov 11 20:19 ls.cpp
+-rw-rw-r-- 1 alexander alexander 4025 Nov 11 19:19 Timer.h
 
-./tests:
-total 60
-drwxrwxr-x 2 alexander alexander 4096 Nov 11 10:18 [34;100m.[0m
-drwxrwxr-x 6 alexander alexander 4096 Nov 11 10:17 [34;100m..[0m
--rw-rw-r-- 1 alexander alexander 15164 Nov 7 23:57 exec.script
--rw-rw-r-- 1 alexander alexander 20480 Nov 11 10:26 ls.script
--rw-r--r-- 1 alexander alexander 16384 Nov 11 10:15 [32;100m.ls.script.swp[0m
+tests:
+total 32
+drwxrwxr-x 2 alexander alexander 4096 Nov 11 20:21 [34;100m.[0m
+drwxrwxr-x 6 alexander alexander 4096 Nov 11 19:44 [34;100m..[0m
+-rw-rw-r-- 1 alexander alexander 15164 Nov 11 19:19 exec.script
+-rw-rw-r-- 1 alexander alexander 8192 Nov 11 20:23 ls.script
 ]0;alexander@Lahela: ~/cs100/rshellalexander@Lahela:~/cs100/rshell$ bin/ls Makefile
 Makefile 
-]0;alexander@Lahela: ~/cs100/rshellalexander@Lahela:~/cs100/rshell$ bin/ls ./Makefile
+]0;alexander@Lahela: ~/cs100/rshellalexander@Lahela:~/cs100/rshell$ bin ./[K[K[K/ls ./Makefile
 ./Makefile 
-]0;alexander@Lahela: ~/cs100/rshellalexander@Lahela:~/cs100/rshell$ bin/ls Makefile README.md
+]0;alexander@Lahela: ~/cs100/rshellalexander@Lahela:~/cs100/rshell$ bin/ls README.md Mae[Kkefile
 Makefile README.md 
-]0;alexander@Lahela: ~/cs100/rshellalexander@Lahela:~/cs100/rshell$ bin/lsbin[K[K[K Makefile -l README.md
--rw-rw-r-- 1 alexander alexander 410 Nov 7 23:57 Makefile
--rw-rw-r-- 1 alexander alexander 3119 Nov 11 10:09 README.md
-]0;alexander@Lahela: ~/cs100/rshellalexander@Lahela:~/cs100/rshell$ bin/ls .hidden
+]0;alexander@Lahela: ~/cs100/rshellalexander@Lahela:~/cs100/rshell$ bin/ls Makeil[K[Kfie[Kle -l LICENSE
+-rw-rw-r-- 1 alexander alexander 1486 Nov 11 19:19 LICENSE
+-rw-rw-r-- 1 alexander alexander 573 Nov 11 19:27 Makefile
+]0;alexander@Lahela: ~/cs100/rshellalexander@Lahela:~/cs100/rshell$ bin/ls .hd[Kidden
 .hidden 
-]0;alexander@Lahela: ~/cs100/rshellalexander@Lahela:~/cs100/rshell$ bin/ls tests Makefile src LICENSE 
+]0;alexander@Lahela: ~/cs100/rshellalexander@Lahela:~/cs100/rshell$ bin/ls tests Makefile src LICENSE
 LICENSE Makefile 
 
 src:
-hw0.cpp[0m  ls.cpp[0m  
+cp.cpp[0m  hw0.cpp[0m  ls.cpp[0m  Timer.h[0m  
 
 tests:
 exec.script[0m  ls.script[0m  
-]0;alexander@Lahela: ~/cs100/rshellalexander@Lahela:~/cs100/rshell$ bin/ls tests Mef[K[K[K-l Makefile -a bin -R LICE NSE
--rw-rw-r-- 1 alexander alexander 1486 Nov 7 23:57 LICENSE
--rw-rw-r-- 1 alexander alexander 410 Nov 7 23:57 Makefile
+]0;alexander@Lahela: ~/cs100/rshellalexander@Lahela:~/cs100/rshell$ bin/ls -a tests MA[Kakefile -r[KR bin LICENS E
+LICENSE Makefile 
 
 ./bin:
-total 212
-drwxrwxr-x 2 alexander alexander 4096 Nov 11 10:17 [34;100m.[0m
-drwxrwxr-x 6 alexander alexander 4096 Nov 11 10:17 [34;100m..[0m
--rwxrwxr-x 1 alexander alexander 158761 Nov 11 10:17 [32mls[0m
--rwxrwxr-x 1 alexander alexander 45870 Nov 11 10:17 [32mrshell[0m
+[34;100m.[0m  [34;100m..[0m  [32mcp[0m  [32mls[0m  [32mrshell[0m  
 
 ./tests:
-total 60
-drwxrwxr-x 2 alexander alexander 4096 Nov 11 10:18 [34;100m.[0m
-drwxrwxr-x 6 alexander alexander 4096 Nov 11 10:17 [34;100m..[0m
--rw-rw-r-- 1 alexander alexander 15164 Nov 7 23:57 exec.script
--rw-rw-r-- 1 alexander alexander 20480 Nov 11 10:26 ls.script
--rw-r--r-- 1 alexander alexander 16384 Nov 11 10:15 [32;100m.ls.script.swp[0m
-]0;alexander@Lahela: ~/cs100/rshellalexander@Lahela:~/cs100/rshell$ #testing ls when one of the[K[K[K[K[K[K[K[K[K[K[K passing a file/dir fro m outside current dur[K[Kir
+[34;100m.[0m  [34;100m..[0m  exec.script[0m  ls.script[0m  
+]0;alexander@Lahela: ~/cs100/rshellalexander@Lahela:~/cs100/rshell$ [K]0;alexander@Lahela: ~/cs100/rshellalexander@Lahela:~/cs100/rshell$ #testinf [K[Kg ls when the file/dir passin[K[Ked in is outside of the current dir
 ]0;alexander@Lahela: ~/cs100/rshellalexander@Lahela:~/cs100/rshell$ bin/ls /home/alexander/Documents/test
 ^[0m  ^^[0m  [34m*_*[0m  ^0$%[0m  3one[0m  865jkj46[0m  897894[0m  8raise[0m  ~8robots[0m  9.8.7.6.5[0m  
 9nine9nine9nine[0m  a1b2[0m  aBcDeFg[0m  AbCdEfG[0m  [32ma.out[0m  a.Out[0m  [34mA.out[0m  a.zzzz[0m  b[0m  ___b[0m  
@@ -544,113 +219,7 @@ race[0m  ^race[0m  ^^race[0m  ^~race[0m  ~^race[0m  r~ace[0m  ra^ce[0m  r
 ^raise[0m  ^^raise[0m  ~raise[0m  raise^the~~woof[0m  rEadme[0m  README[0m  REDfm[0m  res[0m  Res[0m  
 RES[0m  resume[0m  RESUME[0m  *r*raise[0m  tfqf[0m  this.9.is.8.a.7.file[0m  thisa[0m  
 this.is.a.file[0m  [34mthree[0m  two[0m  z.aaaa[0m  ~zz[0m  
-]0;alexander@Lahela: ~/cs100/rshellalexander@Lahela:~/cs100/rshell$ [K]0;alexander@Lahela: ~/cs100/rshellalexander@Lahela:~/cs100/rshell$ bin/ls /home/alexander/Documents/test[K[K[K[Ktest =[K-l[1@-[1@R[1@ 
-/home/alexander/Documents/test:
-total 96
--rw-rw-r-- 1 alexander alexander 0 Nov 7 22:12 ^
--rw-rw-r-- 1 alexander alexander 0 Nov 7 22:12 ^^
-drwxrwxr-x 3 alexander alexander 4096 Nov 7 19:18 [34m*_*[0m
--rw-rw-r-- 1 alexander alexander 0 Nov 7 18:18 ^0$%
--rw-rw-r-- 1 alexander alexander 0 Nov 7 18:46 3one
--rw-rw-r-- 1 alexander alexander 0 Nov 7 18:18 865jkj46
--rw-rw-r-- 1 alexander alexander 0 Nov 7 18:17 897894
--rw-rw-r-- 1 alexander alexander 0 Nov 7 21:02 8raise
--rw-rw-r-- 1 alexander alexander 0 Nov 7 21:17 ~8robots
--rw-rw-r-- 1 alexander alexander 0 Nov 7 18:47 9.8.7.6.5
--rw-rw-r-- 1 alexander alexander 0 Nov 7 19:27 9nine9nine9nine
--rw-rw-r-- 1 alexander alexander 0 Nov 7 18:17 a1b2
--rw-rw-r-- 1 alexander alexander 0 Nov 7 18:49 aBcDeFg
--rw-rw-r-- 1 alexander alexander 0 Nov 7 18:49 AbCdEfG
--rwxrwxr-x 1 alexander alexander 49630 Oct 28 8:02 [32ma.out[0m
--rw-rw-r-- 1 alexander alexander 0 Nov 7 18:47 a.Out
-drwxrwxr-x 5 alexander alexander 4096 Nov 8 7:53 [34mA.out[0m
--rw-rw-r-- 1 alexander alexander 0 Nov 7 18:48 a.zzzz
--rw-rw-r-- 1 alexander alexander 0 Nov 10 16:13 b
--rw-rw-r-- 1 alexander alexander 0 Nov 7 23:38 ___b
--rw-rw-r-- 1 alexander alexander 0 Nov 10 16:13 bb
--rw-rw-r-- 1 alexander alexander 0 Nov 10 16:31 bbz
--rw-rw-r-- 1 alexander alexander 0 Nov 10 16:33 bbzs
--rw-rw-r-- 1 alexander alexander 0 Nov 10 16:33 bbzsf
--rw-rw-r-- 1 alexander alexander 0 Nov 10 16:13 be
--rw-rw-r-- 1 alexander alexander 0 Nov 9 17:32 bees
--rw-rw-r-- 1 alexander alexander 0 Nov 7 22:12 c
--rw-rw-r-- 1 alexander alexander 0 Nov 7 22:10 ^^car
--rw-rw-r-- 1 alexander alexander 0 Nov 7 22:10 ^~car
-drwxrwxr-x 3 alexander alexander 4096 Oct 28 7:48 [34mdir[0m
--rw-rw-r-- 1 alexander alexander 0 Nov 7 22:05 donkey
--rw-rw-r-- 1 alexander alexander 0 Nov 7 22:05 don.key
--rw-rw-r-- 1 alexander alexander 0 Nov 7 22:05 don..key
--rw-rw-r-- 1 alexander alexander 0 Oct 28 7:52 extra
--rw-rw-r-- 1 alexander alexander 0 Oct 27 19:37 ex.txt
-drwxrwxr-x 2 alexander alexander 4096 Oct 28 7:49 [34mfolder[0m
--rw-rw-r-- 1 alexander alexander 0 Nov 7 23:25 ^ghost
--rw-rw-r-- 1 alexander alexander 0 Nov 7 23:26 ^^ghost
--rw-rw-r-- 1 alexander alexander 0 Nov 7 23:26 ^~ghost
-drwxrwxr-x 2 alexander alexander 4096 Nov 8 7:52 [34mgo88away68[0m
-drwxrwxr-x 2 alexander alexander 4096 Nov 8 7:52 [34mgo89away67[0m
--rw-rw-r-- 1 alexander alexander 0 Nov 7 18:18 jhkhkj38278
--rw-rw-r-- 1 alexander alexander 0 Nov 7 18:13 l.cpp
--rw-rw-r-- 1 alexander alexander 4113 Oct 28 8:02 ls.cpp
--rw-rw-r-- 1 alexander alexander 0 Nov 7 18:17 lss.app
-drwxrwxr-x 2 alexander alexander 4096 Nov 7 18:46 [34mlss.cp[0m
--rw-rw-r-- 1 alexander alexander 0 Nov 7 18:14 lss.cpp
--rw-rw-r-- 1 alexander alexander 0 Nov 7 19:19 lSs.cpp
--rw-rw-r-- 1 alexander alexander 0 Nov 7 19:19 lSS.cpp
--rw-rw-r-- 1 alexander alexander 0 Nov 7 19:19 LsS.cpp
--rw-rw-r-- 1 alexander alexander 0 Nov 7 19:19 LSs.cpp
--rw-rw-r-- 1 alexander alexander 0 Nov 7 19:19 lss.pcc
--rw-rw-r-- 1 alexander alexander 0 Nov 7 18:14 ls.txt
-drwxrwxr-x 2 alexander alexander 4096 Nov 7 18:46 [34mon1o[0m
--rw-rw-r-- 1 alexander alexander 0 Nov 7 18:46 on3e
--rw-rw-r-- 1 alexander alexander 0 Oct 28 7:49 one
--rw-rw-r-- 1 alexander alexander 0 Nov 7 18:46 one1
--rw-rw-r-- 1 alexander alexander 0 Nov 7 18:46 one2
--rw-rw-r-- 1 alexander alexander 0 Nov 7 18:46 out.a
--rw-rw-r-- 1 alexander alexander 0 Nov 10 17:28 pleasepleasepleasepleasepleasepleaseplease
--rw-rw-r-- 1 alexander alexander 0 Nov 7 19:35 ^pops
--rw-rw-r-- 1 alexander alexander 0 Nov 7 19:46 ~pops
--rw-rw-r-- 1 alexander alexander 0 Nov 7 23:14 ^popssss
--rw-rw-r-- 1 alexander alexander 0 Nov 7 22:12 race
--rw-rw-r-- 1 alexander alexander 0 Nov 7 22:12 ^race
--rw-rw-r-- 1 alexander alexander 0 Nov 7 22:12 ^^race
--rw-rw-r-- 1 alexander alexander 0 Nov 7 22:13 ^~race
--rw-rw-r-- 1 alexander alexander 0 Nov 7 22:13 ~^race
--rw-rw-r-- 1 alexander alexander 0 Nov 7 23:37 r~ace
--rw-rw-r-- 1 alexander alexander 0 Nov 7 23:29 ra^ce
--rw-rw-r-- 1 alexander alexander 0 Nov 7 22:11 ra~ce
--rw-rw-r-- 1 alexander alexander 0 Nov 7 23:28 race^
--rw-rw-r-- 1 alexander alexander 0 Nov 7 23:29 racff
--rw-rw-r-- 1 alexander alexander 0 Nov 7 23:30 raf
--rw-rw-r-- 1 alexander alexander 0 Nov 7 19:21 ^raise
--rw-rw-r-- 1 alexander alexander 0 Nov 7 19:21 ^^raise
--rw-rw-r-- 1 alexander alexander 0 Nov 7 19:22 ~raise
--rw-rw-r-- 1 alexander alexander 0 Nov 7 19:21 raise^the~~woof
--rw-rw-r-- 1 alexander alexander 0 Nov 7 11:11 rEadme
--rw-rw-r-- 1 alexander alexander 0 Oct 27 19:37 README
--rw-rw-r-- 1 alexander alexander 0 Nov 7 11:11 REDfm
--rw-rw-r-- 1 alexander alexander 0 Nov 7 11:11 res
--rw-rw-r-- 1 alexander alexander 0 Nov 7 11:11 Res
--rw-rw-r-- 1 alexander alexander 0 Nov 7 11:11 RES
--rw-rw-r-- 1 alexander alexander 0 Nov 7 11:11 resume
--rw-rw-r-- 1 alexander alexander 0 Nov 7 11:11 RESUME
--rw-rw-r-- 1 alexander alexander 0 Nov 7 19:21 *r*raise
--rw-rw-r-- 1 alexander alexander 0 Nov 10 16:33 tfqf
--rw-rw-r-- 1 alexander alexander 0 Nov 7 18:47 this.9.is.8.a.7.file
--rw-rw-r-- 1 alexander alexander 0 Nov 10 16:33 thisa
--rw-rw-r-- 1 alexander alexander 0 Nov 7 18:47 this.is.a.file
-drwxrwxr-x 2 alexander alexander 4096 Oct 28 7:49 [34mthree[0m
--rw-rw-r-- 1 alexander alexander 0 Oct 28 7:49 two
--rw-rw-r-- 1 alexander alexander 0 Nov 7 18:48 z.aaaa
--rw-rw-r-- 1 alexander alexander 0 Nov 7 23:27 ~zz
-
-/home/alexander/Documents/test/*_*:
-total 4
--rw-rw-r-- 1 alexander alexander 0 Nov 7 19:18 t-t
-drwxrwxr-x 2 alexander alexander 4096 Nov 7 19:18 [34mT_T[0m
-
-/home/alexander/Documents/test/*_*/T_T:
-total 0
-
+]0;alexander@Lahela: ~/cs100/rshellalexander@Lahela:~/cs100/rshell$ bin/ls /home/alexander/Documents/test/A.out -lR
 /home/alexander/Documents/test/A.out:
 total 12
 drwxrwxr-x 3 alexander alexander 4096 Nov 8 7:54 [34m^~^~^*@[0m
@@ -683,341 +252,68 @@ total 0
 
 /home/alexander/Documents/test/A.out/~^Thejunk~Thejunk:
 total 0
+]0;alexander@Lahela: ~/cs100/rshellalexander@Lahela:~/cs100/rshell$ [K]0;alexander@Lahela: ~/cs100/rshellalexander@Lahela:~/cs100/rshell$ bin/ls /home/alexander/Documents/test/A.out -lR[K[K[K[K[K[K[K[K[Kthree/file.txt -l
+-rw-rw-r-- 1 alexander alexander 0 Oct 28 7:49 /home/alexander/Documents/test/three/file.txt
+]0;alexander@Lahela: ~/cs100/rshellalexander@Lahela:~/cs100/rshell$ bin/ls /home/alexander/Documents/test/three/file.txt -l[K[K[K[K[K[K[K[K[K[K[K src Makefile /home/alexander[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K/home/alexander/Documents/test/three/file.txt
+/home/alexander/Documents/test/three/file.txt Makefile 
 
-/home/alexander/Documents/test/dir:
-total 4
-drwxrwxr-x 3 alexander alexander 4096 Oct 28 7:48 [34msubdir[0m
-
-/home/alexander/Documents/test/dir/subdir:
-total 4
-drwxrwxr-x 3 alexander alexander 4096 Oct 28 7:48 [34msubsubdir[0m
-
-/home/alexander/Documents/test/dir/subdir/subsubdir:
-total 4
-drwxrwxr-x 2 alexander alexander 4096 Oct 28 7:48 [34msubsubsubdir[0m
-
-/home/alexander/Documents/test/dir/subdir/subsubdir/subsubsubdir:
-total 0
--rw-rw-r-- 1 alexander alexander 0 Oct 28 7:48 notadir
-
-/home/alexander/Documents/test/folder:
-total 0
-
-/home/alexander/Documents/test/go88away68:
-total 0
-
-/home/alexander/Documents/test/go89away67:
-total 0
-
-/home/alexander/Documents/test/lss.cp:
-total 0
-
-/home/alexander/Documents/test/on1o:
-total 0
-
-/home/alexander/Documents/test/three:
-total 0
--rw-rw-r-- 1 alexander alexander 0 Oct 28 7:49 file.txt
--rw-rw-r-- 1 alexander alexander 0 Oct 28 7:49 justafile
-]0;alexander@Lahela: ~/cs100/rshellalexander@Lahela:~/cs100/rshell$ [K]0;alexander@Lahela: ~/cs100/rshellalexander@Lahela:~/cs100/rshell$ bin/ls -R /home/alexander/Documents/test -l[C[1@a
-/home/alexander/Documents/test:
-total 116
--rw-rw-r-- 1 alexander alexander 0 Nov 7 22:12 ^
--rw-rw-r-- 1 alexander alexander 0 Nov 7 22:12 ^^
-drwxrwxr-x 14 alexander alexander 4096 Nov 10 17:29 [34;100m.[0m
-drwxr-xr-x 4 alexander alexander 4096 Oct 30 21:41 [34;100m..[0m
-drwxrwxr-x 3 alexander alexander 4096 Nov 7 19:18 [34m*_*[0m
--rw-rw-r-- 1 alexander alexander 0 Nov 7 18:18 ^0$%
--rw-rw-r-- 1 alexander alexander 0 Nov 7 18:46 3one
--rw-rw-r-- 1 alexander alexander 0 Nov 7 18:18 865jkj46
-drwxrwxr-x 2 alexander alexander 4096 Nov 8 7:52 [34;100m.8974[0m
--rw-rw-r-- 1 alexander alexander 0 Nov 7 18:17 897894
--rw-rw-r-- 1 alexander alexander 0 Nov 7 21:02 8raise
--rw-rw-r-- 1 alexander alexander 0 Nov 7 21:17 ~8robots
--rw-rw-r-- 1 alexander alexander 0 Nov 7 18:47 9.8.7.6.5
--rw-rw-r-- 1 alexander alexander 0 Nov 7 19:27 9nine9nine9nine
--rw-rw-r-- 1 alexander alexander 0 Nov 7 18:17 a1b2
--rw-rw-r-- 1 alexander alexander 0 Nov 7 18:49 aBcDeFg
--rw-rw-r-- 1 alexander alexander 0 Nov 7 18:49 AbCdEfG
--rwxrwxr-x 1 alexander alexander 49630 Oct 28 8:02 [32ma.out[0m
--rw-rw-r-- 1 alexander alexander 0 Nov 7 18:47 a.Out
-drwxrwxr-x 5 alexander alexander 4096 Nov 8 7:53 [34mA.out[0m
--rw-rw-r-- 1 alexander alexander 0 Nov 7 18:48 a.zzzz
--rw-rw-r-- 1 alexander alexander 0 Nov 10 16:13 b
--rw-rw-r-- 1 alexander alexander 0 Nov 7 23:38 ___b
--rw-rw-r-- 1 alexander alexander 0 Nov 10 16:13 bb
--rw-rw-r-- 1 alexander alexander 0 Nov 10 16:31 bbz
--rw-rw-r-- 1 alexander alexander 0 Nov 10 16:33 bbzs
--rw-rw-r-- 1 alexander alexander 0 Nov 10 16:33 bbzsf
--rw-rw-r-- 1 alexander alexander 0 Nov 10 16:13 be
--rw-rw-r-- 1 alexander alexander 0 Nov 9 17:32 bees
--rw-rw-r-- 1 alexander alexander 0 Nov 7 22:12 c
--rw-rw-r-- 1 alexander alexander 0 Nov 7 22:10 ^^car
--rw-rw-r-- 1 alexander alexander 0 Nov 7 22:10 ^~car
-drwxrwxr-x 3 alexander alexander 4096 Oct 28 7:48 [34mdir[0m
--rw-rw-r-- 1 alexander alexander 0 Nov 7 22:05 donkey
--rw-rw-r-- 1 alexander alexander 0 Nov 7 22:05 don.key
--rw-rw-r-- 1 alexander alexander 0 Nov 7 22:05 don..key
--rw-rw-r-- 1 alexander alexander 0 Oct 28 7:52 extra
--rw-rw-r-- 1 alexander alexander 0 Oct 27 19:37 ex.txt
-drwxrwxr-x 2 alexander alexander 4096 Oct 28 7:49 [34mfolder[0m
--rw-rw-r-- 1 alexander alexander 0 Nov 7 23:25 ^ghost
--rw-rw-r-- 1 alexander alexander 0 Nov 7 23:26 ^^ghost
--rw-rw-r-- 1 alexander alexander 0 Nov 7 23:26 ^~ghost
-drwxrwxr-x 2 alexander alexander 4096 Nov 8 7:52 [34mgo88away68[0m
-drwxrwxr-x 2 alexander alexander 4096 Nov 8 7:52 [34mgo89away67[0m
-drwxrwxr-x 2 alexander alexander 4096 Nov 8 7:52 [34;100m.goaway[0m
--rw-rw-r-- 1 alexander alexander 0 Nov 7 18:18 jhkhkj38278
--rw-rw-r-- 1 alexander alexander 0 Nov 7 18:13 l.cpp
-drwxrwxr-x 2 alexander alexander 4096 Nov 8 7:53 [34;100m.look...at...that[0m
--rw-rw-r-- 1 alexander alexander 0 Nov 7 18:17 [32;100m.ls.cpp[0m
--rw-rw-r-- 1 alexander alexander 4113 Oct 28 8:02 ls.cpp
--rw-rw-r-- 1 alexander alexander 0 Nov 7 18:17 lss.app
-drwxrwxr-x 2 alexander alexander 4096 Nov 7 18:46 [34mlss.cp[0m
--rw-rw-r-- 1 alexander alexander 0 Nov 7 18:14 lss.cpp
--rw-rw-r-- 1 alexander alexander 0 Nov 7 19:19 lSs.cpp
--rw-rw-r-- 1 alexander alexander 0 Nov 7 19:19 lSS.cpp
--rw-rw-r-- 1 alexander alexander 0 Nov 7 19:19 LsS.cpp
--rw-rw-r-- 1 alexander alexander 0 Nov 7 19:19 LSs.cpp
--rw-rw-r-- 1 alexander alexander 0 Nov 7 19:19 lss.pcc
--rw-rw-r-- 1 alexander alexander 0 Nov 7 18:14 ls.txt
-drwxrwxr-x 2 alexander alexander 4096 Nov 7 18:46 [34mon1o[0m
--rw-rw-r-- 1 alexander alexander 0 Nov 7 18:46 [32;100m.on2e[0m
--rw-rw-r-- 1 alexander alexander 0 Nov 7 18:46 on3e
--rw-rw-r-- 1 alexander alexander 0 Oct 28 7:49 one
--rw-rw-r-- 1 alexander alexander 0 Nov 7 18:46 one1
--rw-rw-r-- 1 alexander alexander 0 Nov 7 18:46 one2
--rw-rw-r-- 1 alexander alexander 0 Nov 7 18:46 out.a
--rw-rw-r-- 1 alexander alexander 0 Nov 10 17:28 pleasepleasepleasepleasepleasepleaseplease
--rw-rw-r-- 1 alexander alexander 0 Nov 7 19:35 ^pops
--rw-rw-r-- 1 alexander alexander 0 Nov 7 19:46 ~pops
--rw-rw-r-- 1 alexander alexander 0 Nov 7 23:14 ^popssss
--rw-rw-r-- 1 alexander alexander 0 Nov 7 22:12 race
--rw-rw-r-- 1 alexander alexander 0 Nov 7 22:12 ^race
--rw-rw-r-- 1 alexander alexander 0 Nov 7 22:12 ^^race
--rw-rw-r-- 1 alexander alexander 0 Nov 7 22:13 ^~race
--rw-rw-r-- 1 alexander alexander 0 Nov 7 22:13 ~^race
--rw-rw-r-- 1 alexander alexander 0 Nov 7 22:16 [32;100m.race[0m
--rw-rw-r-- 1 alexander alexander 0 Nov 7 23:37 r~ace
--rw-rw-r-- 1 alexander alexander 0 Nov 7 23:29 ra^ce
--rw-rw-r-- 1 alexander alexander 0 Nov 7 22:11 ra~ce
--rw-rw-r-- 1 alexander alexander 0 Nov 7 23:28 race^
--rw-rw-r-- 1 alexander alexander 0 Nov 7 23:29 racff
--rw-rw-r-- 1 alexander alexander 0 Nov 7 23:30 raf
--rw-rw-r-- 1 alexander alexander 0 Nov 7 19:21 ^raise
--rw-rw-r-- 1 alexander alexander 0 Nov 7 19:21 ^^raise
--rw-rw-r-- 1 alexander alexander 0 Nov 7 19:22 ~raise
--rw-rw-r-- 1 alexander alexander 0 Nov 7 18:48 [32;100m.raise^the~~woof[0m
--rw-rw-r-- 1 alexander alexander 0 Nov 7 19:21 raise^the~~woof
--rw-rw-r-- 1 alexander alexander 0 Nov 7 11:11 rEadme
--rw-rw-r-- 1 alexander alexander 0 Oct 27 19:37 README
--rw-rw-r-- 1 alexander alexander 0 Nov 7 11:11 REDfm
--rw-rw-r-- 1 alexander alexander 0 Nov 7 11:11 res
--rw-rw-r-- 1 alexander alexander 0 Nov 7 11:11 Res
--rw-rw-r-- 1 alexander alexander 0 Nov 7 11:11 RES
--rw-rw-r-- 1 alexander alexander 0 Nov 7 11:11 resume
--rw-rw-r-- 1 alexander alexander 0 Nov 7 11:11 RESUME
--rw-rw-r-- 1 alexander alexander 0 Nov 7 19:21 *r*raise
--rw-rw-r-- 1 alexander alexander 0 Nov 10 16:33 tfqf
--rw-rw-r-- 1 alexander alexander 0 Nov 7 18:47 this.9.is.8.a.7.file
--rw-rw-r-- 1 alexander alexander 0 Nov 10 16:33 thisa
--rw-rw-r-- 1 alexander alexander 0 Nov 7 18:47 this.is.a.file
-drwxrwxr-x 2 alexander alexander 4096 Oct 28 7:49 [34mthree[0m
--rw-rw-r-- 1 alexander alexander 0 Oct 28 7:49 two
--rw-rw-r-- 1 alexander alexander 0 Nov 7 18:48 z.aaaa
--rw-rw-r-- 1 alexander alexander 0 Nov 7 23:27 ~zz
-
-/home/alexander/Documents/test/*_*:
-total 12
-drwxrwxr-x 3 alexander alexander 4096 Nov 7 19:18 [34;100m.[0m
-drwxrwxr-x 14 alexander alexander 4096 Nov 10 17:29 [34;100m..[0m
--rw-rw-r-- 1 alexander alexander 0 Nov 7 19:18 t-t
-drwxrwxr-x 2 alexander alexander 4096 Nov 7 19:18 [34mT_T[0m
-
-/home/alexander/Documents/test/*_*/T_T:
-total 8
-drwxrwxr-x 2 alexander alexander 4096 Nov 7 19:18 [34;100m.[0m
-drwxrwxr-x 3 alexander alexander 4096 Nov 7 19:18 [34;100m..[0m
--rw-rw-r-- 1 alexander alexander 0 Nov 7 19:18 [32;100m.goaway[0m
-
-/home/alexander/Documents/test/.8974:
-total 8
-drwxrwxr-x 2 alexander alexander 4096 Nov 8 7:52 [34;100m.[0m
-drwxrwxr-x 14 alexander alexander 4096 Nov 10 17:29 [34;100m..[0m
-
-/home/alexander/Documents/test/A.out:
-total 20
-drwxrwxr-x 3 alexander alexander 4096 Nov 8 7:54 [34m^~^~^*@[0m
-drwxrwxr-x 5 alexander alexander 4096 Nov 8 7:53 [34;100m.[0m
-drwxrwxr-x 14 alexander alexander 4096 Nov 10 17:29 [34;100m..[0m
-drwxrwxr-x 2 alexander alexander 4096 Nov 8 7:53 [34mB.out[0m
--rw-rw-r-- 1 alexander alexander 0 Nov 8 7:53 junk
--rw-rw-r-- 1 alexander alexander 0 Nov 8 7:53 thejunk
--rw-rw-r-- 1 alexander alexander 0 Nov 8 7:53 Thejunk
-drwxrwxr-x 2 alexander alexander 4096 Nov 8 7:53 [34m~^Thejunk~Thejunk[0m
-
-/home/alexander/Documents/test/A.out/^~^~^*@:
-total 12
-drwxrwxr-x 3 alexander alexander 4096 Nov 8 7:54 [34;100m.[0m
-drwxrwxr-x 5 alexander alexander 4096 Nov 8 7:53 [34;100m..[0m
-drwxrwxr-x 3 alexander alexander 4096 Nov 8 7:54 [34m:B[0m
--rw-rw-r-- 1 alexander alexander 0 Nov 8 7:54 :D
--rw-rw-r-- 1 alexander alexander 0 Nov 8 7:54 T_T
-
-/home/alexander/Documents/test/A.out/^~^~^*@/:B:
-total 12
-drwxrwxr-x 3 alexander alexander 4096 Nov 8 7:54 [34;100m.[0m
-drwxrwxr-x 3 alexander alexander 4096 Nov 8 7:54 [34;100m..[0m
-drwxrwxr-x 3 alexander alexander 4096 Nov 8 7:54 [34mrotten[0m
--rw-rw-r-- 1 alexander alexander 0 Nov 8 7:54 YOOOO
-
-/home/alexander/Documents/test/A.out/^~^~^*@/:B/rotten:
-total 12
-drwxrwxr-x 3 alexander alexander 4096 Nov 8 7:54 [34;100m.[0m
-drwxrwxr-x 3 alexander alexander 4096 Nov 8 7:54 [34;100m..[0m
-drwxrwxr-x 2 alexander alexander 4096 Nov 8 7:54 [34mtomatoes[0m
-
-/home/alexander/Documents/test/A.out/^~^~^*@/:B/rotten/tomatoes:
-total 8
-drwxrwxr-x 2 alexander alexander 4096 Nov 8 7:54 [34;100m.[0m
-drwxrwxr-x 3 alexander alexander 4096 Nov 8 7:54 [34;100m..[0m
-
-/home/alexander/Documents/test/A.out/B.out:
-total 8
-drwxrwxr-x 2 alexander alexander 4096 Nov 8 7:53 [34;100m.[0m
-drwxrwxr-x 5 alexander alexander 4096 Nov 8 7:53 [34;100m..[0m
-
-/home/alexander/Documents/test/A.out/~^Thejunk~Thejunk:
-total 8
-drwxrwxr-x 2 alexander alexander 4096 Nov 8 7:53 [34;100m.[0m
-drwxrwxr-x 5 alexander alexander 4096 Nov 8 7:53 [34;100m..[0m
-
-/home/alexander/Documents/test/dir:
-total 12
-drwxrwxr-x 3 alexander alexander 4096 Oct 28 7:48 [34;100m.[0m
-drwxrwxr-x 14 alexander alexander 4096 Nov 10 17:29 [34;100m..[0m
-drwxrwxr-x 3 alexander alexander 4096 Oct 28 7:48 [34msubdir[0m
-
-/home/alexander/Documents/test/dir/subdir:
-total 12
-drwxrwxr-x 3 alexander alexander 4096 Oct 28 7:48 [34;100m.[0m
-drwxrwxr-x 3 alexander alexander 4096 Oct 28 7:48 [34;100m..[0m
-drwxrwxr-x 3 alexander alexander 4096 Oct 28 7:48 [34msubsubdir[0m
-
-/home/alexander/Documents/test/dir/subdir/subsubdir:
-total 12
-drwxrwxr-x 3 alexander alexander 4096 Oct 28 7:48 [34;100m.[0m
-drwxrwxr-x 3 alexander alexander 4096 Oct 28 7:48 [34;100m..[0m
-drwxrwxr-x 2 alexander alexander 4096 Oct 28 7:48 [34msubsubsubdir[0m
-
-/home/alexander/Documents/test/dir/subdir/subsubdir/subsubsubdir:
-total 8
-drwxrwxr-x 2 alexander alexander 4096 Oct 28 7:48 [34;100m.[0m
-drwxrwxr-x 3 alexander alexander 4096 Oct 28 7:48 [34;100m..[0m
--rw-rw-r-- 1 alexander alexander 0 Oct 28 7:48 notadir
-
-/home/alexander/Documents/test/folder:
-total 8
-drwxrwxr-x 2 alexander alexander 4096 Oct 28 7:49 [34;100m.[0m
-drwxrwxr-x 14 alexander alexander 4096 Nov 10 17:29 [34;100m..[0m
-
-/home/alexander/Documents/test/go88away68:
-total 8
-drwxrwxr-x 2 alexander alexander 4096 Nov 8 7:52 [34;100m.[0m
-drwxrwxr-x 14 alexander alexander 4096 Nov 10 17:29 [34;100m..[0m
-
-/home/alexander/Documents/test/go89away67:
-total 8
-drwxrwxr-x 2 alexander alexander 4096 Nov 8 7:52 [34;100m.[0m
-drwxrwxr-x 14 alexander alexander 4096 Nov 10 17:29 [34;100m..[0m
-
-/home/alexander/Documents/test/.goaway:
-total 8
-drwxrwxr-x 2 alexander alexander 4096 Nov 8 7:52 [34;100m.[0m
-drwxrwxr-x 14 alexander alexander 4096 Nov 10 17:29 [34;100m..[0m
-
-/home/alexander/Documents/test/.look...at...that:
-total 8
-drwxrwxr-x 2 alexander alexander 4096 Nov 8 7:53 [34;100m.[0m
-drwxrwxr-x 14 alexander alexander 4096 Nov 10 17:29 [34;100m..[0m
-
-/home/alexander/Documents/test/lss.cp:
-total 8
-drwxrwxr-x 2 alexander alexander 4096 Nov 7 18:46 [34;100m.[0m
-drwxrwxr-x 14 alexander alexander 4096 Nov 10 17:29 [34;100m..[0m
-
-/home/alexander/Documents/test/on1o:
-total 8
-drwxrwxr-x 2 alexander alexander 4096 Nov 7 18:46 [34;100m.[0m
-drwxrwxr-x 14 alexander alexander 4096 Nov 10 17:29 [34;100m..[0m
-
-/home/alexander/Documents/test/three:
-total 8
-drwxrwxr-x 2 alexander alexander 4096 Oct 28 7:49 [34;100m.[0m
-drwxrwxr-x 14 alexander alexander 4096 Nov 10 17:29 [34;100m..[0m
--rw-rw-r-- 1 alexander alexander 0 Oct 28 7:49 file.txt
--rw-rw-r-- 1 alexander alexander 0 Oct 28 7:49 justafile
-]0;alexander@Lahela: ~/cs100/rshellalexander@Lahela:~/cs100/rshell$ bin/ls -Ra /home/alexander/Documents/test -l[K[1P[1P[1P[1P[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[K[K/three/file.txt
-/home/alexander/Documents/test/three/file.txt 
-]0;alexander@Lahela: ~/cs100/rshellalexander@Lahela:~/cs100/rshell$ bin/ls /home/alexander/Documents/test/three/file.txt src
-/home/alexander/Documents/test/three/file.txt 
-
-src:
-hw0.cpp[0m  ls.cpp[0m  
-]0;alexander@Lahela: ~/cs100/rshellalexander@Lahela:~/cs100/rshell$ bin/ls /home/alexander/Documents/test/three/file.txt src[1Psrc[1Psrc[1Psrc[1Psrc[1Psrc[1Psrc[1Psrc[1Psrc[1Psrc src
 /home/alexander/Documents/test/three:
 file.txt[0m  justafile[0m  
 
 src:
-hw0.cpp[0m  ls.cpp[0m  
-]0;alexander@Lahela: ~/cs100/rshellalexander@Lahela:~/cs100/rshell$ [K]0;alexander@Lahela: ~/cs100/rshellalexander@Lahela:~/cs100/rshell$ bin/ls /home/alexander/Documents/test/thhree/ src[C-srclsrcRsrcasrc src
-/home/alexander/Documents/test/three:
-total 8
-drwxrwxr-x 2 alexander alexander 4096 Oct 28 7:49 [34;100m.[0m
-drwxrwxr-x 14 alexander alexander 4096 Nov 10 17:29 [34;100m..[0m
--rw-rw-r-- 1 alexander alexander 0 Oct 28 7:49 file.txt
--rw-rw-r-- 1 alexander alexander 0 Oct 28 7:49 justafile
-
-./src:
-total 44
-drwxrwxr-x 2 alexander alexander 4096 Nov 10 22:08 [34;100m.[0m
-drwxrwxr-x 6 alexander alexander 4096 Nov 11 10:17 [34;100m..[0m
--rw-rw-r-- 1 alexander alexander 12544 Nov 9 19:06 hw0.cpp
--rw-rw-r-- 1 alexander alexander 18524 Nov 10 22:02 ls.cpp
-]0;alexander@Lahela: ~/cs100/rshellalexander@Lahela:~/cs100/rshell$ [K]0;alexander@Lahela: ~/cs100/rshellalexander@Lahela:~/cs100/rshell$ #tes[K[K[K[K#testing ls when one of ft[K[Kthe file/dir parameters fail
+cp.cpp[0m  hw0.cpp[0m  ls.cpp[0m  Timer.h[0m  
+]0;alexander@Lahela: ~/cs100/rshellalexander@Lahela:~/cs100/rshell$ #testing ls when one of the file/dir passed in does not exist
 ]0;alexander@Lahela: ~/cs100/rshellalexander@Lahela:~/cs100/rshell$ bin/ls notafile
 lstat: No such file or directory
-]0;alexander@Lahela: ~/cs100/rshellalexander@Lahela:~/cs100/rshell$ bin/ls notafile src notafile tests notafile ls[K[Kbin
+]0;alexander@Lahela: ~/cs100/rshellalexander@Lahela:~/cs100/rshell$ bin/ls notafile src notafile tests not [Kafile
 lstat: No such file or directory
 lstat: No such file or directory
 lstat: No such file or directory
-bin:
-[32mls[0m  [32mrshell[0m  
-
 src:
-hw0.cpp[0m  ls.cpp[0m  
+cp.cpp[0m  hw0.cpp[0m  ls.cpp[0m  Timer.h[0m  
 
 tests:
 exec.script[0m  ls.script[0m  
-]0;alexander@Lahela: ~/cs100/rshellalexander@Lahela:~/cs100/rshell$ [K]0;alexander@Lahela: ~/cs100/rshellalexander@Lahela:~/cs100/rshell$ #testing flag checking
+]0;alexander@Lahela: ~/cs100/rshellalexander@Lahela:~/cs100/rshell$ #testing flag checking
 ]0;alexander@Lahela: ~/cs100/rshellalexander@Lahela:~/cs100/rshell$ bin/ls -w
 No such flag
 ]0;alexander@Lahela: ~/cs100/rshellalexander@Lahela:~/cs100/rshell$ bin/ls -alR -w
 No such flag
-]0;alexander@Lahela: ~/cs100/rshellalexander@Lahela:~/cs100/rshell$ bin/ls -alr[KRw
+]0;alexander@Lahela: ~/cs100/rshellalexander@Lahela:~/cs100/rshell$ bin/ls -alRw
 No such flag
-]0;alexander@Lahela: ~/cs100/rshellalexander@Lahela:~/cs100/rshell$ bin/ls -A
+]0;alexander@Lahela: ~/cs100/rshellalexander@Lahela:~/cs100/rshell$ bin/ls -alRw[K[K[K[KA
 No such flag
-]0;alexander@Lahela: ~/cs100/rshellalexander@Lahela:~/cs100/rshell$ ibn/ls -L
-bash: ibn/ls: No such file or directory
-]0;alexander@Lahela: ~/cs100/rshellalexander@Lahela:~/cs100/rshell$ bin/ls-[K -L
+]0;alexander@Lahela: ~/cs100/rshellalexander@Lahela:~/cs100/rshell$ bin/ls -A[KL
 No such flag
-]0;alexander@Lahela: ~/cs100/rshellalexander@Lahela:~/cs100/rshell$ bin/ls -r
+]0;alexander@Lahela: ~/cs100/rshellalexander@Lahela:~/cs100/rshell$ bin/ls -L[Kr
 No such flag
-]0;alexander@Lahela: ~/cs100/rshellalexander@Lahela:~/cs100/rshell$ bin/ [Kls -r[Klar
+]0;alexander@Lahela: ~/cs100/rshellalexander@Lahela:~/cs100/rshell$ bin/ls -ral
 No such flag
-]0;alexander@Lahela: ~/cs100/rshellalexander@Lahela:~/cs100/rshell$ #this concld[Kudes testing
+]0;alexander@Lahela: ~/cs100/rshellalexander@Lahela:~/cs100/rshell$ #testing ls when [a[K[Kpassed '.' and ".."
+]0;alexander@Lahela: ~/cs100/rshellalexander@Lahela:~/cs100/rshell$ bin/ls .
+[34mbin[0m  [32mbin_link[0m  LICENSE[0m  Makefile[0m  README.md[0m  [34msrc[0m  [34mtests[0m  
+]0;alexander@Lahela: ~/cs100/rshellalexander@Lahela:~/cs100/rshell$ bin/ls ..
+[34mreleases[0m  [34mrshell[0m  [34mrshell-1[0m  
+]0;alexander@Lahela: ~/cs100/rshellalexander@Lahela:~/cs100/rshell$ #testing ls when cl[Kaled form[K[Kr[K[Krom outside [K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K#testing ls when cale[Kled from outside current dir
+]0;alexander@Lahela: ~/cs100/rshellalexander@Lahela:~/cs100/rshell$ cd ..
+]0;alexander@Lahela: ~/cs100alexander@Lahela:~/cs100$ bin[K[K[K./bin[K[Kr[K[Krshell/bin/ls
+[34mreleases[0m  [34mrshell[0m  [34mrshell-1[0m  
+]0;alexander@Lahela: ~/cs100alexander@Lahela:~/cs100$ cd rshell
+]0;alexander@Lahela: ~/cs100/rshellalexander@Lahela:~/cs100/rshell$ #testing recu[K[K[K[Kcur[K[Kr[K[Kru[K[K-Ra
+]0;alexander@Lahela: ~/cs100/rshellalexander@Lahela:~/cs100/rshell$ bin/ls /h[K[K[K[K[K[K[K[K[K#was[K[K[Kdid not test previouslt [K[Ky due to the wo[K[K[K[K[K[Kmy working directory containing .git[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[Kbin/ls /home/alexander/Documents/hidden_test -Ra/ -Ra
+/home/alexander/Documents/hidden_test:
+[34;100m.[0m  [34;100m..[0m  [34;100m.subdir[0m  
+
+/home/alexander/Documents/hidden_test/.subdir:
+[34;100m.[0m  [34;100m..[0m  [34;100m.subsubdir[0m  
+
+/home/alexander/Documents/hidden_test/.subdir/.subsubdir:
+[34;100m.[0m  [34;100m..[0m  [34;100m.subsubdir[0m  
+
+/home/alexander/Documents/hidden_test/.subdir/.subsubdir/.subsubdir:
+[34;100m.[0m  [34;100m..[0m  
+]0;alexander@Lahela: ~/cs100/rshellalexander@Lahela:~/cs100/rshell$ #this concludes testing[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[Kthis concludes tesin[K[Kting
 ]0;alexander@Lahela: ~/cs100/rshellalexander@Lahela:~/cs100/rshell$ exit
 exit
 
-Script done on Tue 11 Nov 2014 12:34:35 PM PST
+Script done on Tue 11 Nov 2014 08:37:08 PM PST
