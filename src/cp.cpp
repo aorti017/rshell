@@ -132,8 +132,8 @@ else{
     Timer t;
     double eTime;
     t.start();
-    ifstream inpoo(argv[1]);
-    ofstream outpoo(argv[2]);
+    ifstream inpoo(argv[file1]);
+    ofstream outpoo(argv[file2]);
 
     if(!inpoo.good()|| !outpoo.good())
     {
