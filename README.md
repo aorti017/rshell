@@ -45,3 +45,4 @@ Bugs/Limitations
 * When using ```&&``` connectors if any extra (more than 1) of these connectors are inserted in between any two commands, or in the front of the command line, and any of the said extra connectors are seperated by a space any command after the excess connectors will not execute.
 * ```&``` and ```|``` are interpreted as ```&&``` and ```||```, respectively.
 * ```bin/ls``` can not be used with regular expressions.
+* When passing a hidden file to ```bin/ls``` the background is not colored grey.
