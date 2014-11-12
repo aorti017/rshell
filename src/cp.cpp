@@ -15,7 +15,8 @@ int main(int argc, char* argv[])
     bool all= false;
     if(argc <3)
     {
-        cerr << "not enough arguments" << endl;
+        cout << "cp: missing file operand" << endl;
+        cout << "To copy using all methods, use the -a flag. Otherwise, no flags uses the fastest method" << endl;
         return 0;
     }
     else if(argc ==4)
@@ -79,8 +80,21 @@ else{
     }
 }
 if(ifstream(argv[file2])){
-    cerr << "Output file already exists" << endl;
-    return 0;
+    if(-1 == stat(argv[2], &buf))
+     {
+         perror("stat");
+         exit(0);
+     }
+
+if(S_ISDIR(buf.st_mode))
+{
+    cerr << "Output parameter is dir" << endl;
+    exit(0);
+}
+else{
+    cerr << "Output exists" << endl;
+    exit(0);
+}
 }
 else{
     ofstream tmp(argv[file2]);
