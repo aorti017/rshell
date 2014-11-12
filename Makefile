@@ -18,7 +18,6 @@ cp:
 	fi
 	g++ -Wall -Werror -ansi -pedantic src/cp.cpp -o bin/cp
 ls:
-
 	if [ ! -d "./bin" ];\
 	then mkdir bin;\
 	fi
