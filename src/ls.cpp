@@ -300,7 +300,7 @@ void print_ls(bool flags[], deque<string> paths, string mainPath){
                 }
                 else{
                     if(isHide(fileObj.at(i))){
-                        cout << "\033[32;100m";
+                        cout << "\033[100m";
                         cout << fileObj.at(i);
                         cout << "\033[0m";
                         cout << endl;
