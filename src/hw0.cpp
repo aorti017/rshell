@@ -183,10 +183,12 @@ vector<string> remRed(vector<string> v){
 
 string getFile(vector<string> v){
     for(unsigned int i = 0; i < v.size(); i++){
-        if(v.at(i) == "<" && i+1 < v.size()){
+        if((v.at(i) == "<" || v.at(i) == ">" || v.at(i) == ">>")
+            && i+1 < v.size()){
             return v.at(i+1);
         }
-        else if(v.at(i) == "<" && i+1 >= v.size()){
+        else if((v.at(i) == "<" || v.at(i) == ">" ||
+            v.at(i) == ">>") && i+1 >= v.size()){
             return "|";
         }
     }
@@ -305,11 +307,13 @@ bool run(char str[]){
             //then remove and store file
             string io = is_iore(cmd);
             bool iRed = false;
+            int changed = 99;
             int defout = 0;
             int fd = 0;
             if(io != "NULL"){
                 if(io == "<"){
                     iRed = true;
+                    changed = 0;
                     defout = dup(0);
                     string file = getFile(cmd);
                     cmd = remRed(cmd);
@@ -322,13 +326,39 @@ bool run(char str[]){
                         dup2(fd, 0);
                     }
                     else{
+                        //TODO make so it executes next command
                         cout << "No input given" << endl;
+                        return true;
                     }
                 }
-                /*else if(io == ">"){
+                else if(io == ">" || io == ">>"){
+                    iRed = true;
+                    changed = 1;
+                    defout = dup(1);
+                    string file = getFile(cmd);
+                    cmd = remRed(cmd);
+                    int mode = S_IRUSR | S_IWUSR;
+                    if(file != "|"){
+                        if(io == ">"){
+                            fd = open(file.c_str(), O_WRONLY |
+                                O_TRUNC | O_CREAT, mode);
+                        }
+                        else{
+                            fd = open(file.c_str(), O_WRONLY |
+                                O_APPEND | O_CREAT, mode);
+                        }
+                        if(fd == -1){
+                            perror("open");
+                            exit(0);
+                        }
+                        dup2(fd, 1);
+                    }
+                    else{
+                        //TODO make so it executes next command
+                        cout << "No output file given" << endl;
+                        return true;
+                    }
                 }
-                else{
-                }*/
             }
 
 
@@ -374,7 +404,8 @@ bool run(char str[]){
 	        	exit(1);
 	        }
             if(iRed){
-                dup2(defout, 0);
+                dup2(defout, changed);
+                changed = 99;
                 close(fd);
                 close(defout);
             }
