@@ -1,6 +1,7 @@
 #include <iostream>
 #include <stdio.h>
 #include <ctype.h>
+#include <fcntl.h>
 #include <cstring>
 #include <vector>
 #include <unistd.h>
@@ -166,6 +167,31 @@ string is_iore(vector<string> cmd){
     return "NULL";
 }
 
+vector<string> remRed(vector<string> v){
+    vector<string> retVec;
+    for(unsigned i = 0; i < v.size(); i++){
+        if(v.at(i) != "<" && v.at(i) != ">" && v.at(i) != ">>"){
+            retVec.push_back(v.at(i));
+        }
+        else{
+            return retVec;
+        }
+    }
+    return retVec;
+}
+
+
+string getFile(vector<string> v){
+    for(unsigned int i = 0; i < v.size(); i++){
+        if(v.at(i) == "<" && i+1 < v.size()){
+            return v.at(i+1);
+        }
+        else if(v.at(i) == "<" && i+1 >= v.size()){
+            return "|";
+        }
+    }
+    return "|";
+}
 
 //this function runs the command using fork and execvp
 //and returns once all commands from the entered char[]
@@ -278,13 +304,31 @@ bool run(char str[]){
             //look here to see if redirection
             //then remove and store file
             string io = is_iore(cmd);
+            bool iRed = false;
+            int defout = 0;
+            int fd = 0;
             if(io != "NULL"){
                 if(io == "<"){
+                    iRed = true;
+                    defout = dup(0);
+                    string file = getFile(cmd);
+                    cmd = remRed(cmd);
+                    if(file != "|"){
+                        fd = open(file.c_str(), O_RDONLY);
+                        if(fd == -1){
+                            perror("open");
+                            exit(0);
+                        }
+                        dup2(fd, 0);
+                    }
+                    else{
+                        cout << "No input given" << endl;
+                    }
                 }
-                else if(io == ">"){
+                /*else if(io == ">"){
                 }
                 else{
-                }
+                }*/
             }
 
 
@@ -328,7 +372,12 @@ bool run(char str[]){
     	        perror("waitpid");
                 delete[] argc;
 	        	exit(1);
-	         }
+	        }
+            if(iRed){
+                dup2(defout, 0);
+                close(fd);
+                close(defout);
+            }
             for(unsigned int i = 0; i <= cmd.size(); i++){
                 delete[] argc[i];
             }
