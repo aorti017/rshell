@@ -133,6 +133,40 @@ string commentRemoval(string x){
     }
 }
 
+vector<unsigned int> getPipes(string &str){
+    vector<unsigned int> v;
+    if(str.at(0) == '|'){
+        cerr << "Invalid pipe placement" << endl;
+        v.push_back(0);
+        return v;
+    }
+    for(unsigned int i = 0; i < str.size(); i++){
+        if(str.at(i) == '|' && i + 1 < str.size()){
+            if(str.at(i+1) != '|' && str.at(i-1) != '|'){
+                v.push_back(i);
+                str.at(i) = '~';
+            }
+        }
+        else if(str.at(i) == '|' && i + 1 >= str.size()){
+            if(str.at(i-1) != '|'){
+                v.push_back(i);
+                str.at(i) = '~';
+            }
+        }
+    }
+    return v;
+}
+
+string is_iore(vector<string> cmd){
+    for(unsigned int i = 0; i < cmd.size(); i++){
+        if(cmd.at(i) == "<" || cmd.at(i) == ">>" || cmd.at(i) == ">"){
+            return cmd.at(i);
+        }
+    }
+    return "NULL";
+}
+
+
 //this function runs the command using fork and execvp
 //and returns once all commands from the entered char[]
 //have been executed
@@ -149,11 +183,21 @@ bool run(char str[]){
 
     //holds the connector used for the current list of comamnds
     string connector;
-
+    string strz = str;
     //holds a string version of the passed in char[] for later
     //comparing
-    string strz = str;
-
+    vector<unsigned int> pipeLocals = getPipes(strz);
+    if(pipeLocals.size() == 1 && pipeLocals.at(0) == 0){
+        return true;
+    }
+    strcpy(str, strz.c_str());
+    /*for(unsigned int i = 0; i < pipeLocals.size(); i++){
+        cout << pipeLocals.at(i) << " "
+        << strz[pipeLocals.at(i)];
+        cout << endl;
+    }
+    cout << str << endl;*/
+    strz = str;
     //the vector that holds the commands to be converted and executed
     vector<string> cmd;
 
@@ -201,6 +245,21 @@ bool run(char str[]){
         return false;
     }
     int fromHead = 0;
+    if(pipeLocals.size() > 0){
+        string pchSz = strz;
+        unsigned int k = 0;
+        for(unsigned int i = 0; i < pchSz.size(); i++){
+            if(pipeLocals.at(k) == i){
+                str[i] = '|';
+                k++;
+                if(k >= pipeLocals.size()){
+                    break;
+                }
+            }
+        }
+    }
+
+    //cout << pch << endl;
     //this while loop is where fork and execvp execute commands
     while(pch != NULL){
         string pmt = pch;
@@ -214,6 +273,22 @@ bool run(char str[]){
             //to break it up into command and params
             parse(pch, cmd);
             //set the size of the dynamic char** that will be passed into execvp
+
+
+            //look here to see if redirection
+            //then remove and store file
+            string io = is_iore(cmd);
+            if(io != "NULL"){
+                if(io == "<"){
+                }
+                else if(io == ">"){
+                }
+                else{
+                }
+            }
+
+
+
             int cmd_size = cmd.size();
             char** argc = new char*[cmd_size + 1];
             //for each string in cmd copy it into argc, which will be passed
@@ -274,7 +349,31 @@ bool run(char str[]){
             //run the next command if the connector logic and value of sucs allow it
             if((connector=="&&" && sucs) || (connector=="||" && !sucs) || (connector==";")){
                 if(ogsz >= fromHead){
+                    if(pipeLocals.size() > 0){
+                        unsigned int k = 0;
+                        for(unsigned int i = 0; i < strz.size(); i++){
+                            if(pipeLocals.at(k) == i){
+                                str[i] = '~';
+                                k++;
+                                if(k >= pipeLocals.size()){
+                                    break;
+                                }
+                            }
+                        }
+                    }
                     pch = strtok(str+fromHead, connector.c_str());
+                    if(pipeLocals.size() > 0){
+                        unsigned int k = 0;
+                        for(unsigned int i = 0; i < strz.size(); i++){
+                            if(pipeLocals.at(k) == i){
+                                str[i] = '|';
+                                k++;
+                                if(k >= pipeLocals.size()){
+                                    break;
+                                }
+                            }
+                        }
+                    }
                 }
                 else{
                     return true;
