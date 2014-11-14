@@ -136,7 +136,7 @@ string commentRemoval(string x){
 
 vector<unsigned int> getPipes(string &str){
     vector<unsigned int> v;
-    if(str.at(0) == '|'){
+    if(str.size() > 0 && str.at(0) == '|'){
         cerr << "Invalid pipe placement" << endl;
         v.push_back(0);
         return v;
@@ -193,6 +193,67 @@ string getFile(vector<string> v){
         }
     }
     return "|";
+}
+
+vector<string> getRed(vector<string> v){
+    vector<string> ret;
+    for(unsigned int i = 0; i < v.size(); i ++){
+        if(v.at(i) == "<"){
+            ret.push_back(v.at(i));
+        }
+        else if(v.at(i) == ">"){
+            ret.push_back(v.at(i));
+        }
+        else if(v.at(i) == ">>"){
+            ret.push_back(v.at(i));
+        }
+    }
+    return ret;
+}
+
+vector<string> remCmd(vector<string> v){
+    vector<string> ret;
+    bool push = false;
+    for(unsigned int i = 0; i < v.size(); i++){
+        if(v.at(i) == "<" || v.at(i) == ">" || v.at(i) == ">>"){
+            push = true;
+        }
+        if(push){
+            ret.push_back(v.at(i));
+        }
+    }
+    return ret;
+}
+
+vector<string> remPrev(vector<string> v){
+    bool first = true;
+    bool add = false;
+    vector<string> ret;
+    for(unsigned int i = 0; i < v.size(); i++){
+        if(v.at(i) == "<" || v.at(i) == ">" || v.at(i) == ">>"){
+            if(first){
+                add = false;
+                first = false;
+            }
+            else{
+                add = true;
+            }
+        }
+        if(add){
+            ret.push_back(v.at(i));
+        }
+    }
+    return ret;
+}
+
+int lastRan(vector<int> v, int x){
+    int ret = 0;
+    for(unsigned int i = 0; i < v.size(); i++){
+        if(v.at(i) == x){
+            ret = i;
+        }
+    }
+    return ret;
 }
 
 //this function runs the command using fork and execvp
@@ -305,58 +366,104 @@ bool run(char str[]){
 
             //look here to see if redirection
             //then remove and store file
-            string io = is_iore(cmd);
             bool iRed = false;
-            int changed = 99;
-            int defout = 0;
-            int fd = 0;
-            if(io != "NULL"){
-                if(io == "<"){
-                    iRed = true;
-                    changed = 0;
-                    defout = dup(0);
-                    string file = getFile(cmd);
-                    cmd = remRed(cmd);
-                    if(file != "|"){
-                        fd = open(file.c_str(), O_RDONLY);
-                        if(fd == -1){
-                            perror("open");
-                            exit(0);
+            //bool changed[2];
+            //vector<int> changed_io;
+            int changed_io_in;
+            int changed_io_out;
+            //changed[0] = false;
+            //changed[1] = false;
+            //vector<int> defout_vec;
+            int defout_in;
+            int defout_out;
+            int fd_in = 0;
+            int fd_out = 0;
+
+            bool i_ran = false;
+            bool o_ran = false;
+
+            vector<int> fd_vec;
+            vector<string> listRed = getRed(cmd);
+            vector<string> cmd_cpy = cmd;
+            if(listRed.size() > 0){
+                cmd = remRed(cmd);
+                cmd_cpy = remCmd(cmd_cpy);
+            }
+            for(unsigned int i = 0; i < listRed.size(); i++){
+                if(listRed.at(i) != "NULL"){
+                    if(listRed.at(i) == "<"){
+                        if(i_ran){
+                            //unsigned int place = lastRan(fd_vec, 0);
+                            close(fd_in);
+                            dup2(defout_in, changed_io_in);
+                            close(defout_in);
                         }
-                        dup2(fd, 0);
-                    }
-                    else{
-                        //TODO make so it executes next command
-                        cout << "No input given" << endl;
-                        return true;
-                    }
-                }
-                else if(io == ">" || io == ">>"){
-                    iRed = true;
-                    changed = 1;
-                    defout = dup(1);
-                    string file = getFile(cmd);
-                    cmd = remRed(cmd);
-                    int mode = S_IRUSR | S_IWUSR;
-                    if(file != "|"){
-                        if(io == ">"){
-                            fd = open(file.c_str(), O_WRONLY |
-                                O_TRUNC | O_CREAT, mode);
+                        iRed = true;
+                        //changed[0] = true;
+                        //changed_io.push_back(0);
+                        changed_io_in = 0;
+                        //defout_vec.push_back(dup(0));
+                        defout_in = dup(0);
+                        string file = getFile(cmd_cpy);
+                        cmd_cpy = remPrev(cmd_cpy);
+                        if(file != "|"){
+                            fd_in = open(file.c_str(), O_RDONLY);
+                            if(fd_in == -1){
+                                perror("open");
+                                exit(0);
+                            }
+                            fd_vec.push_back(fd_in);
+                            //dup2(fd_vec.at(fd_vec.size()-1), 0);
+
+                            close(0);
+                            dup(fd_in);
+                            i_ran = true;
                         }
                         else{
-                            fd = open(file.c_str(), O_WRONLY |
-                                O_APPEND | O_CREAT, mode);
+                            //TODO make so it executes next command
+                            cout << "No input given" << endl;
+                            return true;
                         }
-                        if(fd == -1){
-                            perror("open");
-                            exit(0);
-                        }
-                        dup2(fd, 1);
                     }
-                    else{
-                        //TODO make so it executes next command
-                        cout << "No output file given" << endl;
-                        return true;
+                    else if(listRed.at(i)  == ">" || listRed.at(i) == ">>"){
+                        if(o_ran){
+                            //unsigned int place = lastRan(fd_vec, 1);
+                            close(fd_out);
+                            dup2(defout_out, changed_io_out);
+                            close(defout_out);
+                        }
+                        iRed = true;
+                        //changed[1] = true;
+                        //changed_io.push_back(1);
+                        changed_io_out = 1;
+                        //defout_vec.push_back(dup(1));
+                        defout_out = dup(1);
+                        string file = getFile(cmd_cpy);
+                        cmd_cpy = remPrev(cmd_cpy);
+                        int mode = S_IRUSR | S_IWUSR;
+                        if(file != "|"){
+                            if(listRed.at(i) == ">"){
+                                fd_out = open(file.c_str(), O_WRONLY |
+                                    O_TRUNC | O_CREAT, mode);
+                            }
+                            else{
+                                fd_out = open(file.c_str(), O_WRONLY |
+                                    O_APPEND | O_CREAT, mode);
+                            }
+                            if(fd_out == -1){
+                                perror("open");
+                                exit(0);
+                            }
+                            fd_vec.push_back(fd_out);
+                            close(1);
+                            dup(fd_out);
+                            o_ran = true;
+                        }
+                        else{
+                            //TODO make so it executes next command
+                            cout << "No output file given" << endl;
+                            return true;
+                        }
                     }
                 }
             }
@@ -404,10 +511,31 @@ bool run(char str[]){
 	        	exit(1);
 	        }
             if(iRed){
-                dup2(defout, changed);
-                changed = 99;
-                close(fd);
-                close(defout);
+                cout << "A" << endl;
+                /*for(unsigned int i = 0; i < fd_vec.size(); i++){
+                    close(fd_vec.at(i));
+                }*/
+                if(i_ran){
+                    close(fd_in);
+                    dup2(defout_in, changed_io_in);
+                    close(defout_in);
+                }
+                if(o_ran){
+                    close(fd_out);
+                    dup2(defout_out, changed_io_out);
+                    close(defout_out);
+                }
+                /*for(unsigned int i = 0; i < defout_vec.size(); i++){
+                    dup2(defout_vec.at(i), changed_io.at(i));
+                    close(defout_vec.at(i));
+                }*/
+
+
+
+                //for(unsigned int i = 0; i < fd_vec.size(); i++){
+                //    close(fd_vec.at(i));
+                //}
+                //close(defout);
             }
             for(unsigned int i = 0; i <= cmd.size(); i++){
                 delete[] argc[i];
