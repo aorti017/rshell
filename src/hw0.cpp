@@ -1,4 +1,6 @@
 #include <iostream>
+#include <string>
+#include <iomanip>
 #include <stdio.h>
 #include <ctype.h>
 #include <fcntl.h>
@@ -511,7 +513,6 @@ bool run(char str[]){
 	        	exit(1);
 	        }
             if(iRed){
-                cout << "A" << endl;
                 /*for(unsigned int i = 0; i < fd_vec.size(); i++){
                     close(fd_vec.at(i));
                 }*/
@@ -601,6 +602,40 @@ bool run(char str[]){
     return true;
 }
 
+string addIOSpaces(string x){
+    string ret;
+    char spc = ' ';
+    for(unsigned int i = 0; i < x.size(); i++){
+        if(x.at(i) != ' '){
+        if(x.at(i) == '<' || x.at(i) == '>' || x.at(i) == '|'){
+            if(i+1 < x.size()){
+                ret.push_back(x.at(i));
+                if(x.at(i+1) != '>' && x.at(i+1) != ' '){
+                    ret.push_back(spc);
+                }
+            }
+            else{
+                ret.push_back(x.at(i));
+            }
+        }
+        else{
+            if(i+1 < x.size()){
+                ret.push_back(x.at(i));
+                if(x.at(i+1) == '<' || x.at(i+1) == '>' || x.at(i+1) == '|'){
+                    ret.push_back(spc);
+                }
+            }
+            else{
+                ret.push_back(x.at(i));
+            }
+        }
+        }
+        else{
+            ret.push_back(x.at(i));
+        }
+    }
+    return ret;
+}
 
 //main takes in commands and passes them to run to execute
 int main(){
@@ -644,7 +679,7 @@ int main(){
 
         //remove anything that is a comment from the users input
         input = commentRemoval(input);
-
+        input = addIOSpaces(input);
         //check for multiple connectors
         if(!multiConn(input)){
             //determines the size of the input
