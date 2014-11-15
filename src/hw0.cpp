@@ -258,6 +258,31 @@ int lastRan(vector<int> v, int x){
     return ret;
 }
 
+bool pipe_aft(int total, string x){
+    if(x.at(total) == '|'){
+        return true;
+    }
+    return false;
+}
+bool pipe_bef(int cmd, int total, string x){
+    int nu = total - cmd;
+    if(nu < 0){
+        return false;
+    }
+    else if(nu == 0){
+        return x.at(nu) == '|';
+    }
+    return false;
+}
+
+bool hasPipe(string x){
+    for(unsigned int i = 0; i < x.size(); i++){
+        if(x.at(i) == '|'){
+            return true;
+        }
+    }
+    return false;
+}
 //this function runs the command using fork and execvp
 //and returns once all commands from the entered char[]
 //have been executed
@@ -275,6 +300,7 @@ bool run(char str[]){
     //holds the connector used for the current list of comamnds
     string connector;
     string strz = str;
+    string pipe_cpy = str;
     //holds a string version of the passed in char[] for later
     //comparing
     vector<unsigned int> pipeLocals = getPipes(strz);
@@ -365,10 +391,11 @@ bool run(char str[]){
             parse(pch, cmd);
             //set the size of the dynamic char** that will be passed into execvp
 
-
             //look here to see if redirection
             //then remove and store file
             bool iRed = false;
+            int fd[2];
+            pipe(fd);
             //bool changed[2];
             //vector<int> changed_io;
             int changed_io_in;
@@ -384,13 +411,20 @@ bool run(char str[]){
             bool i_ran = false;
             bool o_ran = false;
 
+            int curr_cmd = 0;
+            int last = 0;
+            int total = 0;
+
             vector<int> fd_vec;
             vector<string> listRed = getRed(cmd);
             vector<string> cmd_cpy = cmd;
+            vector<string> fuck = cmd;
+            bool pip = hasPipe(pipe_cpy);
             if(listRed.size() > 0){
                 cmd = remRed(cmd);
                 cmd_cpy = remCmd(cmd_cpy);
             }
+            bool out = false;
             for(unsigned int i = 0; i < listRed.size(); i++){
                 if(listRed.at(i) != "NULL"){
                     if(listRed.at(i) == "<"){
@@ -425,7 +459,7 @@ bool run(char str[]){
                             fd_in = open(file.c_str(), O_RDONLY);
                             if(fd_in == -1){
                                 perror("open");
-                                exit(0);
+                                return true;
                             }
                             fd_vec.push_back(fd_in);
                             //dup2(fd_vec.at(fd_vec.size()-1), 0);
@@ -447,6 +481,7 @@ bool run(char str[]){
                         }
                     }
                     else if(listRed.at(i)  == ">" || listRed.at(i) == ">>"){
+                        out = true;
                         if(o_ran){
                             //unsigned int place = lastRan(fd_vec, 1);
                             if(-1 == close(fd_out)){
@@ -481,7 +516,7 @@ bool run(char str[]){
                                     O_TRUNC | O_CREAT, mode);
                                 if(fd_out == -1){
                                     perror("open");
-                                    exit(0);
+                                    return true;
                                 }
                             }
                             else{
@@ -489,7 +524,7 @@ bool run(char str[]){
                                     O_APPEND | O_CREAT, mode);
                                 if(fd_out == -1){
                                     perror("open");
-                                    exit(0);
+                                    return true;
                                 }
                             }
                             fd_vec.push_back(fd_out);
@@ -524,7 +559,31 @@ bool run(char str[]){
             }
             //set the last value of argc to be NULL so that execvp will work properly
             argc[cmd.size()] = NULL;
-
+            bool after = false;
+            bool before = false;
+            if(pip){
+            bool stop = false;
+            curr_cmd = 0;
+            for(unsigned int i = last; i < fuck.size(); i++){
+                //cout << fuck.at(i) << endl;
+                for(unsigned int k = 0; k < fuck.at(i).size(); k++){
+                    if(fuck.at(i) == "|"){
+                        stop = true;
+                        break;
+                    }
+                    curr_cmd++;
+                }
+                if(stop){
+                    break;
+                }
+                curr_cmd++;
+            }
+            total += curr_cmd;
+            after = pipe_aft(total, pipe_cpy);
+            before = pipe_bef(curr_cmd, total, pipe_cpy);
+            last = curr_cmd;
+            curr_cmd = 0;
+        }
         //fork the programm
         int pid = fork();
         //if pid is -1 the fork failed so exit
@@ -534,6 +593,26 @@ bool run(char str[]){
         }
         //if the pid is 0 the current id the current process is the child
         else if(pid == 0){
+
+            //check if there is a pipe coming up, but none behind
+            //if so write to pipe
+            if(before && after && !out){
+                dup2(fd[1], 1);
+                dup2(fd[0], 0);
+            }
+            //if there is a pipe coming up, and one behind
+            //read from pipe and output to pipe
+            else if(before && !after && !out){
+                dup2(fd[0], 0);
+                close(fd[1]);
+            }
+            //if there is a no pipe coming up but one behind
+            //read from pipe output to stdout
+            else if(!before && after && !out){
+                dup2(fd[1], 1);
+                close(fd[0]);
+            }
+
             //call execvp on the first element of argc and the entirety of it
             //if it returns -1 it has failed fo print an error and delete
             //the dynamically allocated memory
@@ -616,7 +695,15 @@ bool run(char str[]){
 	        cmd.clear();
 
             //run the next command if the connector logic and value of sucs allow it
-            if((connector=="&&" && sucs) || (connector=="||" && !sucs) || (connector==";")){
+            if(pip){
+                cout << "yay" << endl;
+                cout << pipe_cpy << endl;
+                for(unsigned int i = 0; i < fuck.size(); i++){
+                    cout << fuck.at(i) << endl;
+                }
+                exit(0);
+            }
+            else if((connector=="&&" && sucs) || (connector=="||" && !sucs) || (connector==";")){
                 if(ogsz >= fromHead){
                     if(pipeLocals.size() > 0){
                         unsigned int k = 0;
