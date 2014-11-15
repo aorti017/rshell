@@ -396,9 +396,18 @@ bool run(char str[]){
                     if(listRed.at(i) == "<"){
                         if(i_ran){
                             //unsigned int place = lastRan(fd_vec, 0);
-                            close(fd_in);
-                            dup2(defout_in, changed_io_in);
-                            close(defout_in);
+                            if(-1 == close(fd_in)){
+                                perror("close");
+                                return true;
+                            }
+                            if(-1 == dup2(defout_in, changed_io_in)){
+                                perror("dup2");
+                                return true;
+                            }
+                            if(-1 == close(defout_in)){
+                                perror("close");
+                                return true;
+                            }
                         }
                         iRed = true;
                         //changed[0] = true;
@@ -406,6 +415,10 @@ bool run(char str[]){
                         changed_io_in = 0;
                         //defout_vec.push_back(dup(0));
                         defout_in = dup(0);
+                        if(defout_in == -1){
+                            perror("dup");
+                            return true;
+                        }
                         string file = getFile(cmd_cpy);
                         cmd_cpy = remPrev(cmd_cpy);
                         if(file != "|"){
@@ -417,8 +430,14 @@ bool run(char str[]){
                             fd_vec.push_back(fd_in);
                             //dup2(fd_vec.at(fd_vec.size()-1), 0);
 
-                            close(0);
-                            dup(fd_in);
+                            if(-1 == close(0)){
+                                perror("close");
+                                return true;
+                            }
+                            if(-1 == dup(fd_in)){
+                                perror("dup");
+                                return true;
+                            }
                             i_ran = true;
                         }
                         else{
@@ -430,9 +449,18 @@ bool run(char str[]){
                     else if(listRed.at(i)  == ">" || listRed.at(i) == ">>"){
                         if(o_ran){
                             //unsigned int place = lastRan(fd_vec, 1);
-                            close(fd_out);
-                            dup2(defout_out, changed_io_out);
-                            close(defout_out);
+                            if(-1 == close(fd_out)){
+                                perror("close");
+                                return true;
+                            }
+                            if(-1 == dup2(defout_out, changed_io_out)){
+                                perror("dup2");
+                                return true;
+                            }
+                            if(-1 == close(defout_out)){
+                                perror("close");
+                                return true;
+                            }
                         }
                         iRed = true;
                         //changed[1] = true;
@@ -440,6 +468,10 @@ bool run(char str[]){
                         changed_io_out = 1;
                         //defout_vec.push_back(dup(1));
                         defout_out = dup(1);
+                        if(defout_out == -1){
+                            perror("dup");
+                            return true;
+                        }
                         string file = getFile(cmd_cpy);
                         cmd_cpy = remPrev(cmd_cpy);
                         int mode = S_IRUSR | S_IWUSR;
@@ -447,18 +479,28 @@ bool run(char str[]){
                             if(listRed.at(i) == ">"){
                                 fd_out = open(file.c_str(), O_WRONLY |
                                     O_TRUNC | O_CREAT, mode);
+                                if(fd_out == -1){
+                                    perror("open");
+                                    exit(0);
+                                }
                             }
                             else{
                                 fd_out = open(file.c_str(), O_WRONLY |
                                     O_APPEND | O_CREAT, mode);
-                            }
-                            if(fd_out == -1){
-                                perror("open");
-                                exit(0);
+                                if(fd_out == -1){
+                                    perror("open");
+                                    exit(0);
+                                }
                             }
                             fd_vec.push_back(fd_out);
-                            close(1);
-                            dup(fd_out);
+                            if(-1 == close(1)){
+                                perror("close");
+                                return true;
+                            }
+                            if(-1 == dup(fd_out)){
+                                perror("dup");
+                                return true;
+                            }
                             o_ran = true;
                         }
                         else{
@@ -517,14 +559,32 @@ bool run(char str[]){
                     close(fd_vec.at(i));
                 }*/
                 if(i_ran){
-                    close(fd_in);
-                    dup2(defout_in, changed_io_in);
-                    close(defout_in);
+                    if(-1 == close(fd_in)){
+                        perror("close");
+                        return true;
+                    }
+                    if(-1 == dup2(defout_in, changed_io_in)){
+                        perror("dup2");
+                        return true;
+                    }
+                    if(-1 == close(defout_in)){
+                        perror("close");
+                        return true;
+                    }
                 }
                 if(o_ran){
-                    close(fd_out);
-                    dup2(defout_out, changed_io_out);
-                    close(defout_out);
+                    if(-1 == close(fd_out)){
+                        perror("close");
+                        return true;
+                    }
+                    if(-1 == dup2(defout_out, changed_io_out)){
+                        perror("dup2");
+                        return true;
+                    }
+                    if(-1 == close(defout_out)){
+                        perror("close");
+                        return true;
+                    }
                 }
                 /*for(unsigned int i = 0; i < defout_vec.size(); i++){
                     dup2(defout_vec.at(i), changed_io.at(i));
