@@ -271,7 +271,7 @@ bool pipe_aft(int total, string x){
         return false;
     }
     for(unsigned int i = 0; i < x.size(); i++){
-        if(x.at(i) == '|'){
+        if(x.at(i) == '|' && i != 0){
             return true;
         }
     }
@@ -419,16 +419,17 @@ bool run(char str[]){
             fromHead += pmt.size()+1;
         }
             //call the parsing function on the command and the cmd vector
-            //to break it up into command and params
-            parse(pch, cmd);
-
             if(sec_run_pipe){
                 pipe_cpy = pch;
                 //char buf[BUFSIZ];
             //read(fd[0], buf, BUFSIZ);
             //cout << buf << endl;
             }
-            //cout << "*****************" << endl;
+
+            //to break it up into command and params
+            parse(pch, cmd);
+
+                        //cout << "*****************" << endl;
             //cout << pipe_cpy << endl;
             //set the size of the dynamic char** that will be passed into execvp
 
@@ -629,7 +630,7 @@ bool run(char str[]){
                 curr_cmd++;
             }
             //cout << "TUM" << endl;
-            cout << pipe_cpy << endl;
+            //cout << pipe_cpy << endl;
             total += curr_cmd;
             after = pipe_aft(total, pipe_cpy);
             before = pipe_bef(curr_cmd, total, pipe_cpy);
@@ -637,12 +638,16 @@ bool run(char str[]){
             curr_cmd = 0;
         }
         int save_in = 0;
-         if(before && !after && !out){
+         int fd_2[2];
+         if(before && !out){
                 save_in = dup(0);
                 //cout << "A" << endl;
                 dup2(fd[0], 0);
                 close(fd[1]);
-            }
+                if(after){
+                    pipe(fd_2);
+                }
+         }
         //fork the programm
         int pid = fork();
         //if pid is -1 the fork failed so exit
@@ -656,8 +661,9 @@ bool run(char str[]){
             //check if there is a pipe coming up, but none behind
             //if so write to pipe
             if(before && after && !out){
-                dup2(fd[1], 1);
-                dup2(fd[0], 0);
+                //cout << "B" << endl;
+                dup2(fd_2[1], 1);
+                close(fd_2[0]);
             }
             //if there is a pipe coming up, and one behind
             //read from pipe and output to pipe
@@ -667,7 +673,7 @@ bool run(char str[]){
             //if there is a no pipe coming up but one behind
             //read from pipe output to stdout
             else if(!before && after && !out){
-                //cout << "B" << endl;
+                //cout << "C" << endl;
                 dup2(fd[1], 1);
                 close(fd[0]);
             }
@@ -691,6 +697,10 @@ bool run(char str[]){
 	        	exit(1);
 	        }
             dup2(save_in, 0);
+            if(before && after && !out){
+                fd[1] = fd_2[1];
+                fd[0] = fd_2[0];
+            }
             if(iRed){
                 /*for(unsigned int i = 0; i < fd_vec.size(); i++){
                     close(fd_vec.at(i));
@@ -754,14 +764,15 @@ bool run(char str[]){
 
             //run the next command if the connector logic and value of sucs allow it
             if(pip){
-                int count = 0;
+                unsigned int count = 0;
                 bool stop = false;
                 string next_cmd;
                 for(unsigned int i = 0; i < fuck.size(); i++){
                     //cout << fuck.at(i) << endl;
                     for(unsigned int k = 0; k < fuck.at(i).size(); k++){
                         next_cmd.push_back(fuck.at(i).at(k));
-                        if(fuck.at(i).at(k) == '|' && !stop){
+                        if(fuck.at(i).at(k) == '|' && !stop
+                            && i!=0){
                             stop = true;
                             break;
                         }
@@ -776,10 +787,16 @@ bool run(char str[]){
                         count++;
                     }
                 }
+                //cout << "VITA INFA" << endl;
+                //cout << count << endl;
+                //cout << next_cmd.size() << endl;
+                if(count >= next_cmd.size()){
+                    return true;
+                }
                 next_cmd = next_cmd.substr(count, next_cmd.size());
                 strcpy(pch, next_cmd.c_str());
-                //cout << pch << endl;
-                if(sec_run_pipe){
+                //cout << "**" << pch << "**" << endl;
+                if(count == 0){
                     return true;
                 }
                 sec_run_pipe = true;
