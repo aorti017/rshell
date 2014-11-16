@@ -310,6 +310,31 @@ bool hasPipe(string x){
     }
     return false;
 }
+
+vector<string> get_next_cmd(vector<string> &v){
+    vector<string> ret;
+    vector<string> ref_ret;
+    bool stop = false;
+    for(unsigned int i = 0; i < v.size(); i++){
+        if(v.at(i) != "|" && !stop){
+            ret.push_back(v.at(i));
+        }
+        else if(!stop && i !=0){
+            ret.push_back(v.at(i));
+            ref_ret.push_back(v.at(i));
+            stop = true;
+        }
+        else if(!stop && i==0){
+            ret.push_back(v.at(i));
+        }
+        else if(stop){
+            ref_ret.push_back(v.at(i));
+        }
+    }
+    v = ref_ret;
+    return ret;
+}
+
 //this function runs the command using fork and execvp
 //and returns once all commands from the entered char[]
 //have been executed
@@ -328,6 +353,26 @@ bool run(char str[]){
     string connector;
     string strz = str;
     string pipe_cpy = str;
+    vector<string> current_command_check;
+    string temp;
+    for(unsigned int i = 0; i < pipe_cpy.size(); i++){
+        //cout << pipe_cpy.at(i) << endl;
+        if(pipe_cpy.at(i) != ' ' && i + 1 < pipe_cpy.size()){
+            temp.push_back(pipe_cpy.at(i));
+        }
+        else if(pipe_cpy.at(i) != ' ' && i+1 >= pipe_cpy.size()){
+            temp.push_back(pipe_cpy.at(i));
+            current_command_check.push_back(temp);
+            //cout << temp << endl;
+            temp = "";
+        }
+        else{
+            current_command_check.push_back(temp);
+            //cout << temp << endl;
+            temp = "";
+        }
+    }
+    //cout << "ENOD" << endl;
     //holds a string version of the passed in char[] for later
     //comparing
     vector<unsigned int> pipeLocals = getPipes(strz);
@@ -405,6 +450,7 @@ bool run(char str[]){
     bool sec_run_pipe = false;
     int fd[2];
     pipe(fd);
+    bool last_out = false;
     //int bu = 0;
     //cout << pch << endl;
     //this while loop is where fork and execvp execute commands
@@ -457,7 +503,20 @@ bool run(char str[]){
             int total = 0;
 
             vector<int> fd_vec;
-            vector<string> listRed = getRed(cmd);
+            vector<string> to_parse = get_next_cmd(current_command_check);
+            //cout << "<====" << endl;
+            //for(unsigned int i = 0; i < to_parse.size(); i++){
+            //    cout << to_parse.at(i) << endl;
+            //}
+            //cout << "=====>" << endl;
+            //for(unsigned int i = 0; i < to_parse.size(); i++){
+            //    cout << to_parse.at(i) << endl;
+            //}
+            //cout << "DONE" << endl;
+            //for(unsigned int i =0 ; i < current_command_check.size(); i++){
+            //    cout << current_command_check.at(i) << endl;
+            //}
+            vector<string> listRed = getRed(to_parse);
             vector<string> cmd_cpy = cmd;
             vector<string> fuck = cmd;
             bool pip = hasPipe(pipe_cpy);
@@ -470,6 +529,7 @@ bool run(char str[]){
             //    cout << cmd.at(i) << endl;
             //}
             //cout << "****end****" << endl;
+
             bool out = false;
             for(unsigned int i = 0; i < listRed.size(); i++){
                 if(listRed.at(i) != "NULL"){
@@ -500,6 +560,7 @@ bool run(char str[]){
                             return true;
                         }
                         string file = getFile(cmd_cpy);
+                        //cout << file << endl;
                         cmd_cpy = remPrev(cmd_cpy);
                         if(file != "|"){
                             fd_in = open(file.c_str(), O_RDONLY);
@@ -590,6 +651,9 @@ bool run(char str[]){
                             return true;
                         }
                     }
+                    else if(listRed.at(i) == "|" && i != 0){
+                        break;
+                    }
                 }
             }
 
@@ -634,12 +698,15 @@ bool run(char str[]){
             total += curr_cmd;
             after = pipe_aft(total, pipe_cpy);
             before = pipe_bef(curr_cmd, total, pipe_cpy);
+            if(last_out){
+                before = false;
+            }
             last = curr_cmd;
             curr_cmd = 0;
         }
         int save_in = 0;
          int fd_2[2];
-         if(before && !out){
+         if(before && !last_out){
                 save_in = dup(0);
                 //cout << "A" << endl;
                 dup2(fd[0], 0);
@@ -677,7 +744,12 @@ bool run(char str[]){
                 dup2(fd[1], 1);
                 close(fd[0]);
             }
-
+            //cout << "<===exec" << endl;
+            //for(unsigned int i = 0; i < cmd.size(); i++){
+            //    cout << cmd.at(i) << " ";
+            //}
+            //cout << "===>" << endl;
+            ////cout << endl;
             //call execvp on the first element of argc and the entirety of it
             //if it returns -1 it has failed fo print an error and delete
             //the dynamically allocated memory
@@ -800,6 +872,12 @@ bool run(char str[]){
                     return true;
                 }
                 sec_run_pipe = true;
+                if(out){
+                    last_out = true;
+                }
+                else{
+                    last_out = false;
+                }
                 continue;
             }
             else if((connector=="&&" && sucs) || (connector=="||" && !sucs) || (connector==";")){
