@@ -143,6 +143,11 @@ vector<unsigned int> getPipes(string &str){
         v.push_back(0);
         return v;
     }
+    if(str.at(str.size()-1) == '|'){
+        cerr << "Invalid pipe placement" << endl;
+        v.push_back(0);
+        return v;
+    }
     for(unsigned int i = 0; i < str.size(); i++){
         if(str.at(i) == '|' && i + 1 < str.size()){
             if(str.at(i+1) != '|' && str.at(i-1) != '|'){
@@ -275,20 +280,6 @@ bool pipe_aft(int total, string x){
             return true;
         }
     }
-    /*int k = 0;
-    for(unsigned int i = 0; i < x.size(); i++){
-        if(x.at(i) != ' '){
-            k++;
-        }
-        if(k == total){
-            if(x.at(i) == '|'){
-                return true;
-            }
-            else{
-                return false;
-            }
-        }
-    }*/
     return false;
 }
 bool pipe_bef(int cmd, int total, string x){
@@ -304,8 +295,17 @@ bool pipe_bef(int cmd, int total, string x){
 
 bool hasPipe(string x){
     for(unsigned int i = 0; i < x.size(); i++){
-        if(x.at(i) == '|'){
-            return true;
+        if(x.at(i) == '|' && i + 1 < x.size()){
+            if(x.at(i+1) != '|'){
+                if(i >= 1){
+                    if(x.at(i-1) != '|'){
+                        return true;
+                    }
+                }
+                else{
+                    return true;
+                }
+            }
         }
     }
     return false;
@@ -449,7 +449,10 @@ bool run(char str[]){
     }
     bool sec_run_pipe = false;
     int fd[2];
-    pipe(fd);
+    if(-1 == pipe(fd)){
+        perror("pipe");
+        exit(0);
+    }
     bool last_out = false;
     //int bu = 0;
     //cout << pch << endl;
@@ -474,10 +477,6 @@ bool run(char str[]){
 
             //to break it up into command and params
             parse(pch, cmd);
-
-                        //cout << "*****************" << endl;
-            //cout << pipe_cpy << endl;
-            //set the size of the dynamic char** that will be passed into execvp
 
             //look here to see if redirection
             //then remove and store file
@@ -707,12 +706,24 @@ bool run(char str[]){
         int save_in = 0;
          int fd_2[2];
          if(before && !last_out){
-                save_in = dup(0);
+                if(-1 == (save_in = dup(0))){
+                    perror("dup");
+                    exit(0);
+                }
                 //cout << "A" << endl;
-                dup2(fd[0], 0);
-                close(fd[1]);
+                if(-1 == dup2(fd[0], 0)){
+                    perror("dup2");
+                    exit(0);
+                }
+                if(-1 == close(fd[1])){
+                    perror("close");
+                    exit(0);
+                }
                 if(after){
-                    pipe(fd_2);
+                    if(-1 == pipe(fd_2)){
+                        perror("pipe");
+                        exit(0);
+                    }
                 }
          }
         //fork the programm
@@ -729,8 +740,14 @@ bool run(char str[]){
             //if so write to pipe
             if(before && after && !out){
                 //cout << "B" << endl;
-                dup2(fd_2[1], 1);
-                close(fd_2[0]);
+                if(-1 == dup2(fd_2[1], 1)){
+                    perror("dup2");
+                    exit(0);
+                }
+                if(-1 == close(fd_2[0])){
+                    perror("close");
+                    exit(0);
+                }
             }
             //if there is a pipe coming up, and one behind
             //read from pipe and output to pipe
@@ -741,8 +758,14 @@ bool run(char str[]){
             //read from pipe output to stdout
             else if(!before && after && !out){
                 //cout << "C" << endl;
-                dup2(fd[1], 1);
-                close(fd[0]);
+                if(-1 == dup2(fd[1], 1)){
+                    perror("dup2");
+                    exit(0);
+                }
+                if(-1 == close(fd[0])){
+                    perror("close");
+                    exit(0);
+                }
             }
             //cout << "<===exec" << endl;
             //for(unsigned int i = 0; i < cmd.size(); i++){
@@ -768,7 +791,10 @@ bool run(char str[]){
                 delete[] argc;
 	        	exit(1);
 	        }
-            dup2(save_in, 0);
+            if(-1 == dup2(save_in, 0)){
+                perror("dup2");
+                exit(0);
+            }
             if(before && after && !out){
                 fd[1] = fd_2[1];
                 fd[0] = fd_2[0];
@@ -934,7 +960,7 @@ string addIOSpaces(string x){
         if(x.at(i) == '<' || x.at(i) == '>' || x.at(i) == '|'){
             if(i+1 < x.size()){
                 ret.push_back(x.at(i));
-                if(x.at(i+1) != '>' && x.at(i+1) != ' '){
+                if(x.at(i+1) != '>' && x.at(i+1) != ' ' && x.at(i+1) != '|'){
                     ret.push_back(spc);
                 }
             }
@@ -959,6 +985,36 @@ string addIOSpaces(string x){
         }
     }
     return ret;
+}
+
+bool io_and_conn(string x){
+    unsigned int pipes = 0;
+    unsigned int conn = 0;
+    for(unsigned int i = 0; i < x.size(); i++){
+        if(x.at(i) == ';' || x.at(i) == '&'){
+            conn++;
+        }
+        else if(x.at(i) == '|' && i + 1 < x.size()){
+            if(x.at(i+1) == '|'){
+                conn++;
+            }
+            else if(i >= 1){
+                if(x.at(i-1) == '|'){
+                    conn++;
+                }
+                else{
+                    pipes++;
+                }
+            }
+        }
+    }
+    if(pipes > 0 && conn > 0){
+        cout << "Piping with connectors is forbidden" << endl;
+        return false;
+    }
+    else{
+        return true;
+    }
 }
 
 //main takes in commands and passes them to run to execute
@@ -1005,7 +1061,7 @@ int main(){
         input = commentRemoval(input);
         input = addIOSpaces(input);
         //check for multiple connectors
-        if(!multiConn(input)){
+        if(!multiConn(input) && io_and_conn(input)){
             //determines the size of the input
             int input_size = input.size()+1;
             //dynamically allocates a char*[] of the size of the input + 1
