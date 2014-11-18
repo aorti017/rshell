@@ -453,7 +453,7 @@ bool run(char str[]){
         perror("pipe");
         exit(0);
     }
-    bool last_out = false;
+    //bool last_out = false;
     //int bu = 0;
     //cout << pch << endl;
     //this while loop is where fork and execvp execute commands
@@ -697,15 +697,15 @@ bool run(char str[]){
             total += curr_cmd;
             after = pipe_aft(total, pipe_cpy);
             before = pipe_bef(curr_cmd, total, pipe_cpy);
-            if(last_out){
+            /*if(last_out){
                 before = false;
-            }
+            }*/
             last = curr_cmd;
             curr_cmd = 0;
         }
         int save_in = 0;
          int fd_2[2];
-         if(before && !last_out){
+         if(before && !i_ran){
                 if(-1 == (save_in = dup(0))){
                     perror("dup");
                     exit(0);
@@ -719,13 +719,14 @@ bool run(char str[]){
                     perror("close");
                     exit(0);
                 }
-                if(after){
-                    if(-1 == pipe(fd_2)){
-                        perror("pipe");
-                        exit(0);
-                    }
-                }
          }
+         if(after){
+            if(-1 == pipe(fd_2)){
+                perror("pipe");
+                exit(0);
+            }
+        }
+
         //fork the programm
         int pid = fork();
         //if pid is -1 the fork failed so exit
@@ -899,10 +900,10 @@ bool run(char str[]){
                 }
                 sec_run_pipe = true;
                 if(out){
-                    last_out = true;
+                    //last_out = true;
                 }
                 else{
-                    last_out = false;
+                    //last_out = false;
                 }
                 continue;
             }
