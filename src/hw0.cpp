@@ -375,7 +375,7 @@ int num_re(string x){
         cout << t << endl;
         temp.append(t);
     }*/
-    if(temp.size() == 1 && temp.at(0) == '>'){
+    if(temp.size() <= 1 ||  temp.at(0) == '>'){
         int ret = -1;
         return ret;
     }
