@@ -182,7 +182,9 @@ vector<string> remRed(vector<string> v){
                 return retVec;
             }
             else if(v.at(i) != "|"){
-                retVec.push_back(v.at(i));
+                if(!isdigit(v.at(i).at(0))){
+                    retVec.push_back(v.at(i));
+                }
             }
         }
         else{
@@ -234,7 +236,9 @@ vector<string> remCmd(vector<string> v){
             push = true;
         }
         if(push){
-            ret.push_back(v.at(i));
+            if(!isdigit(v.at(i).at(0))){
+                ret.push_back(v.at(i));
+            }
         }
     }
     return ret;
@@ -335,6 +339,22 @@ vector<string> get_next_cmd(vector<string> &v){
     return ret;
 }
 
+int num_re(string x){
+    int ret = -1;
+    unsigned int i = 0;
+    while(i < x.size()){
+        if(x.at(i) == '0' || x.at(i) == '1' || x.at(i) == '2'){
+            if(i+1 < x.size() && i+2 < x.size()){
+                if(x.at(i+1) == ' ' && x.at(i+2) == '>'){
+                    return x.at(i) - '0';
+                }
+            }
+        }
+        i++;
+    }
+    return ret;
+}
+
 //this function runs the command using fork and execvp
 //and returns once all commands from the entered char[]
 //have been executed
@@ -353,6 +373,7 @@ bool run(char str[]){
     string connector;
     string strz = str;
     string pipe_cpy = str;
+    string num_pipe_cpy = str;
     vector<string> current_command_check;
     string temp;
     for(unsigned int i = 0; i < pipe_cpy.size(); i++){
@@ -528,7 +549,13 @@ bool run(char str[]){
             //    cout << cmd.at(i) << endl;
             //}
             //cout << "****end****" << endl;
-
+            bool restore_error = false;
+            int save_err = 0;
+            int x = num_re(pipe_cpy);
+            bool custom_out = false;
+            if(x != -1){
+                custom_out = true;
+            }
             bool out = false;
             for(unsigned int i = 0; i < listRed.size(); i++){
                 if(listRed.at(i) != "NULL"){
@@ -587,7 +614,9 @@ bool run(char str[]){
                         }
                     }
                     else if(listRed.at(i)  == ">" || listRed.at(i) == ">>"){
-                        out = true;
+                        if(x != 0){
+                            out = true;
+                        }
                         if(o_ran){
                             //unsigned int place = lastRan(fd_vec, 1);
                             if(-1 == close(fd_out)){
@@ -634,13 +663,23 @@ bool run(char str[]){
                                 }
                             }
                             fd_vec.push_back(fd_out);
-                            if(-1 == close(1)){
-                                perror("close");
-                                return true;
+                            if(x != 0 && x != 2){
+                                if(-1 == close(1)){
+                                    perror("close");
+                                    return true;
+                                }
+                                if(-1 == dup(fd_out)){
+                                    perror("dup");
+                                    return true;
+                                }
                             }
-                            if(-1 == dup(fd_out)){
-                                perror("dup");
-                                return true;
+                            if(custom_out && x != 0){
+                                if(x == 2){
+                                    save_err = dup(x);
+                                    restore_error = true;
+                                }
+                                close(x);
+                                dup(fd_out);
                             }
                             o_ran = true;
                         }
@@ -792,6 +831,12 @@ bool run(char str[]){
                 delete[] argc;
 	        	exit(1);
 	        }
+            if(restore_error){
+                if(-1 == dup2(save_err, 2)){
+                    perror("dup2");
+                    exit(0);
+                }
+            }
             if(-1 == dup2(save_in, 0)){
                 perror("dup2");
                 exit(0);
