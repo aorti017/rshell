@@ -185,6 +185,14 @@ vector<string> remRed(vector<string> v){
                 if(!isdigit(v.at(i).at(0))){
                     retVec.push_back(v.at(i));
                 }
+                else if(isdigit(v.at(i).at(0)) && i+1 >= v.size()){
+                    retVec.push_back(v.at(i));
+                }
+                else if(isdigit(v.at(i).at(0)) && i+1 < v.size()){
+                    if(v.at(i+1) != ">"){
+                        retVec.push_back(v.at(i));
+                    }
+                }
             }
         }
         else{
