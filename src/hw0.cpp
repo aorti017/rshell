@@ -522,7 +522,7 @@ bool run(char str[]){
             int last = 0;
             int total = 0;
 
-            vector<int> fd_vec;
+            //vector<int> fd_vec;
             vector<string> to_parse = get_next_cmd(current_command_check);
             //cout << "<====" << endl;
             //for(unsigned int i = 0; i < to_parse.size(); i++){
@@ -549,8 +549,8 @@ bool run(char str[]){
             //    cout << cmd.at(i) << endl;
             //}
             //cout << "****end****" << endl;
-            bool restore_error = false;
-            int save_err = 0;
+            //bool restore_error = false;
+            //int save_err = 0;
             int x = num_re(pipe_cpy);
             bool custom_out = false;
             if(x != -1){
@@ -562,7 +562,7 @@ bool run(char str[]){
                     if(listRed.at(i) == "<"){
                         if(i_ran){
                             //unsigned int place = lastRan(fd_vec, 0);
-                            if(-1 == close(fd_in)){
+                            /*if(-1 == close(fd_in)){
                                 perror("close");
                                 return true;
                             }
@@ -573,7 +573,7 @@ bool run(char str[]){
                             if(-1 == close(defout_in)){
                                 perror("close");
                                 return true;
-                            }
+                            }*/
                         }
                         iRed = true;
                         //changed[0] = true;
@@ -594,17 +594,17 @@ bool run(char str[]){
                                 perror("open");
                                 return true;
                             }
-                            fd_vec.push_back(fd_in);
+                            //fd_vec.push_back(fd_in);
                             //dup2(fd_vec.at(fd_vec.size()-1), 0);
 
-                            if(-1 == close(0)){
+                            /*if(-1 == close(0)){
                                 perror("close");
                                 return true;
                             }
                             if(-1 == dup(fd_in)){
                                 perror("dup");
                                 return true;
-                            }
+                            }*/
                             i_ran = true;
                         }
                         else{
@@ -619,7 +619,7 @@ bool run(char str[]){
                         }
                         if(o_ran){
                             //unsigned int place = lastRan(fd_vec, 1);
-                            if(-1 == close(fd_out)){
+                            /*if(-1 == close(fd_out)){
                                 perror("close");
                                 return true;
                             }
@@ -630,7 +630,7 @@ bool run(char str[]){
                             if(-1 == close(defout_out)){
                                 perror("close");
                                 return true;
-                            }
+                            }*/
                         }
                         iRed = true;
                         //changed[1] = true;
@@ -662,8 +662,8 @@ bool run(char str[]){
                                     return true;
                                 }
                             }
-                            fd_vec.push_back(fd_out);
-                            if(x != 0 && x != 2){
+                            //fd_vec.push_back(fd_out);
+                            /*if(x != 0 && x != 2){
                                 if(-1 == close(1)){
                                     perror("close");
                                     return true;
@@ -680,7 +680,7 @@ bool run(char str[]){
                                 }
                                 close(x);
                                 dup(fd_out);
-                            }
+                            }*/
                             o_ran = true;
                         }
                         else{
@@ -742,18 +742,18 @@ bool run(char str[]){
             last = curr_cmd;
             curr_cmd = 0;
         }
-        int save_in = 0;
+        //int save_in = 0;
          int fd_2[2];
          if(before && !i_ran){
-                if(-1 == (save_in = dup(0))){
+                /*if(-1 == (save_in = dup(0))){
                     perror("dup");
                     exit(0);
-                }
+                }*/
                 //cout << "A" << endl;
-                if(-1 == dup2(fd[0], 0)){
+                /*if(-1 == dup2(fd[0], 0)){
                     perror("dup2");
                     exit(0);
-                }
+                }*/
                 if(-1 == close(fd[1])){
                     perror("close");
                     exit(0);
@@ -775,9 +775,50 @@ bool run(char str[]){
         }
         //if the pid is 0 the current id the current process is the child
         else if(pid == 0){
-
+            if(i_ran){
+                if(-1 == close(0)){
+                    perror("close");
+                    return true;
+                }
+                if(-1 == dup(fd_in)){
+                    perror("dup");
+                    return true;
+                }
+            }
+            if(o_ran){
+                if(x != 0 && x != 2){
+                    if(-1 == close(1)){
+                        perror("close");
+                        return true;
+                    }
+                    if(-1 == dup(fd_out)){
+                        perror("dup");
+                        return true;
+                    }
+                }
+                if(custom_out && x != 0){
+                   /* if(x == 2){
+                        save_err = dup(x);
+                        restore_error = true;
+                    }*/
+                    if(-1 == close(x)){
+                        perror("close");
+                        return true;
+                    }
+                    if(-1 == dup(fd_out)){
+                        perror("dup");
+                        return true;
+                    }
+                }
+            }
             //check if there is a pipe coming up, but none behind
             //if so write to pipe
+            if(before && !i_ran){
+                if(-1 == dup2(fd[0], 0)){
+                    perror("dup2");
+                    exit(0);
+                }
+            }
             if(before && after && !out){
                 //cout << "B" << endl;
                 if(-1 == dup2(fd_2[1], 1)){
@@ -831,7 +872,7 @@ bool run(char str[]){
                 delete[] argc;
 	        	exit(1);
 	        }
-            if(restore_error){
+            /*if(restore_error){
                 if(-1 == dup2(save_err, 2)){
                     perror("dup2");
                     exit(0);
@@ -840,7 +881,7 @@ bool run(char str[]){
             if(-1 == dup2(save_in, 0)){
                 perror("dup2");
                 exit(0);
-            }
+            }*/
             if(before && after && !out){
                 fd[1] = fd_2[1];
                 fd[0] = fd_2[0];
@@ -1107,7 +1148,7 @@ int main(){
         input = commentRemoval(input);
         input = addIOSpaces(input);
         //check for multiple connectors
-        if(!multiConn(input) && io_and_conn(input)){
+        if(!multiConn(input) && io_and_conn(input) && input.size() > 0){
             //determines the size of the input
             int input_size = input.size()+1;
             //dynamically allocates a char*[] of the size of the input + 1
