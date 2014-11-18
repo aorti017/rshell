@@ -340,18 +340,46 @@ vector<string> get_next_cmd(vector<string> &v){
 }
 
 int num_re(string x){
+    /*int ret_ret = 0;
+    int mult = 1;
     int ret = -1;
-    unsigned int i = 0;
-    while(i < x.size()){
-        if(x.at(i) == '0' || x.at(i) == '1' || x.at(i) == '2'){
-            if(i+1 < x.size() && i+2 < x.size()){
-                if(x.at(i+1) == ' ' && x.at(i+2) == '>'){
-                    return x.at(i) - '0';
-                }
+    unsigned int i = 0;*/
+
+    bool stop = true;
+    vector<string> broken;
+    string temp = "";
+    for(unsigned int i = 0; i < x.size(); i++){
+        if(x.at(i) != ' '){
+            if(temp == "" && isdigit(x.at(i))){
+                stop = false;
             }
+            if(x.at(i) == '>'){
+                stop = true;
+            }
+            temp.push_back(x.at(i));
         }
-        i++;
+        else if(stop){
+            if(temp.at(temp.size()-1) == '>'){
+                break;
+            }
+           /* if(temp.at(temp.size()-1) == '>'){
+            cout << temp << endl;
+                broken.push_back(temp);
+            }*/
+            temp = "";
+        }
     }
+    /*for(unsigned int i = 0; i < broken.size() - 1; i++){
+        string t = broken.at(i);
+        t = t.substr(0, t.size()-2);
+        cout << t << endl;
+        temp.append(t);
+    }*/
+    if(temp.size() == 1 && temp.at(0) == '>'){
+        int ret = -1;
+        return ret;
+    }
+    int ret = atoi(temp.c_str());
     return ret;
 }
 
@@ -778,7 +806,7 @@ bool run(char str[]){
             if(i_ran){
                 if(-1 == close(0)){
                     perror("close");
-                    return true;
+                    exit(0);
                 }
                 if(-1 == dup(fd_in)){
                     perror("dup");
@@ -789,7 +817,7 @@ bool run(char str[]){
                 if(x != 0 && x != 2){
                     if(-1 == close(1)){
                         perror("close");
-                        return true;
+                        exit(0);
                     }
                     if(-1 == dup(fd_out)){
                         perror("dup");
@@ -803,7 +831,7 @@ bool run(char str[]){
                     }*/
                     if(-1 == close(x)){
                         perror("close");
-                        return true;
+                        exit(0);
                     }
                     if(-1 == dup(fd_out)){
                         perror("dup");
@@ -893,7 +921,7 @@ bool run(char str[]){
                 if(i_ran){
                     if(-1 == close(fd_in)){
                         perror("close");
-                        return true;
+                        exit(0);
                     }
                     if(-1 == dup2(defout_in, changed_io_in)){
                         perror("dup2");
@@ -901,13 +929,13 @@ bool run(char str[]){
                     }
                     if(-1 == close(defout_in)){
                         perror("close");
-                        return true;
+                        exit(0);
                     }
                 }
                 if(o_ran){
                     if(-1 == close(fd_out)){
                         perror("close");
-                        return true;
+                        exit(0);
                     }
                     if(-1 == dup2(defout_out, changed_io_out)){
                         perror("dup2");
@@ -915,7 +943,7 @@ bool run(char str[]){
                     }
                     if(-1 == close(defout_out)){
                         perror("close");
-                        return true;
+                        exit(0);
                     }
                 }
                 /*for(unsigned int i = 0; i < defout_vec.size(); i++){
