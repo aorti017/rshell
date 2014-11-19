@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include <iostream>
 #include <iomanip>
 #include <stdio.h>
 #include <ctype.h>
@@ -589,7 +590,7 @@ bool run(char str[]){
             //}
             vector<string> listRed = getRed(to_parse);
             vector<string> cmd_cpy = cmd;
-            vector<string> fuck = cmd;
+            vector<string> iuck = cmd;
             bool pip = hasPipe(pipe_cpy);
             if(listRed.size() > 0){
                 cmd = remRed(cmd);
@@ -613,33 +614,14 @@ bool run(char str[]){
             for(unsigned int i = 0; i < listRed.size(); i++){
                 if(listRed.at(i) != "NULL"){
                     if(listRed.at(i) == "<"){
-                        if(i_ran){
-                            //unsigned int place = lastRan(fd_vec, 0);
-                            /*if(-1 == close(fd_in)){
-                                perror("close");
-                                return true;
-                            }
-                            if(-1 == dup2(defout_in, changed_io_in)){
-                                perror("dup2");
-                                return true;
-                            }
-                            if(-1 == close(defout_in)){
-                                perror("close");
-                                return true;
-                            }*/
-                        }
                         iRed = true;
-                        //changed[0] = true;
-                        //changed_io.push_back(0);
                         changed_io_in = 0;
-                        //defout_vec.push_back(dup(0));
                         defout_in = dup(0);
                         if(defout_in == -1){
                             perror("dup");
                             return true;
                         }
                         string file = getFile(cmd_cpy);
-                        //cout << file << endl;
                         cmd_cpy = remPrev(cmd_cpy);
                         if(file != "|"){
                             fd_in = open(file.c_str(), O_RDONLY);
@@ -647,21 +629,9 @@ bool run(char str[]){
                                 perror("open");
                                 return true;
                             }
-                            //fd_vec.push_back(fd_in);
-                            //dup2(fd_vec.at(fd_vec.size()-1), 0);
-
-                            /*if(-1 == close(0)){
-                                perror("close");
-                                return true;
-                            }
-                            if(-1 == dup(fd_in)){
-                                perror("dup");
-                                return true;
-                            }*/
                             i_ran = true;
                         }
                         else{
-                            //TODO make so it executes next command
                             cout << "No input given" << endl;
                             return true;
                         }
@@ -670,26 +640,8 @@ bool run(char str[]){
                         if(x != 0){
                             out = true;
                         }
-                        if(o_ran){
-                            //unsigned int place = lastRan(fd_vec, 1);
-                            /*if(-1 == close(fd_out)){
-                                perror("close");
-                                return true;
-                            }
-                            if(-1 == dup2(defout_out, changed_io_out)){
-                                perror("dup2");
-                                return true;
-                            }
-                            if(-1 == close(defout_out)){
-                                perror("close");
-                                return true;
-                            }*/
-                        }
                         iRed = true;
-                        //changed[1] = true;
-                        //changed_io.push_back(1);
                         changed_io_out = 1;
-                        //defout_vec.push_back(dup(1));
                         defout_out = dup(1);
                         if(defout_out == -1){
                             perror("dup");
@@ -697,7 +649,7 @@ bool run(char str[]){
                         }
                         string file = getFile(cmd_cpy);
                         cmd_cpy = remPrev(cmd_cpy);
-                        int mode = S_IRUSR | S_IWUSR;
+                        int mode = 0666;
                         if(file != "|"){
                             if(listRed.at(i) == ">"){
                                 fd_out = open(file.c_str(), O_WRONLY |
@@ -715,30 +667,10 @@ bool run(char str[]){
                                     return true;
                                 }
                             }
-                            //fd_vec.push_back(fd_out);
-                            /*if(x != 0 && x != 2){
-                                if(-1 == close(1)){
-                                    perror("close");
-                                    return true;
-                                }
-                                if(-1 == dup(fd_out)){
-                                    perror("dup");
-                                    return true;
-                                }
-                            }
-                            if(custom_out && x != 0){
-                                if(x == 2){
-                                    save_err = dup(x);
-                                    restore_error = true;
-                                }
-                                close(x);
-                                dup(fd_out);
-                            }*/
                             o_ran = true;
                         }
 
                         else{
-                            //TODO make so it executes next command
                             cout << "No output file given" << endl;
                             return true;
                         }
@@ -763,11 +695,6 @@ bool run(char str[]){
 
 
             int cmd_size = cmd.size();
-            /*cout << "******" << endl;
-            for(unsigned int i = 0; i < cmd.size(); i++){
-                cout << cmd.at(i) << endl;
-            }
-            cout << "******" << endl;*/
             char** argc = new char*[cmd_size + 1];
             //for each string in cmd copy it into argc, which will be passed
             //into execvp
@@ -782,10 +709,9 @@ bool run(char str[]){
             if(pip){
             bool stop = false;
             curr_cmd = 0;
-            for(unsigned int i = last; i < fuck.size(); i++){
-                //cout << fuck.at(i) << endl;
-                for(unsigned int k = 0; k < fuck.at(i).size(); k++){
-                    if(fuck.at(i) == "|"){
+            for(unsigned int i = last; i < iuck.size(); i++){
+                for(unsigned int k = 0; k < iuck.at(i).size(); k++){
+                    if(iuck.at(i) == "|"){
                         stop = true;
                         break;
                     }
@@ -796,29 +722,14 @@ bool run(char str[]){
                 }
                 curr_cmd++;
             }
-            //cout << "TUM" << endl;
-            //cout << pipe_cpy << endl;
             total += curr_cmd;
             after = pipe_aft(total, pipe_cpy);
             before = pipe_bef(curr_cmd, total, pipe_cpy);
-            /*if(last_out){
-                before = false;
-            }*/
             last = curr_cmd;
             curr_cmd = 0;
         }
-        //int save_in = 0;
          int fd_2[2];
          if(before && !i_ran){
-                /*if(-1 == (save_in = dup(0))){
-                    perror("dup");
-                    exit(0);
-                }*/
-                //cout << "A" << endl;
-                /*if(-1 == dup2(fd[0], 0)){
-                    perror("dup2");
-                    exit(0);
-                }*/
                 if(-1 == close(fd[1])){
                     perror("close");
                     exit(0);
@@ -862,10 +773,6 @@ bool run(char str[]){
                     }
                 }
                 if(custom_out && x != 0){
-                   /* if(x == 2){
-                        save_err = dup(x);
-                        restore_error = true;
-                    }*/
                     if(-1 == close(x)){
                         perror("close");
                         exit(0);
@@ -885,7 +792,6 @@ bool run(char str[]){
                 }
             }
             if(before && after && !out){
-                //cout << "B" << endl;
                 if(-1 == dup2(fd_2[1], 1)){
                     perror("dup2");
                     exit(0);
@@ -897,13 +803,7 @@ bool run(char str[]){
             }
             //if there is a pipe coming up, and one behind
             //read from pipe and output to pipe
-
-
-
-            //if there is a no pipe coming up but one behind
-            //read from pipe output to stdout
             else if(!before && after && !out){
-                //cout << "C" << endl;
                 if(-1 == dup2(fd[1], 1)){
                     perror("dup2");
                     exit(0);
@@ -913,26 +813,33 @@ bool run(char str[]){
                     exit(0);
                 }
             }
-            //cout << "<===exec" << endl;
-            //for(unsigned int i = 0; i < cmd.size(); i++){
-            //    cout << cmd.at(i) << " ";
-            //}
-            //cout << "===>" << endl;
-            ////cout << endl;
-            //call execvp on the first element of argc and the entirety of it
-            //if it returns -1 it has failed fo print an error and delete
-            //the dynamically allocated memory
             if(trip){
-                cout << trip_str << endl;
-                exit(0);
+                char* buf = new char[BUFSIZ];
+                strcpy(buf, trip_str.c_str());
+                int fd_3[2];
+                if(-1 == pipe(fd_3)){
+                    perror("pipe");
+                    exit(0);
+                }
+                if(-1 == write(fd_3[1], buf, trip_str.size()+1)){
+                    perror("write");
+                    exit(0);
+                }
+                if(-1 == close(fd_3[1])){
+                    perror("close");
+                    exit(0);
+                }
+                if(-1 == dup2(fd_3[0], 0)){
+                    perror("dup2");
+                    exit(0);
+                }
+                delete[] buf;
             }
             if(-1 ==  execvp(argc[0], argc)){
                     perror("execvp");
                     exit(1);
             }
-            //cout << "A" << endl;
         }
-        //otherwise it is the parrent process
         else{
             //wait for any process to exit, in this case I only created on,
             //and store its exit code in status
@@ -941,24 +848,11 @@ bool run(char str[]){
                 delete[] argc;
 	        	exit(1);
 	        }
-            /*if(restore_error){
-                if(-1 == dup2(save_err, 2)){
-                    perror("dup2");
-                    exit(0);
-                }
-            }
-            if(-1 == dup2(save_in, 0)){
-                perror("dup2");
-                exit(0);
-            }*/
             if(before && after && !out){
                 fd[1] = fd_2[1];
                 fd[0] = fd_2[0];
             }
             if(iRed){
-                /*for(unsigned int i = 0; i < fd_vec.size(); i++){
-                    close(fd_vec.at(i));
-                }*/
                 if(i_ran){
                     if(-1 == close(fd_in)){
                         perror("close");
@@ -987,17 +881,6 @@ bool run(char str[]){
                         exit(0);
                     }
                 }
-                /*for(unsigned int i = 0; i < defout_vec.size(); i++){
-                    dup2(defout_vec.at(i), changed_io.at(i));
-                    close(defout_vec.at(i));
-                }*/
-
-
-
-                //for(unsigned int i = 0; i < fd_vec.size(); i++){
-                //    close(fd_vec.at(i));
-                //}
-                //close(defout);
             }
             for(unsigned int i = 0; i <= cmd.size(); i++){
                 delete[] argc[i];
@@ -1021,11 +904,10 @@ bool run(char str[]){
                 unsigned int count = 0;
                 bool stop = false;
                 string next_cmd;
-                for(unsigned int i = 0; i < fuck.size(); i++){
-                    //cout << fuck.at(i) << endl;
-                    for(unsigned int k = 0; k < fuck.at(i).size(); k++){
-                        next_cmd.push_back(fuck.at(i).at(k));
-                        if(fuck.at(i).at(k) == '|' && !stop
+                for(unsigned int i = 0; i < iuck.size(); i++){
+                    for(unsigned int k = 0; k < iuck.at(i).size(); k++){
+                        next_cmd.push_back(iuck.at(i).at(k));
+                        if(iuck.at(i).at(k) == '|' && !stop
                             && i!=0){
                             stop = true;
                             break;
@@ -1034,32 +916,22 @@ bool run(char str[]){
                             count++;
                         }
                     }
-                    if(i+1 < fuck.size()){
+                    if(i+1 < iuck.size()){
                         next_cmd.push_back(' ');
                     }
                     if(!stop){
                         count++;
                     }
                 }
-                //cout << "VITA INFA" << endl;
-                //cout << count << endl;
-                //cout << next_cmd.size() << endl;
                 if(count >= next_cmd.size()){
                     return true;
                 }
                 next_cmd = next_cmd.substr(count, next_cmd.size());
                 strcpy(pch, next_cmd.c_str());
-                //cout << "**" << pch << "**" << endl;
                 if(count == 0){
                     return true;
                 }
                 sec_run_pipe = true;
-                if(out){
-                    //last_out = true;
-                }
-                else{
-                    //last_out = false;
-                }
                 continue;
             }
             else if((connector=="&&" && sucs) || (connector=="||" && !sucs) || (connector==";")){
