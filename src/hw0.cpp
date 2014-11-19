@@ -804,12 +804,10 @@ bool run(char str[]){
             //if there is a pipe coming up, and one behind
             //read from pipe and output to pipe
             else if(!before && after && !out){
-                cout << "A" << endl;
                 if(-1 == dup2(fd[1], 1)){
                     perror("dup2");
                     exit(0);
                 }
-                cout << "B" << endl;
                 if(-1 == close(fd[0])){
                     perror("close");
                     exit(0);
