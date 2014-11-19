@@ -35,14 +35,25 @@ Using RShell
 * ```-l``` displays all of the information associated with a file.
 * ```-R``` recursively outputs the contents of all the directories in the starting directory.
 * When using the ```bin/ls``` command directories are displayed in blue, executables in green, and hidden files with a grey background.
-
+* Input and output can be redirected using ```<```, ```>```, and ```>>```.
+* Multiple consecutive instances of ```<``` will only input the last file.
+* Multiple consecutive instances of ```>``` or ```>>``` will clear all files the output to the last one.
+* Strings can be passed to commands via redirection using ```<<<```.
+* Filed descriptors can be specified before the output operator ```>```, such as ```1>```. When doing this there must be a space
+  between the command and the file descriptor. 
+* Commands and redirections can be piped using ```|```.
+* Commands beginning with the ```|```, or any other redirector, character will result in an error.
 
 Bugs/Limitations
 ---------
 * Does not support the functionality of quotation marks with commands like ```echo```.
-* Does not support input redirection.
 * Using connectors as part of or the parameter for a command may cause the command to not execute properly, if at all.
-* When using ```&&``` connectors if any extra (more than 1) of these connectors are inserted in between any two commands, or in the front of the command line, and any of the said extra connectors are seperated by a space any command after the excess connectors will not execute.
-* ```&``` and ```|``` are interpreted as ```&&``` and ```||```, respectively.
+* When using ```&&``` connectors if any extra (more than 1) of these connectors are inserted in between any two commands, or in the front of the command line, and any of the said extra connectors are separated by a space any command after the excess connectors will not execute.
+* ```&``` is interpreted as ```&&```. 
 * ```bin/ls``` can not be used with regular expressions.
 * When passing a hidden file to ```bin/ls``` the background is not colored grey.
+* When running ```cat``` with string redirection, the string is output with no new line. 
+* If using a custom file descriptor and the file descriptor is bad nothing will be output to either file or stdout.
+* If the file ```file``` has contents and the command ```cat<file>>file``` is executed an infinite loop will occur. 
+* Can not link together piping operations using connectors.
+* ```2>``` and ```2>>``` can not combined with pipes.

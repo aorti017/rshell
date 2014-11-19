@@ -1,0 +1,249 @@
+Script started on Tue 18 Nov 2014 10:17:51 PM PST
+~
+aorti017@hammer $ cs100
+[0;91m
+===============================================================================
+|                                                                             |
+| You have enabled settings specific for cs100.                               |
+|                                                                             |
+===============================================================================
+[0m
+[s%%%%%%%%%%[u[0;32maorti017[0;36m@[0;32mcs100[0;36m:[0;32m~[0;95m [0;36m$[0m cd rshell
+[s%%%%%%%%%%[u[0;32maorti017[0;36m@[0;32mcs100[0;36m:[0;32m~/rshell[0;95m (redirect) [0;36m$[0m bin/rshell
+aorti017@hammer.cs.ucr.edu$ #testing intput an       put and output redirection
+aorti017@hammer.cs.ucr.edu$ ls > file
+aorti017@hammer.cs.ucr.edu$ cat < file
+bin
+file
+LICENSE
+Makefile
+README.md
+src
+tests
+aorti017@hammer.cs.ucr.edu$ ls >>      >> fil      s  >> il  file
+aorti017@hammer.cs.ucr.edu$ cat <  file
+bin
+file
+LICENSE
+Makefile
+README.md
+src
+tests
+bin
+file
+LICENSE
+Makefile
+README.md
+src
+tests
+aorti017@hammer.cs.ucr.edu$ ^[[A    cat<filee    >file2
+aorti017@hammer.cs.ucr.edu$ cat < file2
+bin
+file
+LICENSE
+Makefile
+README.md
+src
+tests
+bin
+file
+LICENSE
+Makefile
+README.md
+src
+tests
+aorti017@hammer.cs.ucr.edu$ cat< file>> file2
+aorti017@hammer.cs.ucr.edu$ cat< file2
+bin
+file
+LICENSE
+Makefile
+README.md
+src
+tests
+bin
+file
+LICENSE
+Makefile
+README.md
+src
+tests
+bin
+file
+LICENSE
+Makefile
+README.md
+src
+tests
+bin
+file
+LICENSE
+Makefile
+README.md
+src
+tests
+aorti017@hammer.cs.ucr.edu$ #testing piping
+aorti017@hammer.cs.ucr.edu$ ls | grep bin
+bin
+aorti017@hammer.cs.ucr.edu$ ls | grep E|grep R
+README.md
+aorti017@hammer.cs.ucr.edu$ ls  |grep e|grep i| grep f
+file
+file2
+Makefile
+aorti017@hammer.cs.ucr.edu$ ls|grep thiswontappear
+aorti017@hammer.cs.ucr.edu$ #te   #testing piping with mixed IO r    /O  I/O redirection
+aorti017@hammer.cs.ucr.edu$ cat<Makefile | grep     grep all
+all:
+	g++ -Wall -Werror -pedantic -ansi src/hw0.cpp -o bin/rshell
+	g++ -Wall -Werror -ansi -pedantic src/cp.cpp -o bin/cp
+	g++ -Wall -Werror -ansi -pedantic -std=c++0x src/ls.cpp -o bin/ls
+	g++ -Wall -Werror -ansi -pedantic src/hw0.cpp -o bin/rshell
+	g++ -Wall -Werror -ansi -pedantic src/cp.cpp -o bin/cp
+	g++ -Wall -Werror -ansi -pedantic -std=c++11 src/ls.cpp -o bin/ls
+aorti017@hammer.cs.ucr.edu$ cat<Makefile |cat<README.md| cat < LICENSE |grep binary | grep above
+2. Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following
+aorti017@hammer.cs.ucr.edu$ cat<Makefile | grep bin | cat < README.md | grep cp | cat <LICENSE } | grep above | ls } | grep src
+src
+aorti017@hammer.cs.ucr.edu$ ps > file | grep rshell
+aorti017@hammer.cs.ucr.edu$ ls>file | grep src
+aorti017@hammer.cs.ucr.edu$ ls > file | grep bin | ls  ps > file | grep bin
+aorti017@hammer.cs.ucr.edu$ ls>file | cat <                 ls -a > newfile | cat < newfile
+.
+..
+bin
+file
+file2
+.git
+LICENSE
+Makefile
+newfile
+README.md
+src
+tests
+aorti017@hammer.cs.ucr.edu$ ls -a  > newfile | cat < new fil    file | ps > newfile
+aorti017@hammer.cs.ucr.edu$ ls | cat<file>newfile | grep bin | ps | grep rshell | cat < file |        README.md | grep cp
+* The ```cp``` command can be used to copy  the contents of a source file into a destination file.
+* ```cp``` can be used with the ```-a``` flag, which will copy using all methods. If no flag is specified it will be copied
+* ```cp``` will output an error if the destination file already exists, or if either the source or destination are directories.
+aorti017@hammer.cs.ucr.edu$ echo > thi     this is a test file > test
+aorti017@hammer.cs.ucr.edu$ cat < test
+this is a test file
+aorti017@hammer.cs.ucr.edu$ cat < test | tr a-z A-Z > newtest
+aorti017@hammer.cs.ucr.edu$ cat < newtest
+THIS IS A TEST FILE
+aorti017@hammer.cs.ucr.edu$ echo this is a new test file > file
+aorti017@hammer.cs.ucr.edu$ cat < file | ^[[B^[[B^[[A^[[A                             echo ThIs Is A nE =w   w TeSt FiLe > file
+aorti017@hammer.cs.ucr.edu$ cat < file | tr A-Z az-  -z |t  tee newoutput      o OutputFile | tr a-z A-Z > newOutputFile2
+aorti017@hammer.cs.ucr.edu$ cat < file
+ThIs Is A nEw TeSt FiLe
+aorti017@hammer.cs.ucr.edu$ cat < newout   OutPutFile
+open: No such file or directory
+aorti017@hammer.cs.ucr.edu$ cat < newOutPu=   putFIle
+open: No such file or directory
+aorti017@hammer.cs.ucr.edu$ ^[[A    cat < newOutPu  putFile
+this is a new test file
+aorti017@hammer.cs.ucr.edu$ cat < newOutP putFile2
+THIS IS A NEW TEST FILE
+aorti017@hammer.cs.ucr.edu$ #testing custom file descriptors
+aorti017@hammer.cs.ucr.edu$ ls 0> temp
+bin   file2    Makefile  newOutputFile	 newtest    src   test
+file  LICENSE  newfile	 newOutputFile2  README.md  temp  tests
+aorti017@hammer.cs.ucr.edu$ cat < temp
+aorti017@hammer.cs.ucr.edu$ ls 1> temp
+aorti017@hammer.cs.ucr.edu$ cat < temp
+bin
+file
+file2
+LICENSE
+Makefile
+newfile
+newOutputFile
+newOutputFile2
+newtest
+README.md
+src
+temp
+test
+tests
+aorti017@hammer.cs.ucr.edu$ ls 0 2> temp
+bin   file2    Makefile  newOutputFile	 newtest    src   test
+file  LICENSE  newfile	 newOutputFile2  README.md  temp  tests
+aorti017@hammer.cs.ucr.edu$ cat < temp
+aorti017@hammer.cs.ucr.edu$ ls notafile 2> temp
+aorti017@hammer.cs.ucr.edu$ cat < temp
+ls: cannot access notafile: No such file or directory
+aorti017@hammer.cs.ucr.edu$ echo t e beginning of file > temp
+aorti017@hammer.cs.ucr.edu$ ls 0> file
+bin   file2    Makefile  newOutputFile	 newtest    src   test
+file  LICENSE  newfile	 newOutputFile2  README.md  temp  tests
+aorti017@hammer.cs.ucr.edu$ cat < file
+aorti017@hammer.cs.ucr.edu$ ls 0> temp
+bin   file2    Makefile  newOutputFile	 newtest    src   test
+file  LICENSE  newfile	 newOutputFile2  README.md  temp  tests
+aorti017@hammer.cs.ucr.edu$ cat < temp
+aorti017@hammer.cs.ucr.edu$ echo this is the beginning of the file > temp
+aorti017@hammer.cs.ucr.edu$ c ls 0>> tmep
+bin   file2    Makefile  newOutputFile	 newtest    src   test	 tmep
+file  LICENSE  newfile	 newOutputFile2  README.md  temp  tests
+aorti017@hammer.cs.ucr.edu$ ls 0>> temp
+bin   file2    Makefile  newOutputFile	 newtest    src   test	 tmep
+file  LICENSE  newfile	 newOutputFile2  README.md  temp  tests
+aorti017@hammer.cs.ucr.edu$ cat < temp
+this is the beginning of the file
+aorti017@hammer.cs.ucr.edu$ ls 1> temp     > temp
+aorti017@hammer.cs.ucr.edu$ cat < temp
+this is the beginning of the file
+bin
+file
+file2
+LICENSE
+Makefile
+newfile
+newOutputFile
+newOutputFile2
+newtest
+README.md
+src
+temp
+test
+tests
+tmep
+aorti017@hammer.cs.ucr.edu$ ls not  afile 2> te   > temp
+aorti017@hammer.cs.ucr.edu$ cat < temp
+this is the beginning of the file
+bin
+file
+file2
+LICENSE
+Makefile
+newfile
+newOutputFile
+newOutputFile2
+newtest
+README.md
+src
+temp
+test
+tests
+tmep
+ls: cannot access notafile: No such file or directory
+aorti017@hammer.cs.ucr.edu$ #testing red     string input redirecti                               ls 0> temp | grep bin
+bin
+aorti017@hammer.cs.ucr.edu$ ls 1> file | grep bin
+aorti017@hammer.cs.ucr.edu$ ls 2> file | grep bin
+bin   file2    Makefile  newOutputFile	 newtest    src   test	 tmep
+file  LICENSE  newfile	 newOutputFile2  README.md  temp  tests
+aorti017@hammer.cs.ucr.edu$ #testig   ting string input redirection
+aorti017@hammer.cs.ucr.edu$ cat   wc<<<"ls  this is a string!"
+      0       4      18
+aorti017@hammer.cs.ucr.edu$ c wc<<<"this is a string!" | grep this
+aorti017@hammer.cs.ucr.edu$ #this concludes testing
+aorti017@hammer.cs.ucr.edu$ exit
+[s%%%%%%%%%%[u[0;32maorti017[0;36m@[0;32mcs100[0;36m:[0;32m~/rshell[0;95m (redirect) [0;36m$[0m exit
+exit
+~
+aorti017@hammer $ exit
+exit
+
+Script done on Tue 18 Nov 2014 10:43:16 PM PST

@@ -190,7 +190,7 @@ vector<string> remRed(vector<string> v){
                     retVec.push_back(v.at(i));
                 }
                 else if(isdigit(v.at(i).at(0)) && i+1 < v.size()){
-                    if(v.at(i+1) != ">"){
+                    if(v.at(i+1) != ">" && v.at(i+1) != ">>"){
                         retVec.push_back(v.at(i));
                     }
                 }
