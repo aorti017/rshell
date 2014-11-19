@@ -734,9 +734,6 @@ bool run(char str[]){
                     perror("close");
                     exit(0);
                 }
-                if(out){
-                    close(fd[0]);
-                }
          }
          if(after){
             if(-1 == pipe(fd_2)){
@@ -807,10 +804,12 @@ bool run(char str[]){
             //if there is a pipe coming up, and one behind
             //read from pipe and output to pipe
             else if(!before && after && !out){
+                cout << "A" << endl;
                 if(-1 == dup2(fd[1], 1)){
                     perror("dup2");
                     exit(0);
                 }
+                cout << "B" << endl;
                 if(-1 == close(fd[0])){
                     perror("close");
                     exit(0);
@@ -851,7 +850,7 @@ bool run(char str[]){
                 delete[] argc;
 	        	exit(1);
 	        }
-            if(before && after && !out){
+            if(before && after){
                 fd[1] = fd_2[1];
                 fd[0] = fd_2[0];
             }
