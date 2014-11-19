@@ -37,7 +37,7 @@ Using RShell
 * When using the ```bin/ls``` command directories are displayed in blue, executables in green, and hidden files with a grey background.
 * Input and output can be redirected using ```<```, ```>```, and ```>>```.
 * Multiple consecutive instances of ```<``` will only input the last file.
-* Multiple consecutive instances of ```>``` or ```>>``` will clear all files the output to the last one.
+* Multiple consecutive instances of ```>``` or ```>>``` will clear all files then output to the last one.
 * Strings can be passed to commands via redirection using ```<<<```.
 * Filed descriptors can be specified before the output operator ```>```, such as ```1>```. When doing this there must be a space
   between the command and the file descriptor. 
