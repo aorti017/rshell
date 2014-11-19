@@ -167,7 +167,7 @@ vector<unsigned int> getPipes(string &str){
 
 string is_iore(vector<string> cmd){
     for(unsigned int i = 0; i < cmd.size(); i++){
-        if(cmd.at(i) == "<" || cmd.at(i) == ">>" || cmd.at(i) == ">"){
+        if(cmd.at(i) == "<" || cmd.at(i) == ">>" || cmd.at(i) == ">" || cmd.at(i) == "<<<"){
             return cmd.at(i);
         }
     }
@@ -177,7 +177,7 @@ string is_iore(vector<string> cmd){
 vector<string> remRed(vector<string> v){
     vector<string> retVec;
     for(unsigned i = 0; i < v.size(); i++){
-        if(v.at(i) != "<" && v.at(i) != ">" && v.at(i) != ">>"){
+        if(v.at(i) != "<" && v.at(i) != ">" && v.at(i) != ">>" && v.at(i) != "<<<"){
             if(v.at(i) == "|" && i != 0){
                 return retVec;
             }
@@ -205,12 +205,12 @@ vector<string> remRed(vector<string> v){
 
 string getFile(vector<string> v){
     for(unsigned int i = 0; i < v.size(); i++){
-        if((v.at(i) == "<" || v.at(i) == ">" || v.at(i) == ">>")
-            && i+1 < v.size()){
+        if((v.at(i) == "<" || v.at(i) == ">" || v.at(i) == ">>"  || v.at(i) == "<<<")
+            && (i+1 < v.size())){
             return v.at(i+1);
         }
         else if((v.at(i) == "<" || v.at(i) == ">" ||
-            v.at(i) == ">>") && i+1 >= v.size()){
+            v.at(i) == ">>" || v.at(i) == "<<<") && (i+1 >= v.size())){
             return "|";
         }
     }
@@ -226,7 +226,7 @@ vector<string> getRed(vector<string> v){
         else if(v.at(i) == ">"){
             ret.push_back(v.at(i));
         }
-        else if(v.at(i) == ">>"){
+        else if(v.at(i) == ">>" || v.at(i) == "<<<"){
             ret.push_back(v.at(i));
         }
         else if(v.at(i) == "|"){
@@ -239,13 +239,28 @@ vector<string> getRed(vector<string> v){
 vector<string> remCmd(vector<string> v){
     vector<string> ret;
     bool push = false;
+    string temp = "";
+    bool quo = false;
     for(unsigned int i = 0; i < v.size(); i++){
-        if(v.at(i) == "<" || v.at(i) == ">" || v.at(i) == ">>" || v.at(i) == "|"){
+        if(v.at(i) == "<" || v.at(i) == ">" || v.at(i) == ">>" || v.at(i) == "|" || v.at(i) == "<<<"){
             push = true;
         }
-        if(push){
-            if(!isdigit(v.at(i).at(0))){
+        if(push || quo){
+            if(quo){
+                temp.append(" ");
+                temp.append(v.at(i));
+            }
+            if(v.at(i).at(0) == '"'){
+                quo = true;
+                temp.append(v.at(i));
+            }
+            if(!isdigit(v.at(i).at(0)) && !quo){
                 ret.push_back(v.at(i));
+            }
+            if(v.at(i).at(v.at(i).size()-1) == '"'){
+                quo = false;
+                ret.push_back(temp);
+                temp = "";
             }
         }
     }
@@ -257,7 +272,7 @@ vector<string> remPrev(vector<string> v){
     bool add = false;
     vector<string> ret;
     for(unsigned int i = 0; i < v.size(); i++){
-        if(v.at(i) == "<" || v.at(i) == ">" || v.at(i) == ">>"){
+        if(v.at(i) == "<" || v.at(i) == ">" || v.at(i) == ">>" || v.at(i) == "<<<"){
             if(first){
                 add = false;
                 first = false;
@@ -367,7 +382,7 @@ int num_re(string x){
             temp.push_back(x.at(i));
         }
         else if(stop){
-            if(temp.at(temp.size()-1) == '>'){
+            if( temp.size() > 0 && temp.at(temp.size()-1) == '>'){
                 break;
             }
            /* if(temp.at(temp.size()-1) == '>'){
@@ -593,6 +608,8 @@ bool run(char str[]){
                 custom_out = true;
             }
             bool out = false;
+            bool trip = false;
+            string trip_str = "";
             for(unsigned int i = 0; i < listRed.size(); i++){
                 if(listRed.at(i) != "NULL"){
                     if(listRed.at(i) == "<"){
@@ -719,11 +736,23 @@ bool run(char str[]){
                             }*/
                             o_ran = true;
                         }
+
                         else{
                             //TODO make so it executes next command
                             cout << "No output file given" << endl;
                             return true;
                         }
+                    }
+                    else if(listRed.at(i) == "<<<"){
+                        trip = true;
+                        string file = getFile(cmd_cpy);
+                        if(file.size() > 2){
+                            file = file.substr(1, file.size()-2);
+                        }
+                        else{
+                            file = "";
+                        }
+                        trip_str = file;
                     }
                     else if(listRed.at(i) == "|" && i != 0){
                         break;
@@ -893,6 +922,10 @@ bool run(char str[]){
             //call execvp on the first element of argc and the entirety of it
             //if it returns -1 it has failed fo print an error and delete
             //the dynamically allocated memory
+            if(trip){
+                cout << trip_str << endl;
+                exit(0);
+            }
             if(-1 ==  execvp(argc[0], argc)){
                     perror("execvp");
                     exit(1);
@@ -1078,13 +1111,36 @@ bool run(char str[]){
 string addIOSpaces(string x){
     string ret;
     char spc = ' ';
+    bool quo = false;
+    unsigned int po = 0;
     for(unsigned int i = 0; i < x.size(); i++){
         if(x.at(i) != ' '){
+            if(x.at(i) == '"' && !quo){
+                ret.push_back(spc);
+                quo = true;
+                po = i;
+            }
+            if(quo){
+                ret.push_back(x.at(i));
+                if(x.at(i) == '"' && i != po){
+                    quo = false;
+                    po = i;
+                    ret.push_back(spc);
+                }
+                continue;
+            }
         if(x.at(i) == '<' || x.at(i) == '>' || x.at(i) == '|'){
             if(i+1 < x.size()){
                 ret.push_back(x.at(i));
-                if(x.at(i+1) != '>' && x.at(i+1) != ' ' && x.at(i+1) != '|'){
+                if(x.at(i+1) != '>' && x.at(i+1) != ' ' && x.at(i+1) != '|' && x.at(i+1) != '<'){
                     ret.push_back(spc);
+                }
+                if(x.at(i) == '<'){
+                    if(i >= 2){
+                        if(x.at(i-2) == '<' && x.at(i-1) == '<'){
+                            ret.push_back(spc);
+                        }
+                    }
                 }
             }
             else{
