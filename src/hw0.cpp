@@ -734,6 +734,9 @@ bool run(char str[]){
                     perror("close");
                     exit(0);
                 }
+                if(out){
+                    close(fd[0]);
+                }
          }
          if(after){
             if(-1 == pipe(fd_2)){
