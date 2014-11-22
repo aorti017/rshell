@@ -1,4 +1,5 @@
 #include <iostream>
+#include <signal.h>
 #include <string>
 #include <iostream>
 #include <iomanip>
@@ -12,6 +13,19 @@
 #include <stdlib.h>
 #include <sys/wait.h>
 using namespace std;
+
+static void handler(int signum){
+    if(signum == SIGINT){
+        int pid = getpid();
+        if(-1 == pid){
+            perror("getpid");
+            exit(0);
+        }
+        if(pid == 0){
+            exit(0);
+        }
+    }
+}
 
 //parses the entered command putting each string seperated
 //by spaces into a vector passed in by reference
@@ -1070,6 +1084,7 @@ bool io_and_conn(string x){
 
 //main takes in commands and passes them to run to execute
 int main(){
+    signal(SIGINT, handler);
     bool cont = true;
     //continue until terminated by a conditional branch within run
     while(cont){
