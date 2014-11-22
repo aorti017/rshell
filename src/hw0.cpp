@@ -1110,14 +1110,16 @@ int main(){
             perror("gethostname");
         }
 
+        char buf[BUFSIZ];
+        getcwd(buf, BUFSIZ);
         //if both login and gethostname rerurned without error
         //cout the login@host
         if(login != NULL && hostFlag != -1){
-            cout << login << "@" << host << "$ ";
+            cout << login << "@" << host  << ":" << buf << "$ ";
         }
         //otherwise cout vanilla prompt
         else{
-            cout << "$ ";
+            cout << buf << "$ ";
         }
 
         //retrieve user input including spaces
