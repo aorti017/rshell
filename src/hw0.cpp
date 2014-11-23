@@ -12,6 +12,7 @@
 #include <sys/types.h>
 #include <stdlib.h>
 #include <sys/wait.h>
+#include <sys/stat.h>
 using namespace std;
 
 static void handler(int signum){
@@ -718,6 +719,38 @@ bool run(char str[]){
             }
             //set the last value of argc to be NULL so that execvp will work properly
             argc[cmd.size()] = NULL;
+
+
+            /* here search for the first element of argc,
+             * once found change it to the path
+             */
+            string master_paths = getenv("PATH");
+            string temp = "";
+            vector<string> paths;
+            for(unsigned int i = 0; i < master_paths.size(); i++){
+                if(master_paths.at(i) != ':'){
+                    temp.push_back(master_paths.at(i));
+                }
+                else{
+                    paths.push_back(temp);
+                    temp = "";
+                }
+            }
+            string ui_cmd = argc[0];
+            struct stat s_buf;
+            for(unsigned int i = 0; i < paths.size(); i++){
+                string xemp = paths.at(i);
+                xemp.append("/");
+                xemp.append(ui_cmd);
+                if(stat(xemp.c_str(), &s_buf) == 0){
+                    ui_cmd = xemp;
+                    break;
+                }
+            }
+
+            argc[0] = new char[ui_cmd.size()+1];
+            strcpy(argc[0], ui_cmd.c_str());
+
             bool after = false;
             bool before = false;
             if(pip){
@@ -849,8 +882,8 @@ bool run(char str[]){
                 }
                 delete[] buf;
             }
-            if(-1 ==  execvp(argc[0], argc)){
-                    perror("execvp");
+            if(-1 ==  execv(argc[0], argc)){
+                    perror("execv");
                     exit(1);
             }
         }
