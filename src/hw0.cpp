@@ -724,7 +724,12 @@ bool run(char str[]){
             /* here search for the first element of argc,
              * once found change it to the path
              */
-            string master_paths = getenv("PATH");
+            char* master_path = getenv("PATH");
+            if(master_path == NULL){
+                perror("getnev");
+                exit(0);
+            }
+            string master_paths = master_path;
             string temp = "";
             vector<string> paths;
             for(unsigned int i = 0; i < master_paths.size(); i++){
@@ -882,9 +887,14 @@ bool run(char str[]){
                 }
                 delete[] buf;
             }
-            if(-1 ==  execv(argc[0], argc)){
+            if(cmd.at(0) != "cd"){
+                if(-1 ==  execv(argc[0], argc)){
                     perror("execv");
                     exit(1);
+                }
+            }
+            else{
+                exit(0);
             }
         }
         else{
@@ -895,6 +905,25 @@ bool run(char str[]){
                 delete[] argc;
 	        	exit(1);
 	        }
+            if(cmd.at(0) == "cd"){
+                char* path = getenv("HOME");
+                if(path == NULL){
+                    perror("getenv");
+                    exit(0);
+                }
+                if(cmd.size() >=  2){
+                    if(-1 == chdir(cmd.at(1).c_str())){
+                        perror("chdir");
+                        status = 1;
+                    }
+                }
+                else{
+                    if(-1 == chdir(path)){
+                        perror("chdir");
+                        status = 1;
+                    }
+                }
+            }
             if(before && after){
                 fd[1] = fd_2[1];
                 fd[0] = fd_2[0];
@@ -1144,17 +1173,24 @@ int main(){
         }
 
         char buf[BUFSIZ];
-        getcwd(buf, BUFSIZ);
+        if(getcwd(buf, BUFSIZ) == NULL){
+            perror("getcwd");
+        }
         //if both login and gethostname rerurned without error
         //cout the login@host
-        if(login != NULL && hostFlag != -1){
-            cout << login << "@" << host  << ":" << buf << "$ ";
+        if(login != NULL && hostFlag != -1 && getcwd != NULL){
+            cout << login << "@" << host  << ":~" << buf << "$ ";
         }
         //otherwise cout vanilla prompt
-        else{
+        else if(getcwd != NULL){
             cout << buf << "$ ";
         }
-
+        else if(getcwd == NULL && login != NULL && hostFlag != -1){
+            cout << login << "@" << host << "$ ";
+        }
+        else{
+            cout << "$ ";
+        }
         //retrieve user input including spaces
         getline(cin, input);
 
