@@ -171,9 +171,17 @@ string getInfo(string path){
     ret.append(to_string(static_cast<long long>(l)));
     ret.append(" ");
     struct passwd *pw = getpwuid(buf.st_uid);
+    if(pw == NULL){
+        perror("getpwuid");
+        exit(0);
+    }
     ret.append(pw->pw_name);
     ret.append(" ");
     struct group *gr = getgrgid(buf.st_gid);
+    if(gr == NULL){
+        perror("getgrgid");
+        exit(0);
+    }
     ret.append(gr->gr_name);
     ret.append(" ");
     int t = buf.st_size;

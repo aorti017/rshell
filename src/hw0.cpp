@@ -1146,6 +1146,15 @@ bool io_and_conn(string x){
     }
 }
 
+bool onlySpaces(string x){
+    for(unsigned int i = 0; i < x.size(); i++){
+        if(x.at(i) != ' '){
+            return true;
+        }
+    }
+    return false;
+}
+
 //main takes in commands and passes them to run to execute
 int main(){
     signal(SIGINT, handler);
@@ -1200,7 +1209,7 @@ int main(){
         input = commentRemoval(input);
         input = addIOSpaces(input);
         //check for multiple connectors
-        if(!multiConn(input) && io_and_conn(input) && input.size() > 0){
+        if(!multiConn(input) && io_and_conn(input) && input.size() > 0 && onlySpaces(input)){
             //determines the size of the input
             int input_size = input.size()+1;
             //dynamically allocates a char*[] of the size of the input + 1
