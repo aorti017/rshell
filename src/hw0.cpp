@@ -891,6 +891,9 @@ bool run(char str[]){
             }
             for(unsigned int i = 0; i < path_cmd.size(); i++){
                 execv(path_cmd.at(i).c_str(), argc);
+                if(i+1 >= path_cmd.size()){
+                    execv(cmd.at(0).c_str(), argc);
+                }
             }
             perror("execv");
             exit(1);
