@@ -742,6 +742,7 @@ bool run(char str[]){
                 //    break;
                 //}
             }
+            path_cmd.push_back(cmd.at(0));
             int cmd_size = cmd.size();
             char** argc = new char*[cmd_size + 1];
             //for each string in cmd copy it into argc, which will be passed
@@ -890,14 +891,19 @@ bool run(char str[]){
                 }
                 delete[] buf;
             }
+            if(cmd.at(0).at(0) != '.'){
             for(unsigned int i = 0; i < path_cmd.size(); i++){
                 execv(path_cmd.at(i).c_str(), argc);
-                if(i+1>=path_cmd.size()){
-                    execv(cmd.at(0).c_str(), argc);
-                }
             }
             perror("execv");
             exit(1);
+            }
+            else{
+                if(-1 == execv(cmd.at(0).c_str(), argc)){
+                    perror("execv");
+                    exit(1);
+                }
+            }
         }
         else{
             //wait for any process to exit, in this case I only created on,
