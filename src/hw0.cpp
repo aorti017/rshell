@@ -707,20 +707,6 @@ bool run(char str[]){
                 }
             }
 
-
-
-            int cmd_size = cmd.size();
-            char** argc = new char*[cmd_size + 1];
-            //for each string in cmd copy it into argc, which will be passed
-            //into execvp
-            for(unsigned int i = 0 ; i < cmd.size(); i++ ){
-                argc[i] = new char[cmd.at(i).size() + 1];
-                strcpy(argc[i], cmd.at(i).c_str());
-            }
-            //set the last value of argc to be NULL so that execvp will work properly
-            argc[cmd.size()] = NULL;
-
-
             /* here search for the first element of argc,
              * once found change it to the path
              */
@@ -741,20 +727,36 @@ bool run(char str[]){
                     temp = "";
                 }
             }
-            string ui_cmd = argc[0];
-            struct stat s_buf;
+            string ui_cmd = cmd.at(0);
+            //struct stat s_buf;
+            vector<string> path_cmd;
             for(unsigned int i = 0; i < paths.size(); i++){
                 string xemp = paths.at(i);
                 xemp.append("/");
                 xemp.append(ui_cmd);
-                if(stat(xemp.c_str(), &s_buf) == 0){
-                    ui_cmd = xemp;
-                    break;
+                path_cmd.push_back(xemp);
+                xemp = "";
+                //if(stat(xemp.c_str(), &s_buf) == 0){
+                //    ui_cmd = xemp;
+                //    break;
+                //}
+            }
+            int cmd_size = cmd.size();
+            char** argc = new char*[cmd_size + 1];
+            //for each string in cmd copy it into argc, which will be passed
+            //into execvp
+            for(unsigned int i = 0 ; i < cmd.size(); i++ ){
+                if(i == 0){
+                    argc[0] = new char[ui_cmd.size()+1];
+                    strcpy(argc[0], "");
+                }
+                else{
+                    argc[i] = new char[cmd.at(i).size() + 1];
+                    strcpy(argc[i], cmd.at(i).c_str());
                 }
             }
-
-            argc[0] = new char[ui_cmd.size()+1];
-            strcpy(argc[0], ui_cmd.c_str());
+            //set the last value of argc to be NULL so that execvp will work properly
+            argc[cmd.size()] = NULL;
 
             bool after = false;
             bool before = false;
@@ -793,7 +795,7 @@ bool run(char str[]){
                 exit(0);
             }
         }
-
+    if(cmd.at(0) != "cd"){
         //fork the programm
         int pid = fork();
         //if pid is -1 the fork failed so exit
@@ -827,7 +829,7 @@ bool run(char str[]){
                 if(custom_out && x != 0){
                     if(-1 == close(x)){
                         perror("close");
-                        exit(0);
+                        exit(-1);
                     }
                     if(-1 == dup(fd_out)){
                         perror("dup");
@@ -887,15 +889,11 @@ bool run(char str[]){
                 }
                 delete[] buf;
             }
-            if(cmd.at(0) != "cd"){
-                if(-1 ==  execv(argc[0], argc)){
-                    perror("execv");
-                    exit(1);
-                }
+            for(unsigned int i = 0; i < path_cmd.size(); i++){
+                execv(path_cmd.at(i).c_str(), argc);
             }
-            else{
-                exit(0);
-            }
+            perror("execv");
+            exit(1);
         }
         else{
             //wait for any process to exit, in this case I only created on,
@@ -905,6 +903,8 @@ bool run(char str[]){
                 delete[] argc;
 	        	exit(1);
 	        }
+        }
+    }
             if(cmd.at(0) == "cd"){
                 char* path = getenv("HOME");
                 if(path == NULL){
@@ -1050,7 +1050,6 @@ bool run(char str[]){
             if(pch != NULL && isExit(pch)){
                 return false;
             }
-        }
     }
     //if there are no more commands to execute/parse return
     return true;
