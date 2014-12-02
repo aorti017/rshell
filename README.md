@@ -61,3 +61,4 @@ Bugs/Limitations
 * Can not link together piping operations using connectors.
 * ```2>``` and ```2>>``` can not combined with pipes.
 * ```cd``` is not compatable with regular expressions.
+* When trying to run an executable that has the same name as one that can be found with in any of the ```PATH``` directories, the one in the  ```PATH``` directory will be ran instead.

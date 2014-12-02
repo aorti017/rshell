@@ -718,6 +718,7 @@ bool run(char str[]){
             string master_paths = master_path;
             string temp = "";
             vector<string> paths;
+            //paths.push_back(".");
             for(unsigned int i = 0; i < master_paths.size(); i++){
                 if(master_paths.at(i) != ':'){
                     temp.push_back(master_paths.at(i));
@@ -891,7 +892,7 @@ bool run(char str[]){
             }
             for(unsigned int i = 0; i < path_cmd.size(); i++){
                 execv(path_cmd.at(i).c_str(), argc);
-                if(i+1 >= path_cmd.size()){
+                if(i+1>=path_cmd.size()){
                     execv(cmd.at(0).c_str(), argc);
                 }
             }
