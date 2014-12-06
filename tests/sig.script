@@ -1,0 +1,56 @@
+Script started on Fri 05 Dec 2014 04:05:01 PM PST
+~
+aorti017@hammer $ cs100
+[0;91m
+===============================================================================
+|                                                                             |
+| You have enabled settings specific for cs100.                               |
+|                                                                             |
+===============================================================================
+[0m
+[s%%%%%%%%%%[u[0;32maorti017[0;36m@[0;32mcs100[0;36m:[0;32m~[0;95m [0;36m$[0m cd rshell
+[s%%%%%%%%%%[u[0;32maorti017[0;36m@[0;32mcs100[0;36m:[0;32m~/rshell[0;95m (signals) [0;36m$[0m make
+if [ ! -d "./bin" ];\
+	then mkdir bin;\
+	fi
+g++ -Wall -Werror -pedantic -ansi src/hw0.cpp -o bin/rshell
+g++ -Wall -Werror -ansi -pedantic src/cp.cpp -o bin/cp
+g++ -Wall -Werror -ansi -pedantic -std=c++0x src/ls.cpp -o bin/ls
+[s%%%%%%%%%%[u[0;32maorti017[0;36m@[0;32mcs100[0;36m:[0;32m~/rshell[0;95m (signals) [0;36m$[0m bin/rshell
+aorti017@hammer.cs.ucr.edu:~/home/csmajs/aorti017/rshell$ #testing executing commands using the PATH variable
+aorti017@hammer.cs.ucr.edu:~/home/csmajs/aorti017/rshell$ ls
+bin  LICENSE  Makefile	README.md  src	t.cpp  tests
+aorti017@hammer.cs.ucr.edu:~/home/csmajs/aorti017/rshell$ /bin/ls
+bin  LICENSE  Makefile	README.md  src	t.cpp  tests
+aorti017@hammer.cs.ucr.edu:~/home/csmajs/aorti017/rshell$ ./bin/ls
+[34mbin[0m  LICENSE[0m  Makefile[0m  README.md[0m  [34msrc[0m  t.cpp[0m  [34mtests[0m  
+aorti017@hammer.cs.ucr.edu:~/home/csmajs/aorti017/rshell$ bin/ls
+[34mbin[0m  LICENSE[0m  Makefile[0m  README.md[0m  [34msrc[0m  t.cpp[0m  [34mtests[0m  
+aorti017@hammer.cs.ucr.edu:~/home/csmajs/aorti017/rshell$ ./ls
+execv: No such file or directory
+aorti017@hammer.cs.ucr.edu:~/home/csmajs/aorti017/rshell$ #testing cd and the cwd     prompt
+aorti017@hammer.cs.ucr.edu:~/home/csmajs/aorti017/rshell$ cd
+aorti017@hammer.cs.ucr.edu:~/home/csmajs/aorti017$ cd rshell
+aorti017@hammer.cs.ucr.edu:~/home/csmajs/aorti017/rshell$ cd .
+aorti017@hammer.cs.ucr.edu:~/home/csmajs/aorti017/rshell$ cd ..
+aorti017@hammer.cs.ucr.edu:~/home/csmajs/aorti017$ cd rshell/src
+aorti017@hammer.cs.ucr.edu:~/home/csmajs/aorti017/rshell/src$ cd ..     cd ..
+aorti017@hammer.cs.ucr.edu:~/home/csmajs/aorti017/rshell$ cd ./tests
+aorti017@hammer.cs.ucr.edu:~/home/csmajs/aorti017/rshell/tests$ cd ..
+aorti017@hammer.cs.ucr.edu:~/home/csmajs/aorti017/rshell$ #testing the ^C signal
+aorti017@hammer.cs.ucr.edu:~/home/csmajs/aorti017/rshell$ cat
+this is the foreground process
+this is the foreground process
+I will end it with ^C
+I will end it with ^C
+^Caorti017@hammer.cs.ucr.edu:~/home/csmajs/aorti017/rshell$ ^Cecho this ^C signal wi  did nothing
+this ^C signal did nothing
+aorti017@hammer.cs.ucr.edu:~/home/csmajs/aorti017/rshell$ #this concludes testing
+aorti017@hammer.cs.ucr.edu:~/home/csmajs/aorti017/rshell$ exit
+[s%%%%%%%%%%[u[0;32maorti017[0;36m@[0;32mcs100[0;36m:[0;32m~/rshell[0;95m (signals) [0;36m$[0m exit
+exit
+~
+aorti017@hammer $ exit
+exit
+
+Script done on Fri 05 Dec 2014 04:08:50 PM PST

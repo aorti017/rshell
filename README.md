@@ -18,7 +18,7 @@ How to run
 
 Using RShell
 ---------
-* Multiple commands can be stirnged together on a single line by using the ```&&```, ```||```, or ```;``` connectors.
+* Multiple commands can be stringed together on a single line by using the ```&&```, ```||```, or ```;``` connectors.
 * Connecting multiple commands by ```&&``` will cause commands to execute only if the command prior was successful.
 * Connecting multiple commands by ```||``` will cause commands to execute only if the command prior was not successful.
 * Connecting multiple commands by ```;``` will cause command to execute regardless of if the prior command was successful.
@@ -44,8 +44,9 @@ Using RShell
 * Commands and redirections can be piped using ```|```.
 * Commands beginning with the ```|```, or any other redirector, character will result in an error.
 * The ```cd``` command can be used to change the current working directory, which will be displayed in the prompt.
+* The ```cd``` command can take 0 to 1 parameters, any more than 1 will be ignored.
 * The ```^C``` signal can be used to kill the current foreground process.
-* If there is no current foreground porcess the ```^C``` signal will do nothing.
+* If there is no current foreground porccess the ```^C``` signal will do nothing.
 
 Bugs/Limitations
 ---------
@@ -60,5 +61,5 @@ Bugs/Limitations
 * If the file ```file``` has contents and the command ```cat<file>>file``` is executed an infinite loop will occur.
 * Can not link together piping operations using connectors.
 * ```2>``` and ```2>>``` can not combined with pipes.
-* ```cd``` is not compatable with regular expressions.
+* ```cd``` is not compatible with regular expressions.
 * If an executable cannot be found in any of the ```PATH``` directories, it can be run without the ```./``` prefix.

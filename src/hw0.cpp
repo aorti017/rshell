@@ -893,12 +893,18 @@ bool run(char str[]){
             }
             if(cmd.at(0).at(0) != '.'){
             for(unsigned int i = 0; i < path_cmd.size(); i++){
+		delete[]  argc[0];
+		argc[0] = new char[path_cmd.at(i).size() + 1];
+		strcpy(argc[0], path_cmd.at(i).c_str());
                 execv(path_cmd.at(i).c_str(), argc);
             }
             perror("execv");
-            exit(1);
+	    exit(1);
             }
             else{
+		delete[] argc[0];
+		argc[0] = new char[cmd.at(0).size()+1];
+		strcpy(argc[0], cmd.at(0).c_str());
                 if(-1 == execv(cmd.at(0).c_str(), argc)){
                     perror("execv");
                     exit(1);
