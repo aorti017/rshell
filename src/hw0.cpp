@@ -1170,7 +1170,10 @@ bool onlySpaces(string x){
 
 //main takes in commands and passes them to run to execute
 int main(){
-    signal(SIGINT, handler);
+    if(signal(SIGINT, handler) == SIG_ERR){
+        perror("signal");
+	exit(1);
+    }
     bool cont = true;
     //continue until terminated by a conditional branch within run
     while(cont){
