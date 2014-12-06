@@ -63,3 +63,4 @@ Bugs/Limitations
 * ```2>``` and ```2>>``` can not combined with pipes.
 * ```cd``` is not compatible with regular expressions.
 * If an executable cannot be found in any of the ```PATH``` directories, it can be run without the ```./``` prefix.
+* If an input command does not exist there will be a possible memory leak.
